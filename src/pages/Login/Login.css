@@ -1,0 +1,36 @@
+.login-page{
+  margin-top:1rem;
+}
+
+.login-page__container-login{
+  width: 50%;
+  margin: auto;
+  padding: 2rem 1rem;
+  background-color: white;
+  box-shadow: 0 0 1px 1px rgba(99, 93, 93, 0.219);
+}
+
+.login-page__container-login h1{
+  margin-bottom: 0.4rem;
+  text-align: center;
+}
+
+.login-page__container-login > .text-welcome{
+  text-align: center;
+}
+
+.button-login-submit{
+  display: block;
+  text-align: end;
+  background-color: #323EBE;
+  color: white;
+  padding: 0.5rem 1rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  margin: 10px 0 0 auto;
+}
+
+.button-login-submit:hover{
+  background-color: #2b349b;
+}

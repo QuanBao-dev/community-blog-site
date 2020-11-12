@@ -1,0 +1,36 @@
+.register-page{
+  margin-top:1rem;
+}
+
+.register-page__container-register{
+  width: 50%;
+  margin: auto;
+  padding: 2rem 1rem;
+  background-color: white;
+  box-shadow: 0 0 1px 1px rgba(99, 93, 93, 0.219);
+}
+
+.register-page__container-register h1{
+  margin-bottom: 0.4rem;
+  text-align: center;
+}
+
+.register-page__container-register > .text-welcome{
+  text-align: center;
+}
+
+.button-register-submit{
+  display: block;
+  text-align: end;
+  background-color: #323EBE;
+  color: white;
+  padding: 0.5rem 1rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  margin: 10px 0 0 auto;
+}
+
+.button-register-submit:hover{
+  background-color: #2b349b;
+}
