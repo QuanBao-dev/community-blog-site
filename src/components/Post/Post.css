@@ -1,0 +1,136 @@
+.author-name{
+  font-weight: 500;
+  color: black;
+  text-decoration: none;
+  transition: 0.4s;
+  display: inline;
+  background-image: linear-gradient(to right, green 0%, rgb(165, 64, 64) 100%);
+  background-repeat: no-repeat;
+  background-size: 0 5px;
+  background-position: 0 109%;
+}
+
+.author-name:hover{
+  background-size: 100% 5px;
+}
+
+.container-post{
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.212);
+  width: 90%;
+  background-color: white;
+  padding: 1rem;
+  margin: auto;
+  margin-top: 1rem;
+  position: relative;
+  border-radius: 5px;
+}
+
+.container-author{
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(177, 175, 175, 0.603);
+}
+
+.body-post{
+  display: flex;
+  flex-direction: column;
+}
+
+.container-menu-control{
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.erase-post-button{
+  cursor: pointer;
+  margin-right: 1rem;
+  display: inline-block;
+  transition: 0.5s;
+}
+
+.edit-post-button{
+  cursor: pointer;
+  display: inline-block;
+  transition: 0.5s;
+}
+
+.edit-post-button:hover,.erase-post-button:hover{
+  transform: scale(1.2);
+}
+.edit-post-button:active,.erase-post-button:active{
+  color: white;
+}
+
+
+.container-post__link{
+  text-decoration: none;
+  color: black;
+}
+
+.title-post{
+  font-size: xx-large;
+  font-weight: 800;
+  background-image: linear-gradient(to right,#bdbd3b 0%,#00bec1 100%);
+  background-size: 0 4px;
+  transition: 0.4s;
+  background-repeat: no-repeat;
+  background-position: left 100%;
+  cursor: pointer;
+  overflow: hidden;
+  width: 100%;
+  display: inline;
+}
+
+.title-post:hover{
+  background-size: 100% 4px;
+}
+
+.container-post__link:hover .title-post{
+  background-size: 100% 4px;
+}
+
+.date-upload{
+  color: grey;
+  font-size:1rem;
+}
+
+.tag-name{
+  padding: 0.5rem 1rem;
+  padding-left: 0;
+  color: grey;
+  text-decoration: none;
+}
+
+.tag-name:hover{
+  cursor: pointer;
+  color: black;
+}
+
+.loading-symbol{
+  height: 100px;
+  text-align: center;
+}
+
+.excerpt-post{
+  font-weight: 500;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  margin-top: 0.5rem;
+  overflow: hidden;
+}
+
+.edit-board-container{
+  display: none;
+}
+
+.edit-board-container__button-submit{
+  display: block;
+  margin:0 0 0 auto;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: green;
+  color: white;
+  outline: none;
+  cursor: pointer;
+}

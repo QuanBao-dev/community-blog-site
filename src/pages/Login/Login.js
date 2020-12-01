@@ -2,10 +2,15 @@ import "./Login.css";
 
 import React, { useEffect, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
 
 import Input from "../../components/Input/Input";
-import { submitForm$, submitFormWithEnter$, userStream } from "../../epic/user";
-import { useHistory } from "react-router-dom";
+import {
+  fetchUser$,
+  submitForm$,
+  submitFormWithEnter$,
+  userStream,
+} from "../../epic/user";
 
 const Login = () => {
   const [errorEmail, setErrorEmail] = useState(null);
@@ -31,14 +36,26 @@ const Login = () => {
         { email: emailRef.current, password: passwordRef.current },
         "/api/users/login"
       ).subscribe((result) => {
-        handleResult(result, setCookie, setErrorEmail, setErrorPassword);
+        handleResult(
+          result,
+          setCookie,
+          setErrorEmail,
+          setErrorPassword,
+          history
+        );
       });
       subscription2 = submitFormWithEnter$(
         [emailRef.current, passwordRef.current],
         { email: emailRef.current, password: passwordRef.current },
         "/api/users/login"
       ).subscribe((result) => {
-        handleResult(result, setCookie, setErrorEmail, setErrorPassword);
+        handleResult(
+          result,
+          setCookie,
+          setErrorEmail,
+          setErrorPassword,
+          history
+        );
       });
     }
     return () => {
@@ -46,7 +63,7 @@ const Login = () => {
       subscription && subscription.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user, isDoneFetch]);
 
   return (
     !user &&
@@ -73,13 +90,27 @@ const Login = () => {
 };
 
 export default Login;
-function handleResult(result, setCookie, setErrorEmail, setErrorPassword) {
+function handleResult(
+  result,
+  setCookie,
+  setErrorEmail,
+  setErrorPassword,
+  history
+) {
   if (!result.error) {
     setCookie("idBloggerUser", result, {
       expires: new Date(Date.now() + 43200000),
       path: "/",
     });
-    window.location.replace("/");
+    fetchUser$({ idBloggerUser: result }).subscribe((user) => {
+      if (!user.error) {
+        userStream.updateData({ user });
+        history.replace("/");
+      } else {
+        userStream.updateData({ user: null });
+      }
+      userStream.updateData({ isDoneFetch: true });
+    });
   } else {
     const errorMessage = result.error.response.error.toLocaleLowerCase();
     if (errorMessage.includes("email")) setErrorEmail(errorMessage);

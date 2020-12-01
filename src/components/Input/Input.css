@@ -1,0 +1,103 @@
+.form-custom{
+  display: flex;
+  height: 62px;
+  flex-direction: column;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  color:black;
+  text-align: start;
+}
+
+.form-custom .label-name::before{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  bottom: 0;
+  border-bottom:2px solid #73c9c0;
+  right: 100%;
+  transition: 0.6s;
+}
+
+.form-custom label{
+  position: absolute;
+  width: 102%;
+  height: 100%;
+  top:50%;
+  left:2%;
+  font-size: 120%;
+  pointer-events: auto;
+  transition: 0.3s;
+  pointer-events: none;
+}
+
+.form-custom input{
+  position: absolute;
+  bottom: 0;
+  height: 30px;
+  width: 100%;
+  font-size: 120%;
+  background-color: inherit;
+  border:none;
+  outline: none;
+  border-bottom: 1px solid black;
+  color: black;
+}
+
+.form-custom input:focus + .label-name,
+.form-custom input:valid + .label-name{
+  top:0;
+  left: 0;
+}
+
+.form-custom input:focus + .label-name::before,
+.form-custom input:valid + .label-name::before{
+  right: 0;
+}
+
+.error-message{
+  color: red;
+  font-weight: bolder;
+}
+
+.suggestion-hint-list{
+  box-shadow: 0 0 1px 1px black;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.suggestion-hint-item{
+  cursor: pointer;
+}
+
+.suggestion-hint-item:hover{
+  background-color: rgba(0, 0, 0, 0.308);
+}
+
+.suggestion-hint-item-active{
+  background-color: rgba(0, 0, 0, 0.308);
+}
+
+.tag-name-list{
+  font-weight: 700;
+  margin-top: 1rem;
+}
+
+.delete-tag-symbol{
+  font-weight: lighter;
+  color: rgb(51, 56, 116);
+  cursor: pointer;
+  transition: 0.4s;
+}
+
+.delete-tag-symbol:hover{
+  font-size: 1.2rem;
+}
+
+.tag-name-item{
+  margin-right: 1rem;
+  background-color: rgba(128, 128, 128, 0.24);
+  padding:0.2rem;
+  border-radius: 5px;
+}

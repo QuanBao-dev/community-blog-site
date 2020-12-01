@@ -139,7 +139,7 @@ router.put("/account/edit", verifyRole("Admin", "User"), async (req, res) => {
     const isEmailExist = await User.findOne({ email: newEmail })
       .lean()
       .select();
-    if (isEmailExist) {
+    if (isEmailExist && isEmailExist.userId !== userVm.userId) {
       return res.status(400).send({ error: "Email has been used" });
     }
     data.email = newEmail;

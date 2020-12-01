@@ -1,0 +1,13 @@
+.title-bolder{
+  font-weight: bolder;
+  padding: 0 1rem;
+}
+
+.popular-tag-link{
+  text-decoration: none;
+  color: black;
+}
+
+.popular-tag-link li:hover{
+  background-color: rgba(199, 198, 198, 0.253);
+}

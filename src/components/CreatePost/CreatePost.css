@@ -1,0 +1,24 @@
+.form-create-post-container{
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 0 5px 1px grey;
+  width: 90%;
+  border-radius: 20px;
+  margin: auto;
+  margin-top: 1rem;
+}
+
+.form-create-post{
+  background-color: transparent;
+}
+
+.home-page__create-post-button{
+  padding: 0.5rem 1rem;
+  background-color: rgb(42, 131, 64);
+  color: white;
+  display: block;
+
+  margin: 1rem 0 0 auto;
+  cursor: pointer;
+  border:none;
+}

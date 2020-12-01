@@ -1,0 +1,80 @@
+.home-page__container{
+  width: 80%;
+  margin: auto;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.home-page__container-left-section{
+  width: 15%;
+}
+
+.home-page__bolder-item{
+  font-weight: 600;
+}
+
+.home-page__container-left-section li{
+  padding: 0.5rem 1rem;
+}
+
+.home-page__container-left-section ul{
+  list-style-type: none;
+  padding: 0;
+}
+
+.home-page__container-right-section{
+  width: 25%;
+}
+
+.home-page__container-main-section{
+  width: 60%;
+}
+
+.home-page__container-user-quantity{
+  background-color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-top: 1rem;
+  box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.13);
+}
+
+.home-page__container-user-quantity img{
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  transform: rotate(-10deg);
+}
+
+.home-page__container-list-link{
+  text-align: center;
+}
+
+.home-page__container-list-link a{
+  text-decoration: none;
+}
+
+.home-page__register-link{
+  background-color: #323EBE;
+  color:white;
+  border-radius: 5px;
+  padding: 0.6rem 0;
+}
+
+.home-page__login-link{
+  padding: 0.6rem 0;
+  margin-top: 0.5rem;
+}
+
+.home-page__login-link:hover{
+  background-color: rgba(221, 217, 217, 0.295);
+  color: #323EBE;
+}
+
+.home-page__tags-link{
+  text-decoration: none;
+  color: black;
+}
+
+.home-page__tags-link li:hover{
+  background-color: rgba(199, 198, 198, 0.253);
+}

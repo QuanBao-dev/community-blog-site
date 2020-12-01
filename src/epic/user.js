@@ -33,10 +33,10 @@ export const submitForm$ = (
   cookies
 ) => {
   let headers = {};
-  if(cookies){
+  if (cookies) {
     headers = {
-      authorization:`Bearer ${cookies.idBloggerUser}`
-    }
+      authorization: `Bearer ${cookies.idBloggerUser}`,
+    };
   }
   return fromEvent(buttonSubmit, "click").pipe(
     map(() =>
@@ -50,7 +50,7 @@ export const submitForm$ = (
         method,
         url,
         body,
-        headers
+        headers,
       }).pipe(
         pluck("response", "message"),
         catchError((error) => of({ error }))
@@ -83,4 +83,14 @@ export const submitFormWithEnter$ = (inputList, bodyRef, url) => {
       )
     )
   );
+};
+
+export const logoutUser$ = ({ idBloggerUser }) => {
+  return ajax({
+    url: "/api/users/logout",
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${idBloggerUser}`,
+    },
+  });
 };

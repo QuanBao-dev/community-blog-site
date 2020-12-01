@@ -1,0 +1,42 @@
+.tag-item-container{
+  padding: 1rem;
+  background-color: white;
+  margin: 1rem;
+  box-shadow: 0 0 4px 1px rgba(134, 134, 134, 0.404);
+  max-width: 300px;
+  width: 300px;
+  height: 100px;
+  border-radius: 10px;
+}
+
+.tag-list__tag-name{
+  font-weight: 700;
+  text-decoration: none;
+  color: black;
+  background-image: linear-gradient(to right, aqua 0%,#bdbd3b 100%);
+  background-repeat: no-repeat;
+  background-size: 0 4px;
+  background-position: 0 103%;
+  display: inline;
+  transition: 0.4s;
+}
+
+.tag-list__tag-name:hover{
+  background-size: 100% 4px;
+}
+
+.tag-list__quantity{
+  color: grey;
+}
+
+.tag-list{
+  flex-wrap: wrap;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.tag-list__tag-name{
+  font-size: 1.4rem;
+}
