@@ -9,6 +9,7 @@ const Tag = require("../models/tag.model");
 const User = require("../models/user.model");
 const cloudinary = require("cloudinary");
 const { nanoid } = require("nanoid");
+const Comment = require("../models/comment.model");
 
 const router = require("express").Router();
 const optionsSelection = {
@@ -485,6 +486,13 @@ router.delete("/:postId", verifyRole("User", "Admin"), async (req, res) => {
   if (post.userId !== req.user.userId) {
     return res.status(400).send({ error: "You do not have permission" });
   }
+  Comment.deleteMany({ postId })
+    .then((v) => {
+      console.log(v.n);
+    })
+    .catch(() => {
+      console.log("Something went wrong");
+    });
   const body = post.body;
   const listTag = post.tags;
   try {

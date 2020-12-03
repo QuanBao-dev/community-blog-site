@@ -1,10 +1,10 @@
-import "./CommentForm.css";
+import './CommentForm.css';
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
+import { useCookies } from 'react-cookie';
 
-import { userStream } from "../../epic/user";
-import { usePostComment } from "../../Hook/comment";
-import { useCookies } from "react-cookie";
+import { userStream } from '../../epic/user';
+import { usePostComment } from '../../Hook/comment';
 
 const CommentForm = ({ isReply = false, commentId, commentLevel }) => {
   const buttonRef = useRef();
@@ -18,7 +18,8 @@ const CommentForm = ({ isReply = false, commentId, commentLevel }) => {
     commentLevel,
     buttonRef,
     textareaRef,
-    cookies
+    cookies,
+    setToggleReply
   );
   if (!isReply)
     return (

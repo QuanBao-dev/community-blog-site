@@ -3,8 +3,14 @@
   width: 100%;
   flex-direction: column;
   align-items: flex-end;
+  margin-top: 3rem;
 }
 
-.reply-symbol{
+.comment__number-info span{
+  cursor: pointer;
+}
+
+.reply-symbol, 
+.like-symbol {
   cursor: pointer;
 }

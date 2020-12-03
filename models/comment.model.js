@@ -10,7 +10,11 @@ const commentSchema = new mongoose.Schema({
     type: String,
     default: nanoid,
   },
-  username: {
+  commentIdList: {
+    type: [String],
+    default: [],
+  },
+  userId: {
     type: String,
     required: true,
   },
@@ -25,6 +29,10 @@ const commentSchema = new mongoose.Schema({
   quantityLikes: {
     type: Number,
     default: 0,
+  },
+  userIdLikes: {
+    type: String,
+    default: "[]",
   },
   content: {
     type: String,

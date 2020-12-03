@@ -116,9 +116,9 @@ const BlogInputEdit = ({ postId }) => {
   useInitEditorContent(blogState, cookies, onChange, convertFromRaw, decorator);
   useFetchBlogData(blogState, postId, onChange, history, decorator);
 
-  useAutoSave(cookies);
-  useSaveTrigger(cookies, blogState);
-  usePublishPost(buttonUpload, cookies);
+  useAutoSave(cookies, history);
+  useSaveTrigger(cookies, blogState, history);
+  usePublishPost(buttonUpload, cookies, history);
 
   useToggleEdit(blogState);
   useShowHidePublish(blogState);

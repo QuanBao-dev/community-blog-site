@@ -1,20 +1,41 @@
+import "./Comment.css";
+
 import React from "react";
 import { useRef } from "react";
-import { useHandleRepliesList } from "../../Hook/comment";
+import { useCookies } from "react-cookie";
+
+import { userStream } from "../../epic/user";
+import {
+  useDeleteComment,
+  useHandleRepliesList,
+  useLikeComment,
+} from "../../Hook/comment";
 import CommentForm from "../CommentForm/CommentForm";
 
 function Comment({ comment }) {
   const repliesShowRef = useRef();
+  const { user } = userStream.currentState();
+  const [cookies] = useCookies(["idBloggerUser"]);
+  const likeButtonRef = useRef();
+  const deleteButtonRef = useRef();
+
   useHandleRepliesList(
     repliesShowRef,
     comment.amountReply || 0,
     comment.commentId
   );
+  useLikeComment(likeButtonRef, user, comment.commentId, cookies);
+  useDeleteComment(deleteButtonRef, comment.commentId, cookies);
   return (
     <li
       className="comment-list__comment"
       style={{ marginLeft: `${comment.childLevel * 50}px` }}
     >
+      {comment.userId === user.userId && (
+        <span className="comment-list__delete-symbol" ref={deleteButtonRef}>
+          <i className="fas fa-trash-alt"></i>
+        </span>
+      )}
       <div className="comment-list__header-comment">
         <div className="comment-list__author-name">
           {comment.username}{" "}
@@ -29,7 +50,22 @@ function Comment({ comment }) {
       <div className="comment-list__content">{comment.content}</div>
       <div className="comment__number-info">
         <span ref={repliesShowRef}>{comment.amountReply || 0} Replies</span>
-        <span>{comment.quantityLikes} Likes</span>
+        <span
+          ref={likeButtonRef}
+          style={{
+            fontWeight:
+              user &&
+              comment.userIdLikes &&
+              JSON.parse(comment.userIdLikes).includes(user.userId)
+                ? 900
+                : "inherit",
+          }}
+        >
+          {comment.quantityLikes}{" "}
+          <span className="like-symbol">
+            <i className="far fa-thumbs-up"></i>
+          </span>
+        </span>
         <CommentForm
           isReply={true}
           commentId={comment.commentId}

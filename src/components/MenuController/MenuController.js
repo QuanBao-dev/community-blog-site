@@ -192,9 +192,8 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
       <input
         className="color-picker-input"
         type="color"
-        onMouseDown={(e) => {
-          e.preventDefault();
-        }}
+        title="Enter to select"
+        onMouseDown={(e) => e.preventDefault()}
       />
       <input
         type="text"

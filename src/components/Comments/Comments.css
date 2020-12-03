@@ -25,33 +25,6 @@
   list-style-type: none;
 }
 
-.comment-list__comment{
-  padding: 1rem;
-  border: 1px solid rgb(196, 196, 196);
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.comment-list__created-at{
-  color:grey
-}
-
-.comment-list__header-comment{
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(156, 156, 156, 0.575);
-  margin-bottom: 1rem;
-}
-
-.comment-list__content{
-  font-size: 1.3rem;
-}
-
-.comment-list__author-symbol{
-  color: grey;
-  font-weight: 900;
-}
-
 .page-comment-list{
   list-style-type: none;
   margin: 0;
@@ -80,7 +53,6 @@
 
 .comment__number-info span{
   margin-right: 1rem;
-  cursor: pointer;
 }
 
 .comment__number-info span:hover{

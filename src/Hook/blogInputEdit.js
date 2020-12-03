@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 import {
   autosave,
@@ -13,7 +13,7 @@ import {
   showHideSaving,
   toggleEdit,
   updateAfterFetch,
-} from '../Functions/blogInputEdit';
+} from "../Functions/blogInputEdit";
 
 export function useInitBlogDetail(setBlogState, cookies) {
   useEffect(initBlogDetail(setBlogState, cookies), []);
@@ -45,15 +45,18 @@ export function useFetchBlogData(
   ]);
 }
 
-export const usePublishPost = (buttonUpload, cookies) => {
-  useEffect(publishPost(buttonUpload, cookies), [buttonUpload, cookies]);
+export const usePublishPost = (buttonUpload, cookies, history) => {
+  useEffect(publishPost(buttonUpload, cookies, history), [
+    buttonUpload,
+    cookies,
+  ]);
 };
-export const useSaveTrigger = (cookies, blogState) => {
-  useEffect(saveTrigger(cookies), [blogState.triggerSave, cookies]);
+export const useSaveTrigger = (cookies, blogState, history) => {
+  useEffect(saveTrigger(cookies, history), [blogState.triggerSave, cookies]);
 };
 
-export const useAutoSave = (cookies) => {
-  useEffect(autosave(cookies), [cookies]);
+export const useAutoSave = (cookies, history) => {
+  useEffect(autosave(cookies, history), [cookies]);
 };
 
 export function useColorPickerChange(

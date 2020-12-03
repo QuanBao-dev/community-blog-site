@@ -107,11 +107,19 @@ export function colorPickerChange(
   };
 }
 
-export function autosave(cookies) {
+export function autosave(cookies, history) {
   return () => {
     const subscription = autosave$(cookies).subscribe((v) => {
       if (!v.error) {
         const data = { ...v };
+        if (blogInputEditStream.currentState().currentPostIdPath === "create") {
+          blogInputEditStream.updateData({
+            currentPostIdPath: blogInputEditStream.currentState().randomId,
+          });
+          history.replace(
+            "/blog/" + blogInputEditStream.currentState().randomId
+          );
+        }
         blogInputEditStream.updateData({
           isCompleted: false,
           listImageString: v.listImageString || "[]",
@@ -153,13 +161,23 @@ export function autosave(cookies) {
   };
 }
 
-export function saveTrigger(cookies) {
+export function saveTrigger(cookies, history) {
   return () => {
     // eslint-disable-next-line no-unused-vars
     if (blogInputEditStream.currentState().toggleEditMode) {
       triggerSaveData$(cookies).subscribe((v) => {
         if (!v.error) {
           const data = { ...v };
+          if (
+            blogInputEditStream.currentState().currentPostIdPath === "create"
+          ) {
+            blogInputEditStream.updateData({
+              currentPostIdPath: blogInputEditStream.currentState().randomId,
+            });
+            history.replace(
+              "/blog/" + blogInputEditStream.currentState().randomId
+            );
+          }
           blogInputEditStream.updateData({
             isCompleted: false,
             listImageString: v.listImageString || "[]",
@@ -199,7 +217,7 @@ export function saveTrigger(cookies) {
   };
 }
 
-export function publishPost(buttonUpload, cookies) {
+export function publishPost(buttonUpload, cookies, history) {
   return () => {
     let publicizePostSub;
     if (buttonUpload)
@@ -207,6 +225,16 @@ export function publishPost(buttonUpload, cookies) {
         (v) => {
           if (!v.error) {
             const data = { ...v };
+            if (
+              blogInputEditStream.currentState().currentPostIdPath === "create"
+            ) {
+              blogInputEditStream.updateData({
+                currentPostIdPath: blogInputEditStream.currentState().randomId,
+              });
+              history.replace(
+                "/blog/" + blogInputEditStream.currentState().randomId
+              );
+            }
             blogInputEditStream.updateData({
               isCompleted: true,
               dataBlogPage: v,
@@ -247,8 +275,10 @@ export function publishPost(buttonUpload, cookies) {
 export function fetchBlogData(postId, onChange, decorator, history) {
   return () => {
     blogInputEditStream.updateData({ currentPostIdPath: postId });
-    if (postId === "create")
-      blogInputEditStream.updateData({ randomId: nanoid() });
+    if (postId === "create") {
+      const id = nanoid();
+      blogInputEditStream.updateData({ randomId: id });
+    }
 
     const subscription = fetchBlog$(postId).subscribe((data) => {
       if (!data.error) {
@@ -266,7 +296,9 @@ export function fetchBlogData(postId, onChange, decorator, history) {
           postId === "create" &&
           !blogInputEditStream.currentState().dataBlogPage.title
         ) {
-          history.push("/");
+          history.replace("/");
+        } else {
+          if (postId !== "create") history.replace("/");
         }
       }
     });

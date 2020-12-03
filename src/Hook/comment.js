@@ -1,13 +1,15 @@
 import { useEffect } from "react";
 
+import { commentStream } from "../epic/comment";
 import {
+  deleteComment,
   fetchComment,
+  handleListPageChange,
   handleRepliesList,
   initCommentState,
+  likeComment,
   postComment,
-  updateHandleListPageChange,
 } from "../Functions/comment";
-import { commentStream } from "../epic/comment";
 
 export const useInitComment = (setState) => {
   useEffect(initCommentState(setState), []);
@@ -19,7 +21,8 @@ export const usePostComment = (
   commentLevel,
   button,
   textarea,
-  cookies
+  cookies,
+  setToggleReply
 ) => {
   useEffect(
     postComment(
@@ -28,7 +31,8 @@ export const usePostComment = (
       commentLevel,
       button.current,
       textarea.current,
-      cookies
+      cookies,
+      setToggleReply
     ),
     [cookies, button.current, textarea.current]
   );
@@ -39,7 +43,22 @@ export const useFetchComment = (postId, page) => {
 };
 
 export const useHandleListPageChange = (lastPage, setListPage) => {
-  useEffect(updateHandleListPageChange(setListPage, lastPage), [lastPage]);
+  useEffect(handleListPageChange(setListPage, lastPage), [lastPage]);
+};
+
+export const useLikeComment = (buttonLike, user, commentId, cookies) => {
+  useEffect(likeComment(buttonLike.current, user, commentId, cookies), [
+    buttonLike.current,
+    user,
+  ]);
+};
+
+export const useDeleteComment = (buttonDelete, commentId, cookies) => {
+  const { triggerCommentUpdated } = commentStream.currentState();
+  useEffect(deleteComment(buttonDelete.current, commentId, cookies), [
+    buttonDelete.current,
+    triggerCommentUpdated,
+  ]);
 };
 
 export const useHandleRepliesList = (

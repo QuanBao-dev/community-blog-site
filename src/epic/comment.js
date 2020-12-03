@@ -10,6 +10,7 @@ import {
   switchMap,
   tap,
 } from "rxjs/operators";
+
 import commentStore from "../store/comment";
 import { blogInputEditStream } from "./blogInputEdit";
 import { userStream } from "./user";
@@ -97,12 +98,55 @@ export const submitComment$ = (
 export const handleRepliesList$ = (repliesE, amountReply, parentCommentId) => {
   return fromEvent(repliesE, "click").pipe(
     filter(() => amountReply > 0),
+    filter(() => {
+      return !commentStream
+        .currentState()
+        .fetchedCommentId.includes(parentCommentId);
+    }),
     switchMap(() =>
       ajax(
         `/api/comments/post/${
           blogInputEditStream.currentState().currentPostIdPath
         }?parentCommentId=${parentCommentId}`
       ).pipe(
+        pluck("response", "message"),
+        catchError((error) => of({ error }))
+      )
+    )
+  );
+};
+
+export const likeComment$ = (buttonE, user, commentId, { idBloggerUser }) => {
+  return fromEvent(buttonE, "click").pipe(
+    map(() => ({
+      userId: user.userId,
+    })),
+    exhaustMap((body) =>
+      ajax({
+        method: "PUT",
+        url: `/api/comments/${commentId}`,
+        headers: {
+          authorization: `Bearer ${idBloggerUser}`,
+        },
+        body,
+      }).pipe(
+        pluck("response", "message"),
+        catchError((error) => of({ error }))
+      )
+    )
+  );
+};
+
+export const deleteComment$ = (buttonE, commentId, { idBloggerUser }) => {
+  return fromEvent(buttonE, "click").pipe(
+    exhaustMap(() =>
+      ajax({
+        method: "DELETE",
+        url: `/api/comments/${commentId}`,
+        headers: {
+          authorization: `Bearer ${idBloggerUser}`,
+        },
+      }).pipe(
         pluck("response", "message"),
         catchError((error) => of({ error }))
       )
