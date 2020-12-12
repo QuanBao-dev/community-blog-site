@@ -53,6 +53,12 @@ const listPostStore = {
     };
     behaviorSubject.next(state);
   },
+  updateDataQuick: (data = initialState) => {
+    const keys = Object.keys(data);
+    keys.forEach((key) => {
+      state[key] = data[key];
+    });
+  },
 };
 
 export default listPostStore;

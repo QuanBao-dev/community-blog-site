@@ -23,6 +23,8 @@ const optionsSelection = {
   postId: 1,
   isCompleted: 1,
   colorStyleMapString: 1,
+  upVotesUserIdList: 1,
+  downVotesUserIdList: 1,
 };
 
 router.get("/", async (req, res) => {

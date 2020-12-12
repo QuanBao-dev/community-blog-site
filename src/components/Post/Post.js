@@ -1,15 +1,15 @@
-import './Post.css';
+import "./Post.css";
 
-import React, { useState } from 'react';
-import { useRef } from 'react';
-import { useCookies } from 'react-cookie';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useRef } from "react";
+import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
 
-import { popularTagsStream } from '../../epic/popularTags';
-import { tabBarStream } from '../../epic/tabBar';
-import { userStream } from '../../epic/user';
-import { useCreatePost, useEraseEditPost } from '../../Hook/listPost';
-import Input from '../Input/Input';
+import { popularTagsStream } from "../../epic/popularTags";
+import { tabBarStream } from "../../epic/tabBar";
+import { userStream } from "../../epic/user";
+import { useCreatePost, useEraseEditPost } from "../../Hook/listPost";
+import Input from "../Input/Input";
 
 const Post = ({ post }) => {
   const user = userStream.currentState().user;
@@ -51,6 +51,9 @@ const Post = ({ post }) => {
     cookies,
     triggerFetchTagsTop
   );
+  const likeQuantity =
+    -JSON.parse(post.downVotesUserIdList || "[]").length +
+    JSON.parse(post.upVotesUserIdList || "[]").length;
   return (
     <li className="container-post">
       <div className="container-menu-control">
@@ -92,6 +95,11 @@ const Post = ({ post }) => {
           })}
         </div>
         <div className="excerpt-post">{post.excerpt}</div>
+        <div style={{ opacity: 0.6 }}>
+          {Math.abs(likeQuantity)}{" "}
+          {likeQuantity >= 0 && <i className="far fa-thumbs-up"></i>}
+          {likeQuantity < 0 && <i className="far fa-thumbs-down"></i>}
+        </div>
       </div>
       <div className="edit-board-container" ref={boardEditRef}>
         <Input label="Title" input={titleRef} />

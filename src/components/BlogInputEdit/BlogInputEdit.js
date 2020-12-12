@@ -112,8 +112,15 @@ const BlogInputEdit = ({ postId }) => {
     saveContent(contentState);
   };
 
-  useInitBlogDetail(onChange, decorator, setBlogState, cookies);
-  useInitEditorContent(blogState, cookies, onChange, convertFromRaw, decorator);
+  useInitBlogDetail(postId, onChange, decorator, setBlogState, cookies);
+  useInitEditorContent(
+    postId,
+    blogState,
+    cookies,
+    onChange,
+    convertFromRaw,
+    decorator
+  );
   useFetchBlogData(blogState, postId, onChange, history, decorator);
 
   useAutoSave(cookies, history);

@@ -17,6 +17,7 @@ import { tabBarStream } from "../epic/tabBar";
 import { userStream } from "../epic/user";
 
 export function initEditorContent(
+  postId,
   blogState,
   cookies,
   onChange,
@@ -34,7 +35,7 @@ export function initEditorContent(
       blogInputEditStream.updateData({
         bodySavedString: content,
       });
-      fetchValidateImageList$(cookies).subscribe(() => {
+      fetchValidateImageList$(cookies, postId).subscribe(() => {
         if (blogInputEditStream.currentState().dataBlogPage.title === "")
           blogInputEditStream.updateData({
             triggerFetchBlog: !blogInputEditStream.currentState()
@@ -53,7 +54,13 @@ export function initEditorContent(
   };
 }
 
-export function initBlogDetail(onChange, decorator, setBlogState, cookies) {
+export function initBlogDetail(
+  postId,
+  onChange,
+  decorator,
+  setBlogState,
+  cookies
+) {
   return () => {
     window.scroll({
       top: 0,
@@ -71,7 +78,7 @@ export function initBlogDetail(onChange, decorator, setBlogState, cookies) {
       onChange(EditorState.createEmpty(decorator));
       subscription.unsubscribe();
       subscription2.unsubscribe();
-      fetchValidateImageList$(cookies).subscribe();
+      fetchValidateImageList$(cookies, postId).subscribe();
       if (blogInputEditStream.currentState().currentPostIdPath !== "create")
         blogInputEditStream.updateData({
           dataBlogPage: {

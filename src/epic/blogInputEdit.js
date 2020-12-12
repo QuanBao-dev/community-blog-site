@@ -172,11 +172,10 @@ export const publicizePost$ = (buttonUpload, { idBloggerUser }) => {
   );
 };
 
-export const fetchValidateImageList$ = ({ idBloggerUser }) => {
+export const fetchValidateImageList$ = ({ idBloggerUser }, postId) => {
   return timer(0).pipe(
     map(() => {
       const body = blogInputEditStream.currentState().bodySavedString;
-      const postId = blogInputEditStream.currentState().currentPostIdPath;
       return { body, postId };
     }),
     filter(({ body, postId }) => postId && body && body !== ""),

@@ -1,3 +1,4 @@
+import { listPostStream } from "../epic/listPost";
 import { downVoteBlog$, upVoteBlog$, fetchVoteBlog$ } from "../epic/voteBlog";
 import { voteBlogStream } from "../Hook/voteBlog";
 
@@ -38,11 +39,24 @@ export const upVoteBlog = (postId, upVoteButtonElement, cookies) => {
         upVoteButtonElement,
         cookies
       ).subscribe(({ error, downVotesUserIdList, upVotesUserIdList }) => {
-        if (!error)
+        if (!error) {
           voteBlogStream.updateData({
             downVotesUserIdList: JSON.parse(downVotesUserIdList),
             upVotesUserIdList: JSON.parse(upVotesUserIdList),
           });
+          let { listPost } = listPostStream.currentState();
+          listPost = listPost.map((post) => {
+            if (post.postId === postId) {
+              return {
+                ...post,
+                downVotesUserIdList,
+                upVotesUserIdList,
+              };
+            }
+            return post;
+          });
+          listPostStream.updateData({ listPost });
+        }
       });
     return () => {
       subscription && subscription.unsubscribe();
@@ -59,11 +73,24 @@ export const downVoteBlog = (postId, downVoteButtonElement, cookies) => {
         downVoteButtonElement,
         cookies
       ).subscribe(({ error, downVotesUserIdList, upVotesUserIdList }) => {
-        if (!error)
+        if (!error) {
           voteBlogStream.updateData({
             downVotesUserIdList: JSON.parse(downVotesUserIdList),
             upVotesUserIdList: JSON.parse(upVotesUserIdList),
           });
+          let { listPost } = listPostStream.currentState();
+          listPost = listPost.map((post) => {
+            if (post.postId === postId) {
+              return {
+                ...post,
+                downVotesUserIdList,
+                upVotesUserIdList,
+              };
+            }
+            return post;
+          });
+          listPostStream.updateData({ listPost });
+        }
       });
     return () => {
       subscription && subscription.unsubscribe();

@@ -16,14 +16,15 @@ import {
   updateAfterFetch,
 } from "../Functions/blogInputEdit";
 
-export function useInitBlogDetail(onChange, decorator, setBlogState, cookies) {
+export function useInitBlogDetail(postId, onChange, decorator, setBlogState, cookies) {
   const { currentPostIdPath } = blogInputEditStream.currentState();
-  useEffect(initBlogDetail(onChange, decorator, setBlogState, cookies), [
+  useEffect(initBlogDetail(postId, onChange, decorator, setBlogState, cookies), [
     currentPostIdPath,
   ]);
 }
 
 export function useInitEditorContent(
+  postId,
   blogState,
   cookies,
   onChange,
@@ -31,7 +32,7 @@ export function useInitEditorContent(
   decorator
 ) {
   useEffect(
-    initEditorContent(blogState, cookies, onChange, convertFromRaw, decorator),
+    initEditorContent(postId,blogState, cookies, onChange, convertFromRaw, decorator),
     [blogState.dataBlogPage.title]
   );
 }
