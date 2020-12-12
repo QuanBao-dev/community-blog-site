@@ -1,6 +1,16 @@
-import { fromEvent, timer } from "rxjs";
+import { fromEvent, of, timer } from "rxjs";
 import { ajax } from "rxjs/ajax";
-import { filter, mergeMapTo, pluck, takeWhile, tap } from "rxjs/operators";
+import {
+  catchError,
+  filter,
+  map,
+  mergeMapTo,
+  pluck,
+  switchMap,
+  switchMapTo,
+  takeWhile,
+  tap,
+} from "rxjs/operators";
 
 import listPostStore from "../store/listPost";
 
@@ -63,3 +73,65 @@ export const updateDataWhenScrollingToBottom$ = () => {
     filter(() => document.body.scrollHeight - (window.scrollY + 1500) < 0)
   );
 };
+
+export const createEditPost$ = (
+  buttonSubmitElement,
+  titleElement,
+  introElement,
+  boardEditElement,
+  dataSend,
+  tagElement,
+  tabMode,
+  post,
+  cookies
+) => {
+  return fromEvent(buttonSubmitElement, "click").pipe(
+    map(() => ({
+      title: titleElement.value,
+      excerpt: introElement.value,
+      tags: JSON.stringify(dataSend),
+      isCompleted: tabMode === 3 ? false : true,
+    })),
+    tap(() => {
+      boardEditElement.style.display = "none";
+      titleElement.value = "";
+      introElement.value = "";
+      tagElement.value = "";
+    }),
+    switchMap((body) =>
+      ajax({
+        url: "/api/posts/" + post.postId,
+        method: "PUT",
+        headers: {
+          authorization: `Bearer ${cookies.idBloggerUser}`,
+        },
+        body,
+      }).pipe(
+        pluck("response", "message"),
+        catchError((error) => of({ error }))
+      )
+    )
+  );
+};
+
+export const erasePost$ = (eraseButtonElement, post, cookies) => {
+  return fromEvent(eraseButtonElement, "click")
+  .pipe(
+    switchMapTo(
+      ajax({
+        url: "/api/posts/" + post.postId,
+        method: "DELETE",
+        headers: {
+          authorization: `Bearer ${cookies.idBloggerUser}`,
+        },
+      }).pipe(
+        pluck("response", "message"),
+        catchError((error) => of({ error }))
+      )
+    )
+  )
+}
+
+export const showEditPostForm$ = (editButtonElement) => {
+  return fromEvent(editButtonElement, "click")
+}

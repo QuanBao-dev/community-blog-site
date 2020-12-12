@@ -1,0 +1,11 @@
+.wrapper-vote{
+  text-align: center;
+  position: sticky;
+  top: 0;
+  font-size: 3rem;
+  color: grey;
+}
+
+.wrapper-vote i{
+  cursor: pointer;
+}

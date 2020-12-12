@@ -1,0 +1,20 @@
+.control-menu-container{
+  position: relative;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  z-index: 2;
+  padding: 1rem;
+  background-color: rgb(159, 163, 172);
+  border-radius: 10px;
+}
+
+.autosave-button-active{
+  background-color: black;
+  color: white;
+  outline: none;
+}

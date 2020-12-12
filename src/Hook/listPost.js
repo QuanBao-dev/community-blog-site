@@ -1,13 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 import {
+  createPost,
+  eraseEditPost,
   initListPost,
   resetTabBar,
   stopFetch,
   updateDataListPost,
   updatePageScrolling,
   updateParams,
-} from '../Functions/listPost';
+} from "../Functions/listPost";
 const quantityPost = 5;
 
 export function useInitListPost(setListPostState, setTabBarState) {
@@ -65,3 +67,74 @@ export function useResetTabBar(tabBarState, listPostState) {
     listPostState.title,
   ]);
 }
+
+export const useEraseEditPost = (
+  eraseButtonRef,
+  editButtonRef,
+  boardEditRef,
+  trigger,
+  setTrigger,
+  triggerFetchTagsTop,
+  setDataSend,
+  post,
+  cookies
+) => {
+  useEffect(
+    eraseEditPost(
+      eraseButtonRef.current,
+      editButtonRef.current,
+      boardEditRef.current,
+      trigger,
+      setTrigger,
+      triggerFetchTagsTop,
+      setDataSend,
+      post,
+      cookies
+    ),
+    [
+      trigger,
+      eraseButtonRef.current,
+      editButtonRef.current,
+      boardEditRef.current,
+    ]
+  );
+};
+
+export const useCreatePost = (
+  trigger,
+  buttonSubmitRef,
+  titleRef,
+  introRef,
+  boardEditRef,
+  tagRef,
+  post,
+  dataSend,
+  setDataSend,
+  tabMode,
+  cookies,
+  triggerFetchTagsTop
+) => {
+  useEffect(
+    createPost(
+      buttonSubmitRef.current,
+      titleRef.current,
+      introRef.current,
+      boardEditRef.current,
+      tagRef.current,
+      post,
+      dataSend,
+      setDataSend,
+      tabMode,
+      cookies,
+      triggerFetchTagsTop
+    ),
+    [
+      trigger,
+      buttonSubmitRef.current,
+      titleRef.current,
+      introRef.current,
+      boardEditRef.current,
+      tagRef.current,
+    ]
+  );
+};

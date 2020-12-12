@@ -1,26 +1,15 @@
-import "./Post.css";
+import './Post.css';
 
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useCookies } from "react-cookie";
-import { Link } from "react-router-dom";
-import { fromEvent, of } from "rxjs";
-import { ajax } from "rxjs/ajax";
-import {
-  catchError,
-  map,
-  pluck,
-  switchMap,
-  switchMapTo,
-  tap,
-} from "rxjs/operators";
+import React, { useState } from 'react';
+import { useRef } from 'react';
+import { useCookies } from 'react-cookie';
+import { Link } from 'react-router-dom';
 
-import { listPostStream } from "../../epic/listPost";
-import { userStream } from "../../epic/user";
-import Input from "../Input/Input";
-import { tabBarStream } from "../../epic/tabBar";
-import { popularTagsStream } from "../../epic/popularTags";
+import { popularTagsStream } from '../../epic/popularTags';
+import { tabBarStream } from '../../epic/tabBar';
+import { userStream } from '../../epic/user';
+import { useCreatePost, useEraseEditPost } from '../../Hook/listPost';
+import Input from '../Input/Input';
 
 const Post = ({ post }) => {
   const user = userStream.currentState().user;
@@ -32,107 +21,36 @@ const Post = ({ post }) => {
   const editButtonRef = useRef();
   const boardEditRef = useRef();
   const buttonSubmitRef = useRef();
-
   const titleRef = useRef();
   const introRef = useRef();
   const tagRef = useRef();
 
-  useEffect(() => {
-    let subscription;
-    let subscription2;
-    if (eraseButtonRef.current)
-      subscription = fromEvent(eraseButtonRef.current, "click")
-        .pipe(
-          switchMapTo(
-            ajax({
-              url: "/api/posts/" + post.postId,
-              method: "DELETE",
-              headers: {
-                authorization: `Bearer ${cookies.idBloggerUser}`,
-              },
-            }).pipe(
-              pluck("response", "message"),
-              catchError((error) => of({ error }))
-            )
-          )
-        )
-        .subscribe((v) => {
-          if (!v.error) {
-            listPostStream.updateData({
-              listPost: listPostStream
-                .currentState()
-                .listPost.filter((postL) => postL.postId !== post.postId),
-            });
-            triggerFetchTagsTop();
-          }
-        });
-    if (editButtonRef.current)
-      subscription2 = fromEvent(editButtonRef.current, "click")
-        .pipe(
-          tap(() => {
-            boardEditRef.current.style.display =
-              boardEditRef.current.style.display === "block" ? "none" : "block";
-            setTrigger(!trigger);
-          })
-        )
-        .subscribe();
-    return () => {
-      subscription2 && subscription2.unsubscribe();
-      subscription && subscription.unsubscribe();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger]);
-  useEffect(() => {
-    let subscription;
-    if (buttonSubmitRef.current) {
-      subscription = fromEvent(buttonSubmitRef.current, "click")
-        .pipe(
-          map(() => ({
-            title: titleRef.current.value,
-            excerpt: introRef.current.value,
-            tags: JSON.stringify(dataSend),
-            isCompleted: tabMode === 3 ? false : true,
-          })),
-          tap(() => {
-            boardEditRef.current.style.display = "none";
-            titleRef.current.value = "";
-            introRef.current.value = "";
-            tagRef.current.value = "";
-          }),
-          switchMap((body) =>
-            ajax({
-              url: "/api/posts/" + post.postId,
-              method: "PUT",
-              headers: {
-                authorization: `Bearer ${cookies.idBloggerUser}`,
-              },
-              body,
-            }).pipe(
-              pluck("response", "message"),
-              catchError((error) => of({ error }))
-            )
-          )
-        )
-        .subscribe((v) => {
-          if (!v.error) {
-            listPostStream.updateData({
-              listPost: listPostStream.currentState().listPost.map((postL) => {
-                if (postL.postId === post.postId) {
-                  return v;
-                }
-                return postL;
-              }),
-            });
-            triggerFetchTagsTop();
-            setDataSend([]);
-          }
-        });
-    }
-    return () => {
-      subscription && subscription.unsubscribe();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [trigger, dataSend]);
+  useEraseEditPost(
+    eraseButtonRef,
+    editButtonRef,
+    boardEditRef,
+    trigger,
+    setTrigger,
+    triggerFetchTagsTop,
+    setDataSend,
+    post,
+    cookies
+  );
+
+  useCreatePost(
+    trigger,
+    buttonSubmitRef,
+    titleRef,
+    introRef,
+    boardEditRef,
+    tagRef,
+    post,
+    dataSend,
+    setDataSend,
+    tabMode,
+    cookies,
+    triggerFetchTagsTop
+  );
   return (
     <li className="container-post">
       <div className="container-menu-control">

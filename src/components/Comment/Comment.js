@@ -31,7 +31,7 @@ function Comment({ comment }) {
       className="comment-list__comment"
       style={{ marginLeft: `${comment.childLevel * 50}px` }}
     >
-      {comment.userId === user.userId && (
+      {user && comment.userId === user.userId && (
         <span className="comment-list__delete-symbol" ref={deleteButtonRef}>
           <i className="fas fa-trash-alt"></i>
         </span>

@@ -1,7 +1,10 @@
 import {
+  createEditPost$,
+  erasePost$,
   fetchPosts$,
   listPostStream,
   updateDataWhenScrollingToBottom$,
+  showEditPostForm$,
 } from "../epic/listPost";
 import { tabBarStream } from "../epic/tabBar";
 
@@ -136,5 +139,96 @@ export const updatePageScrolling = (listPostState, quantityPost) => {
     return () => {
       subscription && subscription.unsubscribe();
     };
+  };
+};
+
+export const eraseEditPost = (
+  eraseButtonElement,
+  editButtonElement,
+  boardEditElement,
+  trigger,
+  setTrigger,
+  triggerFetchTagsTop,
+  setDataSend,
+  post,
+  cookies
+) => {
+  return () => {
+    let subscription;
+    let subscription2;
+    if (eraseButtonElement)
+      subscription = erasePost$(eraseButtonElement, post, cookies).subscribe(
+        (v) => {
+          if (!v.error) {
+            listPostStream.updateData({
+              listPost: listPostStream
+                .currentState()
+                .listPost.filter((postL) => postL.postId !== post.postId),
+            });
+            triggerFetchTagsTop();
+          }
+        }
+      );
+    if (editButtonElement)
+      subscription2 = showEditPostForm$(editButtonElement).subscribe(() => {
+        boardEditElement.style.display =
+          boardEditElement.style.display === "block" ? "none" : "block";
+        setTrigger(!trigger);
+        const dataTagSend = post.tags.map((tag) => tag.tagName);
+        setDataSend(dataTagSend);
+      });
+    return () => {
+      subscription2 && subscription2.unsubscribe();
+      subscription && subscription.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  };
+};
+
+export const createPost = (
+  buttonSubmitElement,
+  titleElement,
+  introElement,
+  boardEditElement,
+  tagElement,
+  post,
+  dataSend,
+  setDataSend,
+  tabMode,
+  cookies,
+  triggerFetchTagsTop
+) => {
+  return () => {
+    let subscription;
+    if (buttonSubmitElement) {
+      subscription = createEditPost$(
+        buttonSubmitElement,
+        titleElement,
+        introElement,
+        boardEditElement,
+        dataSend,
+        tagElement,
+        tabMode,
+        post,
+        cookies
+      ).subscribe((v) => {
+        if (!v.error) {
+          listPostStream.updateData({
+            listPost: listPostStream.currentState().listPost.map((postL) => {
+              if (postL.postId === post.postId) {
+                return v;
+              }
+              return postL;
+            }),
+          });
+          triggerFetchTagsTop();
+          setDataSend([]);
+        }
+      });
+    }
+    return () => {
+      subscription && subscription.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   };
 };

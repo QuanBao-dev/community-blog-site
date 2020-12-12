@@ -11,6 +11,7 @@ import {
   publicizePost$,
   triggerSaveData$,
 } from "../epic/blogInputEdit";
+import { latestPostsStream } from "../epic/latestPosts";
 import { listPostStream } from "../epic/listPost";
 import { tabBarStream } from "../epic/tabBar";
 import { userStream } from "../epic/user";
@@ -34,10 +35,11 @@ export function initEditorContent(
         bodySavedString: content,
       });
       fetchValidateImageList$(cookies).subscribe(() => {
-        blogInputEditStream.updateData({
-          triggerFetchBlog: !blogInputEditStream.currentState()
-            .triggerFetchBlog,
-        });
+        if (blogInputEditStream.currentState().dataBlogPage.title === "")
+          blogInputEditStream.updateData({
+            triggerFetchBlog: !blogInputEditStream.currentState()
+              .triggerFetchBlog,
+          });
       });
       if (content) {
         onChange(
@@ -51,7 +53,7 @@ export function initEditorContent(
   };
 }
 
-export function initBlogDetail(setBlogState, cookies) {
+export function initBlogDetail(onChange, decorator, setBlogState, cookies) {
   return () => {
     window.scroll({
       top: 0,
@@ -66,21 +68,23 @@ export function initBlogDetail(setBlogState, cookies) {
     });
     blogInputEditStream.init();
     return () => {
+      onChange(EditorState.createEmpty(decorator));
       subscription.unsubscribe();
       subscription2.unsubscribe();
       fetchValidateImageList$(cookies).subscribe();
-      blogInputEditStream.updateData({
-        dataBlogPage: {
-          body: "",
-          title: "",
-        },
-        toggleEditMode: false,
-        isSaving: false,
-        isAutosaveMode: false,
-        listImageString: "[]",
-        isPublicizing: false,
-        filterImageUrl: [],
-      });
+      if (blogInputEditStream.currentState().currentPostIdPath !== "create")
+        blogInputEditStream.updateData({
+          dataBlogPage: {
+            body: "",
+            title: "",
+          },
+          toggleEditMode: false,
+          isSaving: false,
+          isAutosaveMode: false,
+          listImageString: "[]",
+          isPublicizing: false,
+          filterImageUrl: [],
+        });
     };
   };
 }
@@ -112,9 +116,11 @@ export function autosave(cookies, history) {
     const subscription = autosave$(cookies).subscribe((v) => {
       if (!v.error) {
         const data = { ...v };
+        latestPostsStream.updateData({ shouldFetchLatestPost: true });
         if (blogInputEditStream.currentState().currentPostIdPath === "create") {
           blogInputEditStream.updateData({
             currentPostIdPath: blogInputEditStream.currentState().randomId,
+            isLoading: false,
           });
           history.replace(
             "/blog/" + blogInputEditStream.currentState().randomId
@@ -168,11 +174,13 @@ export function saveTrigger(cookies, history) {
       triggerSaveData$(cookies).subscribe((v) => {
         if (!v.error) {
           const data = { ...v };
+          latestPostsStream.updateData({ shouldFetchLatestPost: true });
           if (
             blogInputEditStream.currentState().currentPostIdPath === "create"
           ) {
             blogInputEditStream.updateData({
               currentPostIdPath: blogInputEditStream.currentState().randomId,
+              isLoading: false,
             });
             history.replace(
               "/blog/" + blogInputEditStream.currentState().randomId
@@ -224,6 +232,7 @@ export function publishPost(buttonUpload, cookies, history) {
       publicizePostSub = publicizePost$(buttonUpload, cookies).subscribe(
         (v) => {
           if (!v.error) {
+            latestPostsStream.updateData({ shouldFetchLatestPost: true });
             const data = { ...v };
             if (
               blogInputEditStream.currentState().currentPostIdPath === "create"
@@ -239,7 +248,9 @@ export function publishPost(buttonUpload, cookies, history) {
               isCompleted: true,
               dataBlogPage: v,
               listImageString: v.listImageString || "[]",
+              isPublicizing: false,
             });
+            latestPostsStream.updateData({ shouldFetchLatestPost: true });
             delete data.body;
             if (tabBarStream.currentState().tabMode !== 2) {
               tabBarStream.updateData({ tabMode: 2 });
@@ -281,6 +292,7 @@ export function fetchBlogData(postId, onChange, decorator, history) {
     }
 
     const subscription = fetchBlog$(postId).subscribe((data) => {
+      blogInputEditStream.updateData({ isLoading: false });
       if (!data.error) {
         blogInputEditStream.updateData({
           isCompleted: data.isCompleted,
@@ -294,7 +306,7 @@ export function fetchBlogData(postId, onChange, decorator, history) {
         onChange(EditorState.createEmpty(decorator));
         if (
           postId === "create" &&
-          !blogInputEditStream.currentState().dataBlogPage.title
+          blogInputEditStream.currentState().dataBlogPage.title === ""
         ) {
           history.replace("/");
         } else {
@@ -303,6 +315,11 @@ export function fetchBlogData(postId, onChange, decorator, history) {
       }
     });
     return () => {
+      if (postId === "create") {
+        blogInputEditStream.updateData({ isLoading: false });
+      } else {
+        blogInputEditStream.updateData({ isLoading: true });
+      }
       subscription.unsubscribe();
     };
   };

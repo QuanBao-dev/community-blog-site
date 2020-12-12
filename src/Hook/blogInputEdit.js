@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { blogInputEditStream } from "../epic/blogInputEdit";
 
 import {
   autosave,
@@ -15,8 +16,11 @@ import {
   updateAfterFetch,
 } from "../Functions/blogInputEdit";
 
-export function useInitBlogDetail(setBlogState, cookies) {
-  useEffect(initBlogDetail(setBlogState, cookies), []);
+export function useInitBlogDetail(onChange, decorator, setBlogState, cookies) {
+  const { currentPostIdPath } = blogInputEditStream.currentState();
+  useEffect(initBlogDetail(onChange, decorator, setBlogState, cookies), [
+    currentPostIdPath,
+  ]);
 }
 
 export function useInitEditorContent(

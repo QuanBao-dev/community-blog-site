@@ -13,12 +13,6 @@ blockquote{
   background-color: rgba(219, 219, 219, 0.705);
 }
 
-.autosave-button-active{
-  background-color: black;
-  color: white;
-  outline: none;
-}
-
 .unsaved-content{
   position: fixed;
   bottom: 0;

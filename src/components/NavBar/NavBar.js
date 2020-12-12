@@ -1,7 +1,11 @@
-import React from "react";
-import { Link, useHistory, withRouter } from "react-router-dom";
-import { tabBarStream } from "../../epic/tabBar";
-import { logoutUser$, userStream } from "../../epic/user";
+import './NavBar.css';
+
+import React from 'react';
+import { Link, useHistory, withRouter } from 'react-router-dom';
+
+import { tabBarStream } from '../../epic/tabBar';
+import { logoutUser$, userStream } from '../../epic/user';
+
 function NavBar({ userState, removeCookie, cookies }) {
   const history = useHistory();
   return (

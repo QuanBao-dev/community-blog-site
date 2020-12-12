@@ -1,17 +1,13 @@
-import "./Comments.css";
+import './Comments.css';
 
-import React from "react";
-import { useState } from "react";
+import React from 'react';
+import { useState } from 'react';
 
-import { commentStream } from "../../epic/comment";
-import {
-  useFetchComment,
-  useHandleListPageChange,
-  useInitComment,
-} from "../../Hook/comment";
-import Comment from "../Comment/Comment";
-import CommentForm from "../CommentForm/CommentForm";
-import { blogInputEditStream } from "../../epic/blogInputEdit";
+import { blogInputEditStream } from '../../epic/blogInputEdit';
+import { commentStream } from '../../epic/comment';
+import { useFetchComment, useHandleListPageChange, useInitComment } from '../../Hook/comment';
+import Comment from '../Comment/Comment';
+import CommentForm from '../CommentForm/CommentForm';
 
 const Comments = ({ postId }) => {
   const [commentsState, setCommentsState] = useState(

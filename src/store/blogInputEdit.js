@@ -25,6 +25,7 @@ const initialState = {
   colorStyleMap: {},
   colorStyleMapSavedString: "{}",
   triggerFetchBlog: true,
+  isLoading:false
 };
 const behaviorSubject = new BehaviorSubject(initialState);
 let state = initialState;
@@ -51,7 +52,7 @@ const blogInputEditStore = {
     } else {
       state[keyState] = value;
     }
-    behaviorSubject.next(state);
+    // behaviorSubject.next(state);
   },
   updateBodyQuick: (body) => {
     state.dataBlogPage.body = body;

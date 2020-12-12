@@ -49,10 +49,18 @@ const postSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  colorStyleMapString:{
+  colorStyleMapString: {
     type: String,
-    default:"{}"
-  }
+    default: "{}",
+  },
+  upVotesUserIdList: {
+    type: String,
+    default: "[]",
+  },
+  downVotesUserIdList: {
+    type: String,
+    default: "[]",
+  },
 });
 
 postSchema.pre("findOneAndUpdate", function (next) {

@@ -8,6 +8,7 @@ import TabBar from "../../components/TabBar/TabBar";
 import { userStream } from "../../epic/user";
 import PopularTags from "../../components/PopularTags/PopularTags";
 import { Link } from "react-router-dom";
+import LatestPosts from "../../components/LatestPosts/LatestPosts";
 
 const Home = () => {
   const { user, quantityUser, isDoneFetch } = userStream.currentState();
@@ -58,6 +59,7 @@ const Home = () => {
             </div>
           )}
         </div>
+        <LatestPosts />
       </aside>
     </div>
   );

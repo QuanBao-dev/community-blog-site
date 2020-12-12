@@ -9,6 +9,7 @@ import {
   mergeMap,
   pluck,
   switchMap,
+  switchMapTo,
   tap,
 } from "rxjs/operators";
 
@@ -17,9 +18,14 @@ import blogInputEditStore from "../store/blogInputEdit";
 export const blogInputEditStream = blogInputEditStore;
 
 export const fetchBlog$ = (postId) => {
-  return ajax({ url: "/api/posts/" + postId }).pipe(
-    pluck("response", "message"),
-    catchError((error) => of({ error }))
+  return timer(0).pipe(
+    switchMapTo(
+      ajax({ url: "/api/posts/" + postId }).pipe(
+        pluck("response", "message"),
+        tap(() => blogInputEditStream.updateData({ isLoading: false })),
+        catchError((error) => of({ error }))
+      )
+    )
   );
 };
 
@@ -41,11 +47,11 @@ export const autosave$ = ({ idBloggerUser }) => {
     map(() => {
       let body = { ...blogInputEditStream.currentState().dataBlogPage };
       body.colorStyleMapString = JSON.stringify(
-        blogInputEditStream.currentState().colorStyleMap,
+        blogInputEditStream.currentState().colorStyleMap
       );
       blogInputEditStream.updateData({
         bodySavedString: body.body,
-        colorStyleMapSavedString: body.colorStyleMapString
+        colorStyleMapSavedString: body.colorStyleMapString,
       });
       if (blogInputEditStream.currentState().currentPostIdPath === "create") {
         body.postId = blogInputEditStream.currentState().randomId;
@@ -62,6 +68,8 @@ export const autosave$ = ({ idBloggerUser }) => {
       delete body.userId;
       delete body.listImageString;
       delete body.createdAt;
+      delete body.upVotesUserIdList;
+      delete body.downVotesUserIdList;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isSaving: true })),
@@ -89,7 +97,7 @@ export const triggerSaveData$ = ({ idBloggerUser }) => {
       );
       blogInputEditStream.updateData({
         bodySavedString: body.body,
-        colorStyleMapSavedString: body.colorStyleMapString
+        colorStyleMapSavedString: body.colorStyleMapString,
       });
       if (blogInputEditStream.currentState().currentPostIdPath === "create") {
         body.postId = blogInputEditStream.currentState().randomId;
@@ -106,6 +114,8 @@ export const triggerSaveData$ = ({ idBloggerUser }) => {
       delete body.userId;
       delete body.listImageString;
       delete body.createdAt;
+      delete body.upVotesUserIdList;
+      delete body.downVotesUserIdList;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isSaving: true })),
@@ -143,6 +153,8 @@ export const publicizePost$ = (buttonUpload, { idBloggerUser }) => {
       delete body.userId;
       delete body.listImageString;
       delete body.createdAt;
+      delete body.upVotesUserIdList;
+      delete body.downVotesUserIdList;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isPublicizing: true })),
@@ -167,6 +179,7 @@ export const fetchValidateImageList$ = ({ idBloggerUser }) => {
       const postId = blogInputEditStream.currentState().currentPostIdPath;
       return { body, postId };
     }),
+    filter(({ body, postId }) => postId && body && body !== ""),
     mergeMap((data) =>
       ajax({
         method: "PUT",

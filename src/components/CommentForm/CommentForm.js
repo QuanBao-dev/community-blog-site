@@ -1,10 +1,11 @@
-import './CommentForm.css';
+import "./CommentForm.css";
 
-import React, { useRef, useState } from 'react';
-import { useCookies } from 'react-cookie';
+import React, { useRef, useState } from "react";
+import { useCookies } from "react-cookie";
 
-import { userStream } from '../../epic/user';
-import { usePostComment } from '../../Hook/comment';
+import { userStream } from "../../epic/user";
+import { commentStream } from "../../epic/comment";
+import { usePostComment } from "../../Hook/comment";
 
 const CommentForm = ({ isReply = false, commentId, commentLevel }) => {
   const buttonRef = useRef();
@@ -23,7 +24,12 @@ const CommentForm = ({ isReply = false, commentId, commentLevel }) => {
   );
   if (!isReply)
     return (
-      <div className="section-container__form">
+      <div
+        style={{
+          display: !commentStream.currentState().isLoading ? "block" : "none",
+        }}
+        className="section-container__form"
+      >
         <textarea ref={textareaRef} className="textarea-container" />
         <button
           ref={buttonRef}

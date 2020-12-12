@@ -169,6 +169,24 @@ router.get("/personal", verifyRole("Admin", "User"), async (req, res) => {
   }
 });
 
+router.get("/:postId/votes", async (req, res) => {
+  const { postId } = req.params;
+  const post = await Post.findOne({ postId }).lean().select({
+    _id: 0,
+    upVotesUserIdList: 1,
+    downVotesUserIdList: 1,
+  });
+  if (!post) {
+    return res.status(400).send({ error: "Post doesn't exist" });
+  }
+  res.send({
+    message: {
+      upVotesUserIdList: post.upVotesUserIdList || "[]",
+      downVotesUserIdList: post.downVotesUserIdList || "[]",
+    },
+  });
+});
+
 router.get("/:postId", async (req, res) => {
   const { postId } = req.params;
   try {
@@ -384,6 +402,64 @@ function checkListInlineStyleRanges(array, colorCheck) {
   return check;
 }
 
+router.put("/:postId/votes", verifyRole("User", "Admin"), async (req, res) => {
+  const { postId } = req.params;
+  let { isUpVote } = req.body;
+  isUpVote = isUpVote === "true";
+  let post = await Post.findOne({ postId });
+  if (!post) {
+    return res.status(400).send({ error: "Post doesn't exist" });
+  }
+  if (post.userId !== req.user.userId) {
+    return res.status(401).send({ error: "You do not have permission" });
+  }
+  if (isUpVote !== undefined && isUpVote !== null) {
+    if (!post.upVotesUserIdList) post.upVotesUserIdList = "[]";
+    if (!post.downVotesUserIdList) post.downVotesUserIdList = "[]";
+    let upVotesUserIdList = JSON.parse(post.upVotesUserIdList);
+    let downVotesUserIdList = JSON.parse(post.downVotesUserIdList);
+    if (isUpVote === true) {
+      if (!upVotesUserIdList.includes(req.user.userId))
+        upVotesUserIdList.push(req.user.userId);
+      else
+        upVotesUserIdList = upVotesUserIdList.filter(
+          (userId) => userId !== req.user.userId
+        );
+      if (downVotesUserIdList.includes(req.user.userId))
+        downVotesUserIdList = downVotesUserIdList.filter(
+          (userId) => userId !== req.user.userId
+        );
+    } else {
+      if (upVotesUserIdList.includes(req.user.userId))
+        upVotesUserIdList = upVotesUserIdList.filter(
+          (userId) => userId !== req.user.userId
+        );
+      if (!downVotesUserIdList.includes(req.user.userId))
+        downVotesUserIdList.push(req.user.userId);
+      else
+        downVotesUserIdList = downVotesUserIdList.filter(
+          (userId) => userId !== req.user.userId
+        );
+    }
+    post.upVotesUserIdList = JSON.stringify(upVotesUserIdList);
+    post.downVotesUserIdList = JSON.stringify(downVotesUserIdList);
+  }
+  try {
+    await post.save();
+    res.send({
+      message: {
+        upVotesUserIdList: post.upVotesUserIdList || "[]",
+        downVotesUserIdList: post.downVotesUserIdList || "[]",
+      },
+    });
+  } catch (error) {
+    if (error) {
+      return res.status(400).send({ error: error.message });
+    }
+    res.status(404).send({ error: "Something went wrong" });
+  }
+});
+
 //TODO change tags excerpt title
 router.put("/:postId", verifyRole("User", "Admin"), async (req, res) => {
   const { postId } = req.params;
@@ -405,9 +481,6 @@ router.put("/:postId", verifyRole("User", "Admin"), async (req, res) => {
   let post = await Post.findOne({ postId });
   if (!post) {
     return res.status(400).send({ error: "Post doesn't exist" });
-  }
-  if (result.error) {
-    return res.status(400).send({ error: result.error.details[0].message });
   }
   if (post.userId !== req.user.userId) {
     return res.status(401).send({ error: "You do not have permission" });

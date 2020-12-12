@@ -115,6 +115,7 @@ export function postComment(
               if (comments.length > 6) comments.pop();
               commentStream.updateData({
                 comments,
+                fetchedCommentId: [],
                 lastPage: v.lastPage,
               });
             } else
@@ -143,7 +144,6 @@ export function postComment(
                 ...comments.slice(index + 1, comments.length),
               ];
             }
-            console.log(updatedComments);
             commentStream.updateData({
               comments: updatedComments,
               fetchedCommentId,

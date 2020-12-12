@@ -41,6 +41,7 @@ const CreatePost = () => {
                 ...blogInputEditStream.currentState().dataBlogPage,
                 ...data,
               },
+              isLoading: false,
             });
             history.push("/blog/create");
           }}

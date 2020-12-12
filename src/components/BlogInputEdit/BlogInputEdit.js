@@ -112,7 +112,7 @@ const BlogInputEdit = ({ postId }) => {
     saveContent(contentState);
   };
 
-  useInitBlogDetail(setBlogState, cookies);
+  useInitBlogDetail(onChange, decorator, setBlogState, cookies);
   useInitEditorContent(blogState, cookies, onChange, convertFromRaw, decorator);
   useFetchBlogData(blogState, postId, onChange, history, decorator);
 
@@ -139,57 +139,71 @@ const BlogInputEdit = ({ postId }) => {
   );
   return (
     <div>
-      <div className="loading-save-content">
-        <i className="fas fa-spinner fa-spin"></i> <span>Save</span>
-      </div>
       <div
-        className="unsaved-content"
         style={{
-          display: blogState.toggleEditMode ? "block" : "none",
-          backgroundColor: blogState.isSaved ? "green" : "red",
+          display: !blogState.isLoading ? "block" : "none",
         }}
       >
-        <span></span>
+        <div className="loading-save-content">
+          <i className="fas fa-spinner fa-spin"></i> <span>Save</span>
+        </div>
+        <div
+          className="unsaved-content"
+          style={{
+            display: blogState.toggleEditMode ? "block" : "none",
+            backgroundColor: blogState.isSaved ? "green" : "red",
+          }}
+        >
+          <span></span>
+        </div>
+        <div className="loading-publicize-content">
+          <i className="fas fa-spinner fa-spin"></i> <span>Publicizing...</span>
+        </div>
+        {user &&
+          (blogState.dataBlogPage.userId === user.userId ||
+            (postId === "create" && blogState.dataBlogPage.title)) && (
+            <div className="menu-control-fix">
+              {blogState.isCompleted !== true && (
+                <button className="button-publicize-post">Upload Post</button>
+              )}
+              <button
+                onClick={toggleStateEdit}
+                className={
+                  blogState.toggleEditMode === true
+                    ? "edit-button-post--inactive"
+                    : "edit-button-post"
+                }
+              >
+                {blogState.toggleEditMode === true ? "No Edit" : "Edit"}
+              </button>
+            </div>
+          )}
+        {user &&
+          (blogState.dataBlogPage.userId === user.userId ||
+            (postId === "create" && blogState.dataBlogPage.title)) && (
+            <MenuController
+              blogState={blogState}
+              onChange={onChange}
+              editorState={editorState}
+              currentStyle={currentStyle}
+            />
+          )}
+        <BlogContentDetail
+          blogState={blogState}
+          styleMap={styleMap}
+          editorState={editorState}
+          onChange={onChange}
+          editorRef={editorRef}
+        />
       </div>
-      <div className="loading-publicize-content">
-        <i className="fas fa-spinner fa-spin"></i> <span>Publicizing...</span>
+      <div
+        style={{
+          display: blogState.isLoading ? "block" : "none",
+          textAlign: "center",
+        }}
+      >
+        <i className="fas fa-cog fa-spin fa-2x"></i>
       </div>
-      {user &&
-        (blogState.dataBlogPage.userId === user.userId ||
-          (postId === "create" && blogState.dataBlogPage.title)) && (
-          <div className="menu-control-fix">
-            {blogState.isCompleted !== true && (
-              <button className="button-publicize-post">Upload Post</button>
-            )}
-            <button
-              onClick={toggleStateEdit}
-              className={
-                blogState.toggleEditMode === true
-                  ? "edit-button-post--inactive"
-                  : "edit-button-post"
-              }
-            >
-              {blogState.toggleEditMode === true ? "No Edit" : "Edit"}
-            </button>
-          </div>
-        )}
-      {user &&
-        (blogState.dataBlogPage.userId === user.userId ||
-          (postId === "create" && blogState.dataBlogPage.title)) && (
-          <MenuController
-            blogState={blogState}
-            onChange={onChange}
-            editorState={editorState}
-            currentStyle={currentStyle}
-          />
-        )}
-      <BlogContentDetail
-        blogState={blogState}
-        styleMap={styleMap}
-        editorState={editorState}
-        onChange={onChange}
-        editorRef={editorRef}
-      />
     </div>
   );
 };

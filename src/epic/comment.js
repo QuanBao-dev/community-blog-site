@@ -44,7 +44,9 @@ export const submitComment$ = (
       iif(
         () => !isReply,
         fromEvent(button, "click").pipe(
-          filter(() => textarea.value.trim() !== ""),
+          filter(
+            () => textarea.value.trim() !== "" && userStream.currentState().user
+          ),
           map(() => ({
             postId: blogInputEditStream.currentState().currentPostIdPath,
             content: textarea.value,

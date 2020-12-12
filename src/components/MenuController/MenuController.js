@@ -1,11 +1,10 @@
-import React from "react";
-import {
-  changeTriggerSave,
-  createNewCustomBlock,
-  uploadFile,
-} from "../../Functions/blogInputEdit";
-import { blogInputEditStream } from "../../epic/blogInputEdit";
-import { AtomicBlockUtils, RichUtils } from "draft-js";
+import './MenuController.css';
+
+import { AtomicBlockUtils, RichUtils } from 'draft-js';
+import React from 'react';
+
+import { blogInputEditStream } from '../../epic/blogInputEdit';
+import { changeTriggerSave, createNewCustomBlock, uploadFile } from '../../Functions/blogInputEdit';
 
 const BLOCK_STYLES = [
   { label: "h1", style: "header-one" },
