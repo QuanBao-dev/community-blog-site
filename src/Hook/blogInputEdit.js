@@ -16,9 +16,9 @@ import {
   updateAfterFetch,
 } from "../Functions/blogInputEdit";
 
-export function useInitBlogDetail(postId, onChange, decorator, setBlogState, cookies) {
+export function useInitBlogDetail(onChange, decorator, setBlogState) {
   const { currentPostIdPath } = blogInputEditStream.currentState();
-  useEffect(initBlogDetail(postId, onChange, decorator, setBlogState, cookies), [
+  useEffect(initBlogDetail(onChange, decorator, setBlogState), [
     currentPostIdPath,
   ]);
 }

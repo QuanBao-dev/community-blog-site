@@ -2,6 +2,8 @@ import { BehaviorSubject } from "rxjs";
 
 const initialState = {
   latestPost: [],
+  latestPostAuthor: [],
+  authorId: null,
   shouldFetchLatestPost: true,
 };
 const behaviorSubject = new BehaviorSubject(initialState);

@@ -54,13 +54,7 @@ export function initEditorContent(
   };
 }
 
-export function initBlogDetail(
-  postId,
-  onChange,
-  decorator,
-  setBlogState,
-  cookies
-) {
+export function initBlogDetail(onChange, decorator, setBlogState) {
   return () => {
     window.scroll({
       top: 0,
@@ -78,7 +72,6 @@ export function initBlogDetail(
       onChange(EditorState.createEmpty(decorator));
       subscription.unsubscribe();
       subscription2.unsubscribe();
-      fetchValidateImageList$(cookies, postId).subscribe();
       if (blogInputEditStream.currentState().currentPostIdPath !== "create")
         blogInputEditStream.updateData({
           dataBlogPage: {
@@ -301,6 +294,7 @@ export function fetchBlogData(postId, onChange, decorator, history) {
     const subscription = fetchBlog$(postId).subscribe((data) => {
       blogInputEditStream.updateData({ isLoading: false });
       if (!data.error) {
+        latestPostsStream.updateData({ authorId: data.userId });
         blogInputEditStream.updateData({
           isCompleted: data.isCompleted,
           dataBlogPage: data,

@@ -20,6 +20,7 @@ const Blog = (props) => {
       </div>
       <div className="container-news">
         <LatestPosts />
+        <LatestPosts isAuthor={true} />
       </div>
     </div>
   );

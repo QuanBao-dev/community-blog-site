@@ -19,6 +19,11 @@
   transition: 0.5s;
 }
 
+.latest-post-item__author-username{
+  font-weight: 1000;
+  display: inline;
+}
+
 .latest-post-item__title:hover{
   background-size: 100% 4px;
 }

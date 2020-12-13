@@ -28,7 +28,7 @@ const optionsSelection = {
 };
 
 router.get("/", async (req, res) => {
-  let { tags, page } = req.query;
+  let { tags, page, authorId } = req.query;
   if (typeof tags === "string") {
     tags = [tags];
   }
@@ -40,6 +40,14 @@ router.get("/", async (req, res) => {
     if (tags && tags.length > 0)
       posts = await Post.aggregate([
         { $match: { isCompleted: true, "tags.tagName": { $in: tags } } },
+        { $sort: { updatedAt: -1 } },
+        { $skip: (page - 1) * quantityPosts },
+        { $limit: quantityPosts },
+        { $project: opts },
+      ]);
+    else if (authorId)
+      posts = await Post.aggregate([
+        { $match: { userId: authorId } },
         { $sort: { updatedAt: -1 } },
         { $skip: (page - 1) * quantityPosts },
         { $limit: quantityPosts },

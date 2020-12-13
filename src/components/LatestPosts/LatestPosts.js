@@ -9,12 +9,21 @@ import {
 } from "../../Hook/latestPosts";
 import LatestPost from "../LatestPost/LatestPost";
 
-const LatestPosts = () => {
+const LatestPosts = ({ isAuthor }) => {
   const [latestPostsState, setLatestPostsState] = useState(
     latestPostsStream.currentState()
   );
   useInitLatestPosts(setLatestPostsState);
-  useFetchLatestPosts(latestPostsState);
+  useFetchLatestPosts(latestPostsState, isAuthor);
+  if (isAuthor)
+    return (
+      <ul className="container-latest-posts">
+        <h1>Latest Author's Posts</h1>
+        {latestPostsState.latestPostAuthor.map((post) => (
+          <LatestPost key={post.postId} post={post} />
+        ))}
+      </ul>
+    );
   return (
     <ul className="container-latest-posts">
       <h1>Latest Posts</h1>

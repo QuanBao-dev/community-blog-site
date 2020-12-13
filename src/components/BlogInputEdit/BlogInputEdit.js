@@ -112,7 +112,7 @@ const BlogInputEdit = ({ postId }) => {
     saveContent(contentState);
   };
 
-  useInitBlogDetail(postId, onChange, decorator, setBlogState, cookies);
+  useInitBlogDetail(onChange, decorator, setBlogState);
   useInitEditorContent(
     postId,
     blogState,
