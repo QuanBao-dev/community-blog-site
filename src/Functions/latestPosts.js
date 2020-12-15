@@ -20,6 +20,7 @@ export const fetchLatestPosts = (isAuthor) => {
       else {
         latestPostsStream.updateData({
           latestPostAuthor: v,
+          shouldFetchLatestPostAuthor: false,
         });
       }
     });

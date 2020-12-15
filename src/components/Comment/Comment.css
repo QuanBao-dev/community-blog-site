@@ -28,6 +28,11 @@
   font-size: 1.3rem;
 }
 
+.comment-list__content p{
+  margin: 0;
+  margin-bottom: 0.4rem;
+}
+
 .comment-list__author-symbol{
   color: grey;
   font-weight: 900;

@@ -50,10 +50,10 @@ export function useFetchBlogData(
   ]);
 }
 
-export const usePublishPost = (buttonUpload, cookies, history) => {
+export const usePublishPost = (buttonUpload, cookies, history, postId) => {
   useEffect(publishPost(buttonUpload, cookies, history), [
     buttonUpload,
-    cookies,
+    postId,
   ]);
 };
 export const useSaveTrigger = (cookies, blogState, history) => {

@@ -5,6 +5,7 @@ const initialState = {
   latestPostAuthor: [],
   authorId: null,
   shouldFetchLatestPost: true,
+  shouldFetchLatestPostAuthor: true
 };
 const behaviorSubject = new BehaviorSubject(initialState);
 let state = initialState;

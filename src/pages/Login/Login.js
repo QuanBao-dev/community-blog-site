@@ -112,7 +112,7 @@ function handleResult(
       userStream.updateData({ isDoneFetch: true });
     });
   } else {
-    const errorMessage = result.error.response.error.toLocaleLowerCase();
+    const errorMessage = result.error.toLocaleLowerCase();
     if (errorMessage.includes("email")) setErrorEmail(errorMessage);
     else setErrorEmail(null);
 

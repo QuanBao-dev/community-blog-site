@@ -1,3 +1,4 @@
+import { latestPostsStream } from "../epic/latestPosts";
 import { listPostStream } from "../epic/listPost";
 import { downVoteBlog$, upVoteBlog$, fetchVoteBlog$ } from "../epic/voteBlog";
 import { voteBlogStream } from "../Hook/voteBlog";
@@ -40,6 +41,7 @@ export const upVoteBlog = (postId, upVoteButtonElement, cookies) => {
         cookies
       ).subscribe(({ error, downVotesUserIdList, upVotesUserIdList }) => {
         if (!error) {
+          latestPostsStream.updateData({ shouldFetchLatestPost: true });
           voteBlogStream.updateData({
             downVotesUserIdList: JSON.parse(downVotesUserIdList),
             upVotesUserIdList: JSON.parse(upVotesUserIdList),
@@ -74,6 +76,7 @@ export const downVoteBlog = (postId, downVoteButtonElement, cookies) => {
         cookies
       ).subscribe(({ error, downVotesUserIdList, upVotesUserIdList }) => {
         if (!error) {
+          latestPostsStream.updateData({ shouldFetchLatestPost: true });
           voteBlogStream.updateData({
             downVotesUserIdList: JSON.parse(downVotesUserIdList),
             upVotesUserIdList: JSON.parse(upVotesUserIdList),

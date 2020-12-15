@@ -138,7 +138,6 @@ const ImageMedia = (props) => {
           iframeRef={iframeRef}
           isImage={isImage}
           onClick={() => {
-            document.querySelector(".public-DraftEditor-content").focus();
             if (imageRef.current)
               saveContent(
                 props.contentState.replaceEntityData(props.entityKey, {

@@ -72,6 +72,10 @@ export function initBlogDetail(onChange, decorator, setBlogState) {
       onChange(EditorState.createEmpty(decorator));
       subscription.unsubscribe();
       subscription2.unsubscribe();
+      latestPostsStream.updateData({
+        authorId: null,
+        shouldFetchLatestPostAuthor: true,
+      });
       if (blogInputEditStream.currentState().currentPostIdPath !== "create")
         blogInputEditStream.updateData({
           dataBlogPage: {
@@ -115,8 +119,8 @@ export function autosave(cookies, history) {
   return () => {
     const subscription = autosave$(cookies).subscribe((v) => {
       if (!v.error) {
+        updateLatestPost(v);
         const data = { ...v };
-        latestPostsStream.updateData({ shouldFetchLatestPost: true });
         if (blogInputEditStream.currentState().currentPostIdPath === "create") {
           blogInputEditStream.updateData({
             currentPostIdPath: blogInputEditStream.currentState().randomId,
@@ -152,12 +156,14 @@ export function autosave(cookies, history) {
           });
         }
       } else {
-        userStream.updateData({
-          user: null,
-          quantityUser: null,
-          isDoneFetch: false,
-        });
-        alert("Please refresh and sign in");
+        if (v.error === "Access denied") {
+          userStream.updateData({
+            user: null,
+            quantityUser: null,
+            isDoneFetch: false,
+          });
+          alert("Please refresh and sign in");
+        }
       }
       blogInputEditStream.updateData({ isSaving: false });
     });
@@ -173,8 +179,8 @@ export function saveTrigger(cookies, history) {
     if (blogInputEditStream.currentState().toggleEditMode) {
       triggerSaveData$(cookies).subscribe((v) => {
         if (!v.error) {
+          updateLatestPost(v);
           const data = { ...v };
-          latestPostsStream.updateData({ shouldFetchLatestPost: true });
           if (
             blogInputEditStream.currentState().currentPostIdPath === "create"
           ) {
@@ -212,12 +218,14 @@ export function saveTrigger(cookies, history) {
             });
           }
         } else {
-          userStream.updateData({
-            user: null,
-            quantityUser: null,
-            isDoneFetch: false,
-          });
-          alert("Please refresh and sign in");
+          if (v.error === "Access denied") {
+            userStream.updateData({
+              user: null,
+              quantityUser: null,
+              isDoneFetch: false,
+            });
+            alert("Please refresh and sign in");
+          }
         }
         blogInputEditStream.updateData({ isSaving: false });
       });
@@ -232,7 +240,7 @@ export function publishPost(buttonUpload, cookies, history) {
       publicizePostSub = publicizePost$(buttonUpload, cookies).subscribe(
         (v) => {
           if (!v.error) {
-            latestPostsStream.updateData({ shouldFetchLatestPost: true });
+            updateLatestPost(v, true);
             const data = { ...v };
             if (
               blogInputEditStream.currentState().currentPostIdPath === "create"
@@ -267,12 +275,14 @@ export function publishPost(buttonUpload, cookies, history) {
               });
             }
           } else {
-            userStream.updateData({
-              user: null,
-              quantityUser: null,
-              isDoneFetch: false,
-            });
-            alert("Please refresh and sign in");
+            if (v.error === "Access denied") {
+              userStream.updateData({
+                user: null,
+                quantityUser: null,
+                isDoneFetch: false,
+              });
+              alert("Please refresh and sign in");
+            }
           }
           blogInputEditStream.updateData({ isPublicizing: false });
         }
@@ -281,6 +291,34 @@ export function publishPost(buttonUpload, cookies, history) {
       publicizePostSub && publicizePostSub.unsubscribe();
     };
   };
+}
+
+function updateLatestPost(v, isPublish) {
+  const listPostId = latestPostsStream
+    .currentState()
+    .latestPost.map((post) => post.postId);
+  const listPostAuthorPostId = latestPostsStream
+    .currentState()
+    .latestPostAuthor.map((post) => post.postId);
+  if (isPublish) {
+    if (!listPostId.includes(v.postId)) {
+      latestPostsStream.updateData({ shouldFetchLatestPost: true });
+    }
+    if (!listPostAuthorPostId.includes(v.postId)) {
+      latestPostsStream.updateData({
+        shouldFetchLatestPostAuthor: true,
+      });
+    }
+  } else {
+    if (listPostId.includes(v.postId)) {
+      latestPostsStream.updateData({ shouldFetchLatestPost: true });
+    }
+    if (listPostAuthorPostId.includes(v.postId)) {
+      latestPostsStream.updateData({
+        shouldFetchLatestPostAuthor: true,
+      });
+    }
+  }
 }
 
 export function fetchBlogData(postId, onChange, decorator, history) {
@@ -482,6 +520,8 @@ export const saveContent = (content) => {
       });
       k++;
     } else if (
+      rawBody.entityMap[keys[i]].data &&
+      rawBody.entityMap[keys[i]].data.url &&
       rawBody.entityMap[keys[i]].data.url.match(
         /https:\/\/res.cloudinary.com\/storagecloud\/image\/upload\/v[0-9]+\/web-blog\/post-user\/[a-zA-Z0-9:/;,+=@#$%^&*\\\-_]+.(jpg|png|gif)/
       )

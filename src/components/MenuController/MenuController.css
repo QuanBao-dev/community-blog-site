@@ -1,7 +1,4 @@
 .control-menu-container{
-  position: relative;
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
   top: 0;
   display: flex;
   flex-wrap: wrap;
@@ -11,6 +8,8 @@
   padding: 1rem;
   background-color: rgb(159, 163, 172);
   border-radius: 10px;
+  font-size: small;
+  position: sticky;
 }
 
 .autosave-button-active{

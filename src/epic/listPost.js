@@ -25,7 +25,9 @@ export const fetchPosts$ = (
 ) => {
   let url;
   if (userId) {
-    url = `/api/posts/user/${userId}`;
+    url = `/api/posts/user/${userId}?page=${
+      listPostStream.currentState().currentPage
+    }`;
   } else if (title) {
     url = `/api/posts/${title}/search`;
   } else if (tagId) {
@@ -108,15 +110,19 @@ export const createEditPost$ = (
         body,
       }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );
 };
 
 export const erasePost$ = (eraseButtonElement, post, cookies) => {
-  return fromEvent(eraseButtonElement, "click")
-  .pipe(
+  return fromEvent(eraseButtonElement, "click").pipe(
     switchMapTo(
       ajax({
         url: "/api/posts/" + post.postId,
@@ -126,12 +132,17 @@ export const erasePost$ = (eraseButtonElement, post, cookies) => {
         },
       }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
-  )
-}
+  );
+};
 
 export const showEditPostForm$ = (editButtonElement) => {
-  return fromEvent(editButtonElement, "click")
-}
+  return fromEvent(editButtonElement, "click");
+};

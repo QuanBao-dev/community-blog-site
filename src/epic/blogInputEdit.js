@@ -23,7 +23,12 @@ export const fetchBlog$ = (postId) => {
       ajax({ url: "/api/posts/" + postId }).pipe(
         pluck("response", "message"),
         tap(() => blogInputEditStream.updateData({ isLoading: false })),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );
@@ -81,7 +86,12 @@ export const autosave$ = ({ idBloggerUser }) => {
         body,
       }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );
@@ -127,7 +137,12 @@ export const triggerSaveData$ = ({ idBloggerUser }) => {
         body,
       }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );
@@ -166,7 +181,12 @@ export const publicizePost$ = (buttonUpload, { idBloggerUser }) => {
         body,
       }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );

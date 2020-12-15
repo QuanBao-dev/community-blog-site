@@ -13,10 +13,16 @@ import {
 } from "draft-js";
 import React, { useRef, useState } from "react";
 import { useCookies } from "react-cookie";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 import { blogInputEditStream } from "../../epic/blogInputEdit";
 import { userStream } from "../../epic/user";
+import {
+  changeTriggerSave,
+  saveContent,
+  toggleStateEdit,
+  uploadFile,
+} from "../../Functions/blogInputEdit";
 import {
   useAutoSave,
   useCheckPageSaved,
@@ -31,13 +37,8 @@ import {
   useToggleEdit,
   useUpdateAfterFetch,
 } from "../../Hook/blogInputEdit";
-import {
-  changeTriggerSave,
-  saveContent,
-  toggleStateEdit,
-  uploadFile,
-} from "../../Functions/blogInputEdit";
 import AudioCustom from "../AudioCustom/AudioCustom";
+import HeaderBlogPost from "../HeaderBlogPost/HeaderBlogPost";
 import ImageMedia from "../ImageMedia/ImageMedia";
 import LinkCustom from "../LinkCustom/LinkCustom";
 import MenuController from "../MenuController/MenuController";
@@ -125,7 +126,7 @@ const BlogInputEdit = ({ postId }) => {
 
   useAutoSave(cookies, history);
   useSaveTrigger(cookies, blogState, history);
-  usePublishPost(buttonUpload, cookies, history);
+  usePublishPost(buttonUpload, cookies, history, postId);
 
   useToggleEdit(blogState);
   useShowHidePublish(blogState);
@@ -201,6 +202,7 @@ const BlogInputEdit = ({ postId }) => {
           editorState={editorState}
           onChange={onChange}
           editorRef={editorRef}
+          postId={postId}
         />
       </div>
       <div
@@ -223,41 +225,19 @@ function BlogContentDetail({
   editorState,
   onChange,
   editorRef,
+  postId,
 }) {
   return (
     <section className="section-blog-detail">
-      <div className="header-blog-post">
-        <h1>{blogState.dataBlogPage.title}</h1>
-        {blogState.dataBlogPage.tags && (
-          <div>
-            {blogState.dataBlogPage.tags.map((tag, key) => (
-              <Link
-                to={"/tags/" + tag.tagId}
-                key={key}
-                className="header-blog-post__tag-name"
-              >
-                #{tag.tagName || tag}
-              </Link>
-            ))}
-          </div>
-        )}
-        {blogState.dataBlogPage.user && (
-          <Link
-            to={"/posts/user/" + blogState.dataBlogPage.user.userId}
-            className="header-blog-post__author-username"
-          >
-            {blogState.dataBlogPage.user.username}
-          </Link>
-        )}
-        {blogState.dataBlogPage && blogState.dataBlogPage.updatedAt && (
-          <span className="header-blog-post__date-updated">
-            {new Date(blogState.dataBlogPage.updatedAt).toUTCString()}
-          </span>
-        )}
-        <div className="header-blog-post__excerpt-post">
-          {blogState.dataBlogPage.excerpt}
-        </div>
-      </div>
+      <HeaderBlogPost
+        title={blogState.dataBlogPage.title}
+        excerpt={blogState.dataBlogPage.excerpt}
+        tags={blogState.dataBlogPage.tags}
+        updatedAt={blogState.dataBlogPage.updatedAt}
+        user={blogState.dataBlogPage.user}
+        post={blogState.dataBlogPage}
+        postId={postId}
+      />
       <Editor
         customStyleMap={styleMap}
         keyBindingFn={onKeyDown(editorState, onChange)}
@@ -280,11 +260,6 @@ function BlogContentDetail({
 function handleData(editorState, blogState, colorPickerInput) {
   const currentStyle = editorState.getCurrentInlineStyle();
   const styleMap = {
-    CODE: {
-      fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-      fontSize: 16,
-      padding: 2,
-    },
     ...blogInputEditStream.currentState().colorStyleMap,
   };
   const colorPicker = blogState.COLORS.find(({ style }) => {
@@ -353,6 +328,14 @@ function applyColorInlineStyle(editorState, type, onChange) {
 function handleKeyCommand(onChange) {
   return (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
+    if (command === "split-block") {
+      const scrollY = window.scrollY;
+      setTimeout(() => {
+        window.scroll({
+          top: scrollY,
+        });
+      }, 0);
+    }
     if (newState) {
       onChange(newState);
       return "handled";

@@ -6,8 +6,12 @@ export const useInitLatestPosts = (setLatestPostsState) => {
 };
 
 export const useFetchLatestPosts = (
-  { shouldFetchLatestPost, authorId },
+  { shouldFetchLatestPost, shouldFetchLatestPostAuthor, authorId },
   isAuthor
 ) => {
-  useEffect(fetchLatestPosts(isAuthor), [shouldFetchLatestPost, authorId]);
+  useEffect(fetchLatestPosts(isAuthor), [
+    shouldFetchLatestPostAuthor,
+    shouldFetchLatestPost,
+    authorId,
+  ]);
 };

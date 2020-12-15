@@ -157,7 +157,12 @@ const fetchTagsSearch$ = (tagInput) => {
     switchMap((key) =>
       ajax({ url: "/api/tags/search/" + key }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );

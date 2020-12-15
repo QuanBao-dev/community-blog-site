@@ -25,7 +25,12 @@ export const fetchComments$ = (postId) => {
         `/api/comments/post/${postId}?page=${commentStream.currentState().page}`
       ).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );
@@ -64,7 +69,12 @@ export const submitComment$ = (
               body,
             }).pipe(
               pluck("response", "message"),
-              catchError((error) => of({ error }))
+              catchError((error) =>
+                of(error).pipe(
+                  pluck("response", "error"),
+                  map((error) => ({ error }))
+                )
+              )
             )
           )
         ),
@@ -88,7 +98,12 @@ export const submitComment$ = (
               body,
             }).pipe(
               pluck("response", "message"),
-              catchError((error) => of({ error }))
+              catchError((error) =>
+                of(error).pipe(
+                  pluck("response", "error"),
+                  map((error) => ({ error }))
+                )
+              )
             )
           )
         )
@@ -112,7 +127,12 @@ export const handleRepliesList$ = (repliesE, amountReply, parentCommentId) => {
         }?parentCommentId=${parentCommentId}`
       ).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );
@@ -133,7 +153,12 @@ export const likeComment$ = (buttonE, user, commentId, { idBloggerUser }) => {
         body,
       }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );
@@ -150,7 +175,12 @@ export const deleteComment$ = (buttonE, commentId, { idBloggerUser }) => {
         },
       }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );

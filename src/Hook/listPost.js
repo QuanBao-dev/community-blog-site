@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import {
   createPost,
   eraseEditPost,
+  initHeaderBlogPost,
   initListPost,
   resetTabBar,
   stopFetch,
@@ -58,6 +59,10 @@ export function useUpdateDataListPost(
     ]
   );
 }
+
+export const useInitHeaderBlogPost = (boardEditRef, postId) => {
+  useEffect(initHeaderBlogPost(boardEditRef.current), [postId]);
+};
 
 export function useResetTabBar(tabBarState, listPostState) {
   useEffect(resetTabBar(tabBarState, listPostState), [

@@ -10,6 +10,7 @@ import {
   useHandleRepliesList,
   useLikeComment,
 } from "../../Hook/comment";
+import ReactMarkdown from "react-markdown";
 import CommentForm from "../CommentForm/CommentForm";
 
 function Comment({ comment }) {
@@ -47,7 +48,9 @@ function Comment({ comment }) {
           {timeSince(new Date(comment.createdAt))}
         </div>
       </div>
-      <div className="comment-list__content">{comment.content}</div>
+      <ReactMarkdown className="comment-list__content">
+        {comment.content}
+      </ReactMarkdown>
       <div className="comment__number-info">
         <span ref={repliesShowRef}>{comment.amountReply || 0} Replies</span>
         <span

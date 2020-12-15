@@ -33,7 +33,11 @@ router.get("/", async (req, res) => {
     tags = [tags];
   }
   page = +page;
-  const opts = ignoreProperty(optionsSelection, ["body"]);
+  const opts = ignoreProperty(optionsSelection, [
+    "body",
+    "colorStyleMapString",
+    "isCompleted",
+  ]);
   const quantityPosts = 5;
   try {
     let posts;
@@ -47,7 +51,7 @@ router.get("/", async (req, res) => {
       ]);
     else if (authorId)
       posts = await Post.aggregate([
-        { $match: { userId: authorId } },
+        { $match: { userId: authorId, isCompleted: true } },
         { $sort: { updatedAt: -1 } },
         { $skip: (page - 1) * quantityPosts },
         { $limit: quantityPosts },
@@ -420,9 +424,6 @@ router.put("/:postId/votes", verifyRole("User", "Admin"), async (req, res) => {
   if (!post) {
     return res.status(400).send({ error: "Post doesn't exist" });
   }
-  if (post.userId !== req.user.userId) {
-    return res.status(401).send({ error: "You do not have permission" });
-  }
   if (isUpVote !== undefined && isUpVote !== null) {
     if (!post.upVotesUserIdList) post.upVotesUserIdList = "[]";
     if (!post.downVotesUserIdList) post.downVotesUserIdList = "[]";
@@ -551,7 +552,15 @@ router.put("/:postId", verifyRole("User", "Admin"), async (req, res) => {
       ...post.toJSON(),
       user,
     };
-    res.send({ message: ignoreProperty(ans, ["_id", "__v"]) });
+    res.send({
+      message: ignoreProperty(ans, [
+        "_id",
+        "__v",
+        "body",
+        "colorStyleMapString",
+        "listImageString",
+      ]),
+    });
   } catch (error) {
     if (error) {
       return res.status(400).send({ error: error.message });

@@ -85,7 +85,7 @@ function handleResult(
     alert("Success, please sign in");
     history.push("/auth/login");
   } else {
-    const errorMessage = result.error.response.error.toLocaleLowerCase();
+    const errorMessage = result.error.toLocaleLowerCase();
     if (errorMessage.includes("email")) setErrorEmail(errorMessage);
     else setErrorEmail(null);
 

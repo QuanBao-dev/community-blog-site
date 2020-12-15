@@ -21,7 +21,12 @@ export const fetchUser$ = ({ idBloggerUser }) => {
     },
   }).pipe(
     pluck("response", "message"),
-    catchError((error) => of({ error }))
+    catchError((error) =>
+      of(error).pipe(
+        pluck("response", "error"),
+        map((error) => ({ error }))
+      )
+    )
   );
 };
 
@@ -53,7 +58,12 @@ export const submitForm$ = (
         headers,
       }).pipe(
         pluck("response", "message"),
-        catchError((error) => of({ error }))
+        catchError((error) =>
+          of(error).pipe(
+            pluck("response", "error"),
+            map((error) => ({ error }))
+          )
+        )
       )
     )
   );
@@ -77,7 +87,12 @@ export const submitFormWithEnter$ = (inputList, bodyRef, url) => {
             body,
           }).pipe(
             pluck("response", "message"),
-            catchError((error) => of({ error }))
+            catchError((error) =>
+              of(error).pipe(
+                pluck("response", "error"),
+                map((error) => ({ error }))
+              )
+            )
           )
         )
       )

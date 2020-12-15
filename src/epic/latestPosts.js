@@ -1,6 +1,6 @@
 import { iif, of, timer } from "rxjs";
 import { ajax } from "rxjs/ajax";
-import { catchError, filter, mergeMapTo, pluck } from "rxjs/operators";
+import { catchError, filter, map, mergeMapTo, pluck } from "rxjs/operators";
 
 import latestPostsStore from "../store/latestPosts";
 
@@ -15,11 +15,19 @@ export const fetchLatestPosts$ = (isAuthor) => {
           mergeMapTo(
             ajax("/api/posts?page=1").pipe(
               pluck("response", "message"),
-              catchError((error) => of({ error }))
+              catchError((error) =>
+                of(error).pipe(
+                  pluck("response", "error"),
+                  map((error) => ({ error }))
+                )
+              )
             )
           )
         ),
         timer(0).pipe(
+          filter(
+            () => latestPostsStream.currentState().shouldFetchLatestPostAuthor
+          ),
           filter(() => latestPostsStream.currentState().authorId),
           mergeMapTo(
             ajax(
@@ -27,7 +35,12 @@ export const fetchLatestPosts$ = (isAuthor) => {
                 latestPostsStream.currentState().authorId
             ).pipe(
               pluck("response", "message"),
-              catchError((error) => of({ error }))
+              catchError((error) =>
+                of(error).pipe(
+                  pluck("response", "error"),
+                  map((error) => ({ error }))
+                )
+              )
             )
           )
         )

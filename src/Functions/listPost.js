@@ -1,3 +1,5 @@
+import { blogInputEditStream } from "../epic/blogInputEdit";
+import { latestPostsStream } from "../epic/latestPosts";
 import {
   createEditPost$,
   erasePost$,
@@ -165,6 +167,8 @@ export const eraseEditPost = (
                 .currentState()
                 .listPost.filter((postL) => postL.postId !== post.postId),
             });
+            if (tabBarStream.currentState().tabMode === 1)
+              latestPostsStream.updateData({ shouldFetchLatestPost: true });
             triggerFetchTagsTop();
           }
         }
@@ -213,6 +217,9 @@ export const createPost = (
         cookies
       ).subscribe((v) => {
         if (!v.error) {
+          blogInputEditStream.updateData({ dataBlogPage: v });
+          if (tabBarStream.currentState().tabMode === 1)
+            latestPostsStream.updateData({ shouldFetchLatestPost: true });
           listPostStream.updateData({
             listPost: listPostStream.currentState().listPost.map((postL) => {
               if (postL.postId === post.postId) {
@@ -229,6 +236,13 @@ export const createPost = (
     return () => {
       subscription && subscription.unsubscribe();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  };
+};
+
+export const initHeaderBlogPost = (boardEditElement) => {
+  return () => {
+    return () => {
+      if (boardEditElement) boardEditElement.style.display = "none";
+    };
   };
 };

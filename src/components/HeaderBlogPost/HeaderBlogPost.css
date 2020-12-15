@@ -1,0 +1,26 @@
+.header-blog-post{
+  position: relative;
+}
+.header-blog-post__excerpt-post{
+  margin-top: 1rem;
+}
+
+.edit-header-post{
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+  z-index: 2;
+  transition: 0.3s;
+}
+
+.edit-header-post:hover{
+  transform: scale(1.1);
+}
+
+.edit-header-post:active{
+  color: white;
+}
+
+.header-blog-post .edit-board-container{
+  font-size: 1rem;
+}

@@ -43,7 +43,7 @@ const EditAccount = () => {
         });
         window.location.replace("/");
       } else {
-        const message = v.error.response.error;
+        const message = v.error;
         setErrorEmail(null);
         setErrorUsername(null);
         setErrorPassword(null);

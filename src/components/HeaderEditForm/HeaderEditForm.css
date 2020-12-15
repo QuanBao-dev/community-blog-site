@@ -1,0 +1,14 @@
+.edit-board-container{
+  display: none;
+}
+
+.edit-board-container__button-submit{
+  display: block;
+  margin:0 0 0 auto;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: green;
+  color: white;
+  outline: none;
+  cursor: pointer;
+}

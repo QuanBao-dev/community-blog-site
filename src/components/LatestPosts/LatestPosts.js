@@ -8,6 +8,8 @@ import {
   useInitLatestPosts,
 } from "../../Hook/latestPosts";
 import LatestPost from "../LatestPost/LatestPost";
+import { Link } from "react-router-dom";
+import { blogInputEditStream } from "../../epic/blogInputEdit";
 
 const LatestPosts = ({ isAuthor }) => {
   const [latestPostsState, setLatestPostsState] = useState(
@@ -18,10 +20,21 @@ const LatestPosts = ({ isAuthor }) => {
   if (isAuthor)
     return (
       <ul className="container-latest-posts">
-        <h1>Latest Author's Posts</h1>
+        <h1>Latest author's Posts</h1>
         {latestPostsState.latestPostAuthor.map((post) => (
           <LatestPost key={post.postId} post={post} />
         ))}
+        {blogInputEditStream.currentState().dataBlogPage.user && (
+          <Link
+            className="container-latest-posts__see-all-posts"
+            to={
+              "/posts/user/" +
+              blogInputEditStream.currentState().dataBlogPage.user.userId
+            }
+          >
+            See all posts
+          </Link>
+        )}
       </ul>
     );
   return (

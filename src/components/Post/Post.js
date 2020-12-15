@@ -1,15 +1,16 @@
-import "./Post.css";
+import './Post.css';
 
-import React, { useState } from "react";
-import { useRef } from "react";
-import { useCookies } from "react-cookie";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { useRef } from 'react';
+import { useCookies } from 'react-cookie';
+import ReactMarkdown from 'react-markdown';
+import { Link } from 'react-router-dom';
 
-import { popularTagsStream } from "../../epic/popularTags";
-import { tabBarStream } from "../../epic/tabBar";
-import { userStream } from "../../epic/user";
-import { useCreatePost, useEraseEditPost } from "../../Hook/listPost";
-import Input from "../Input/Input";
+import { popularTagsStream } from '../../epic/popularTags';
+import { tabBarStream } from '../../epic/tabBar';
+import { userStream } from '../../epic/user';
+import { useCreatePost, useEraseEditPost } from '../../Hook/listPost';
+import HeaderEditForm from '../HeaderEditForm/HeaderEditForm';
 
 const Post = ({ post }) => {
   const user = userStream.currentState().user;
@@ -54,6 +55,11 @@ const Post = ({ post }) => {
   const likeQuantity =
     -JSON.parse(post.downVotesUserIdList || "[]").length +
     JSON.parse(post.upVotesUserIdList || "[]").length;
+  if (introRef.current && titleRef.current) {
+    introRef.current.value = post.excerpt;
+    titleRef.current.value = post.title;
+  }
+
   return (
     <li className="container-post">
       <div className="container-menu-control">
@@ -94,30 +100,25 @@ const Post = ({ post }) => {
             );
           })}
         </div>
-        <div className="excerpt-post">{post.excerpt}</div>
-        <div style={{ opacity: 0.6 }}>
+        <ReactMarkdown className="excerpt-post">{post.excerpt}</ReactMarkdown>
+        <div>
           {Math.abs(likeQuantity)}{" "}
           {likeQuantity >= 0 && <i className="far fa-thumbs-up"></i>}
           {likeQuantity < 0 && <i className="far fa-thumbs-down"></i>}
         </div>
       </div>
-      <div className="edit-board-container" ref={boardEditRef}>
-        <Input label="Title" input={titleRef} />
-        <Input label="Introduction" input={introRef} />
-        <Input
-          label="Tag"
-          input={tagRef}
-          isSuggestion={true}
-          dataSend={dataSend}
-          setDataSend={setDataSend}
-        />
-        <button
-          className="edit-board-container__button-submit"
-          ref={buttonSubmitRef}
-        >
-          Update
-        </button>
-      </div>
+      <HeaderEditForm
+        boardEditRef={boardEditRef}
+        introRef={introRef}
+        titleRef={titleRef}
+        title={post.title}
+        excerpt={post.excerpt}
+        buttonSubmitRef={buttonSubmitRef}
+        dataSend={dataSend}
+        setDataSend={setDataSend}
+        tagRef={tagRef}
+        
+      />
     </li>
   );
 };
