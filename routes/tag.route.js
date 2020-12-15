@@ -9,6 +9,7 @@ const optionsSelectionTag = {
   tagId: 1,
   listPostId: 1,
 };
+const quantitiesPosts = 5;
 
 router.get("/", async (req, res) => {
   let { page } = req.query;
@@ -47,6 +48,7 @@ router.get("/:tagId/posts", async (req, res) => {
     tags: 1,
     updatedAt: 1,
     userId: 1,
+    body: 1,
     postId: 1,
     isCompleted: 1,
   };
@@ -56,18 +58,25 @@ router.get("/:tagId/posts", async (req, res) => {
       .select({ _id: 0, listPostId: 1 });
     const listPostId = JSON.parse(tag.listPostId);
     const listPost = await Promise.all(
-      listPostId.slice((page - 1) * 5, page * 5).map(async (postId) => {
-        const post = await Post.findOne({ postId })
-          .lean()
-          .select(optionsSelection);
-        const user = await User.findOne({ userId: post.userId }).lean().select({
-          username: 1,
-          userId: 1,
-          _id: 0,
-        });
-        post.user = user;
-        return post;
-      })
+      listPostId
+        .slice((page - 1) * quantitiesPosts, page * quantitiesPosts)
+        .map(async (postId) => {
+          const post = await Post.findOne({ postId })
+            .lean()
+            .select(optionsSelection);
+          const user = await User.findOne({ userId: post.userId })
+            .lean()
+            .select({
+              username: 1,
+              userId: 1,
+              _id: 0,
+            });
+          const imageUrl = extractListImage(post, true);
+          post.imageUrl = imageUrl;
+          post.user = user;
+          delete post.body;
+          return post;
+        })
     );
     res.send({ message: listPost });
   } catch (error) {
@@ -104,5 +113,31 @@ router.get("/:tagId", async (req, res) => {
     res.status(404).send({ error: error.message });
   }
 });
-
+function extractListImage(post, isFirst) {
+  const body = JSON.parse(post.body);
+  if (!isFirst) {
+    const listImage = Object.keys(body.entityMap)
+      .filter(
+        (key) =>
+          body.entityMap[key].type === "PHOTO" &&
+          body.entityMap[key].data &&
+          body.entityMap[key].data.url.match(
+            /https:\/\/res.cloudinary.com\/storagecloud\/image\/upload\/v[0-9]+\/web-blog\/post-user\/[a-zA-Z0-9:/;,+=@#$%^&*\\\-_]+.(jpg|png|gif)/
+          )
+      )
+      .map((key) => body.entityMap[key].data.url);
+    return listImage;
+  } else {
+    const keyFirst = Object.keys(body.entityMap).find(
+      (key) =>
+        body.entityMap[key].type === "PHOTO" &&
+        body.entityMap[key].data &&
+        body.entityMap[key].data.url.match(
+          /https:\/\/res.cloudinary.com\/storagecloud\/image\/upload\/v[0-9]+\/web-blog\/post-user\/[a-zA-Z0-9:/;,+=@#$%^&*\\\-_]+.(jpg|png|gif)/
+        )
+    );
+    if (!keyFirst) return undefined;
+    return body.entityMap[keyFirst].data.url;
+  }
+}
 module.exports = router;

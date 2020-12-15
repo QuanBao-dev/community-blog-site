@@ -112,7 +112,6 @@
 }
 
 .excerpt-post{
-  font-weight: 500;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
@@ -122,4 +121,15 @@
 
 .excerpt-post p{
   margin: 0;
+}
+
+.container-image-post{
+  width: 100%;
+}
+
+.container-image-post img{
+  object-fit: cover;
+  width: 100%;
+  max-height: 270px;
+  object-position: center;
 }

@@ -147,11 +147,7 @@ const BlogInputEdit = ({ postId }) => {
   );
   return (
     <div>
-      <div
-        style={{
-          display: !blogState.isLoading ? "block" : "none",
-        }}
-      >
+      <div style={{ display: !blogState.isLoading ? "block" : "none" }}>
         <div className="loading-save-content">
           <i className="fas fa-spinner fa-spin"></i> <span>Save</span>
         </div>

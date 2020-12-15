@@ -29,7 +29,9 @@ export const fetchPosts$ = (
       listPostStream.currentState().currentPage
     }`;
   } else if (title) {
-    url = `/api/posts/${title}/search`;
+    url = `/api/posts/${title}/search?page=${
+      listPostStream.currentState().currentPage
+    }`;
   } else if (tagId) {
     url = `/api/tags/${tagId}/posts?page=${
       listPostStream.currentState().currentPage

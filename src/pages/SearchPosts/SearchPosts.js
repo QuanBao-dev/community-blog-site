@@ -1,16 +1,10 @@
-import "./SearchPosts.css";
-
 import React from "react";
-import ListPost from "../../components/ListPost/ListPost";
+
+import PostsFilter from "../../components/PostsFilter/PostsFilter";
 
 const SearchPosts = ({ match }) => {
   const { title } = match.params;
-  return (
-    <div>
-      <h1>Searching for "{title}"</h1>
-      <ListPost title={title} />
-    </div>
-  );
+  return <PostsFilter title={title} />;
 };
 
 export default SearchPosts;

@@ -26,6 +26,7 @@ const optionsSelection = {
   upVotesUserIdList: 1,
   downVotesUserIdList: 1,
 };
+const quantityPosts = 5;
 
 router.get("/", async (req, res) => {
   let { tags, page, authorId } = req.query;
@@ -34,11 +35,9 @@ router.get("/", async (req, res) => {
   }
   page = +page;
   const opts = ignoreProperty(optionsSelection, [
-    "body",
     "colorStyleMapString",
     "isCompleted",
   ]);
-  const quantityPosts = 5;
   try {
     let posts;
     if (tags && tags.length > 0)
@@ -72,10 +71,13 @@ router.get("/", async (req, res) => {
           userId: 1,
           _id: 0,
         });
+        const imageUrl = extractListImage(post, true);
         const ans = {
           ...post,
           user,
+          imageUrl: imageUrl,
         };
+        delete ans.body;
         return ans;
       })
     );
@@ -89,13 +91,13 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/:title/search", async (req, res) => {
-  const page = req.query.page;
+  const page = parseInt(req.query.page || "1");
   const title = req.params.title;
   try {
     let posts = await Post.aggregate([
       { $match: { title: new RegExp(title, "i"), isCompleted: true } },
-      { $skip: (page - 1) * 10 },
-      { $limit: 10 },
+      { $skip: (page - 1) * quantityPosts },
+      { $limit: quantityPosts },
       { $project: optionsSelection },
     ]);
     posts = await Promise.all(
@@ -105,11 +107,11 @@ router.get("/:title/search", async (req, res) => {
           userId: 1,
           _id: 0,
         });
-        const ans = {
-          ...post,
-          user,
-        };
-        return ans;
+        const imageUrl = extractListImage(post, true);
+        post.imageUrl = imageUrl;
+        post.user = user;
+        delete post.body;
+        return post;
       })
     );
     res.send({ message: posts });
@@ -124,8 +126,8 @@ router.get("/user/:userId", async (req, res) => {
   try {
     let posts = await Post.aggregate([
       { $match: { userId, isCompleted: true } },
-      { $skip: (page - 1) * 10 },
-      { $limit: 10 },
+      { $skip: (page - 1) * quantityPosts },
+      { $limit: quantityPosts },
       { $project: optionsSelection },
     ]);
     posts = await Promise.all(
@@ -135,11 +137,11 @@ router.get("/user/:userId", async (req, res) => {
           userId: 1,
           _id: 0,
         });
-        const ans = {
-          ...post,
-          user,
-        };
-        return ans;
+        const imageUrl = extractListImage(post, true);
+        post.imageUrl = imageUrl;
+        post.user = user;
+        delete post.body;
+        return post;
       })
     );
     res.send({ message: posts });
@@ -150,7 +152,6 @@ router.get("/user/:userId", async (req, res) => {
 });
 router.get("/personal", verifyRole("Admin", "User"), async (req, res) => {
   let { isCompleted = "true", page = "1" } = req.query;
-  const quantityPosts = 5;
   page = +page;
   isCompleted = isCompleted === "true";
   const opts = ignoreProperty(optionsSelection, ["body"]);
@@ -211,17 +212,7 @@ router.get("/:postId", async (req, res) => {
     post.user = await User.findOne({ userId: post.userId })
       .lean()
       .select({ _id: 0, userId: 1, username: 1 });
-    const body = JSON.parse(post.body);
-    const listImage = Object.keys(body.entityMap)
-      .filter(
-        (key) =>
-          body.entityMap[key].type === "PHOTO" &&
-          body.entityMap[key].data &&
-          body.entityMap[key].data.url.match(
-            /https:\/\/res.cloudinary.com\/storagecloud\/image\/upload\/v[0-9]+\/web-blog\/post-user\/[a-zA-Z0-9:/;,+=@#$%^&*\\\-_]+.(jpg|png|gif)/
-          )
-      )
-      .map((key) => body.entityMap[key].data.url);
+    const listImage = extractListImage(post);
     post.listImageString = JSON.stringify(listImage);
     res.send({ message: post });
   } catch (error) {
@@ -381,6 +372,34 @@ router.put("/image/:postId", verifyRole("User", "Admin"), async (req, res) => {
     res.status(404).send({ error: "Something went wrong" });
   }
 });
+
+function extractListImage(post, isFirst) {
+  const body = JSON.parse(post.body);
+  if (!isFirst) {
+    const listImage = Object.keys(body.entityMap)
+      .filter(
+        (key) =>
+          body.entityMap[key].type === "PHOTO" &&
+          body.entityMap[key].data &&
+          body.entityMap[key].data.url.match(
+            /https:\/\/res.cloudinary.com\/storagecloud\/image\/upload\/v[0-9]+\/web-blog\/post-user\/[a-zA-Z0-9:/;,+=@#$%^&*\\\-_]+.(jpg|png|gif)/
+          )
+      )
+      .map((key) => body.entityMap[key].data.url);
+    return listImage;
+  } else {
+    const keyFirst = Object.keys(body.entityMap).find(
+      (key) =>
+        body.entityMap[key].type === "PHOTO" &&
+        body.entityMap[key].data &&
+        body.entityMap[key].data.url.match(
+          /https:\/\/res.cloudinary.com\/storagecloud\/image\/upload\/v[0-9]+\/web-blog\/post-user\/[a-zA-Z0-9:/;,+=@#$%^&*\\\-_]+.(jpg|png|gif)/
+        )
+    );
+    if (!keyFirst) return undefined;
+    return body.entityMap[keyFirst].data.url;
+  }
+}
 
 async function filterColorStyleMap(body, post) {
   const colorStyleMapString = post.colorStyleMapString;

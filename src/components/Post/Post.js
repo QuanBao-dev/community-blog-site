@@ -1,16 +1,16 @@
-import './Post.css';
+import "./Post.css";
 
-import React, { useState } from 'react';
-import { useRef } from 'react';
-import { useCookies } from 'react-cookie';
-import ReactMarkdown from 'react-markdown';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { useRef } from "react";
+import { useCookies } from "react-cookie";
+import ReactMarkdown from "react-markdown";
+import { Link } from "react-router-dom";
 
-import { popularTagsStream } from '../../epic/popularTags';
-import { tabBarStream } from '../../epic/tabBar';
-import { userStream } from '../../epic/user';
-import { useCreatePost, useEraseEditPost } from '../../Hook/listPost';
-import HeaderEditForm from '../HeaderEditForm/HeaderEditForm';
+import { popularTagsStream } from "../../epic/popularTags";
+import { tabBarStream } from "../../epic/tabBar";
+import { userStream } from "../../epic/user";
+import { useCreatePost, useEraseEditPost } from "../../Hook/listPost";
+import HeaderEditForm from "../HeaderEditForm/HeaderEditForm";
 
 const Post = ({ post }) => {
   const user = userStream.currentState().user;
@@ -74,6 +74,11 @@ const Post = ({ post }) => {
           </span>
         )}
       </div>
+      {post.imageUrl && (
+        <div className="container-image-post">
+          <img src={post.imageUrl} alt="image_post" />
+        </div>
+      )}
       <div className="container-author">
         <Link className="author-name" to={`/posts/user/${post.userId}`}>
           {post.user.username}
@@ -117,7 +122,6 @@ const Post = ({ post }) => {
         dataSend={dataSend}
         setDataSend={setDataSend}
         tagRef={tagRef}
-        
       />
     </li>
   );
