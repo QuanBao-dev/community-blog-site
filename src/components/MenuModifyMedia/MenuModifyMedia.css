@@ -1,0 +1,18 @@
+.edit-buttons{
+  cursor: pointer;
+  position: absolute;
+  left: 0;
+  top:0;
+  border: none;
+  outline: none;
+  color: white;
+  z-index: 10;
+}
+
+.button-edit-item{
+  padding: 0.5rem 1rem;
+  color: white;
+  background-color: rgb(0, 0, 0);
+  margin-right: 1rem;
+}
+

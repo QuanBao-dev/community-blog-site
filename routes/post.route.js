@@ -25,6 +25,7 @@ const optionsSelection = {
   colorStyleMapString: 1,
   upVotesUserIdList: 1,
   downVotesUserIdList: 1,
+  isCheckedImage: 1,
 };
 const quantityPosts = 5;
 
@@ -96,6 +97,7 @@ router.get("/:title/search", async (req, res) => {
   try {
     let posts = await Post.aggregate([
       { $match: { title: new RegExp(title, "i"), isCompleted: true } },
+      { $sort: { updatedAt: -1 } },
       { $skip: (page - 1) * quantityPosts },
       { $limit: quantityPosts },
       { $project: optionsSelection },
@@ -126,6 +128,7 @@ router.get("/user/:userId", async (req, res) => {
   try {
     let posts = await Post.aggregate([
       { $match: { userId, isCompleted: true } },
+      { $sort: { updatedAt: -1 } },
       { $skip: (page - 1) * quantityPosts },
       { $limit: quantityPosts },
       { $project: optionsSelection },
@@ -154,14 +157,13 @@ router.get("/personal", verifyRole("Admin", "User"), async (req, res) => {
   let { isCompleted = "true", page = "1" } = req.query;
   page = +page;
   isCompleted = isCompleted === "true";
-  const opts = ignoreProperty(optionsSelection, ["body"]);
   try {
     let posts = await Post.aggregate([
       { $match: { isCompleted, userId: req.user.userId } },
       { $sort: { updatedAt: -1 } },
       { $skip: (page - 1) * quantityPosts },
       { $limit: quantityPosts },
-      { $project: opts },
+      { $project: optionsSelection },
     ]);
     posts = await Promise.all(
       posts.map(async (post) => {
@@ -170,11 +172,11 @@ router.get("/personal", verifyRole("Admin", "User"), async (req, res) => {
           userId: 1,
           _id: 0,
         });
-        const ans = {
-          ...post,
-          user,
-        };
-        return ans;
+        const imageUrl = extractListImage(post, true);
+        post.user = user;
+        post.imageUrl = imageUrl;
+        delete post.body;
+        return post;
       })
     );
     res.send({ message: posts });
@@ -322,6 +324,7 @@ router.post("/", verifyRole("User", "Admin"), async (req, res) => {
     }
     tempBody.entityMap = entityMap || {};
     post.body = JSON.stringify(tempBody);
+    post.isCheckedImage = false;
     await post.save();
     body = JSON.parse(post.body);
     const listImage = Object.keys(body.entityMap)
@@ -358,14 +361,19 @@ router.put("/image/:postId", verifyRole("User", "Admin"), async (req, res) => {
   if (!post) {
     return res.status(400).send({ error: "Post doesn't exist" });
   }
-  if (post.userId !== req.user.userId) {
-    return res.status(401).send({ error: "You do not have permission" });
+  // if (post.userId !== req.user.userId) {
+  //   return res.status(401).send({ error: "You do not have permission" });
+  // }
+  if (post.isCheckedImage) {
+    return res.status(401).send({ error: "Post has already been checked" });
   }
   try {
     await Promise.all([
       filterValidImage(body, postId),
       filterColorStyleMap(body, post),
     ]);
+    post.isCheckedImage = true;
+    await post.save();
     res.send({ message: "success" });
   } catch (error) {
     if (error) return res.status(400).send({ error: error.message });

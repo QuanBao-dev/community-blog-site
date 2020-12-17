@@ -61,6 +61,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     default: "[]",
   },
+  isCheckedImage: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 postSchema.pre("findOneAndUpdate", function (next) {

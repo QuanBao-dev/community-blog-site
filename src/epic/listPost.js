@@ -1,18 +1,8 @@
-import { fromEvent, of, timer } from "rxjs";
-import { ajax } from "rxjs/ajax";
-import {
-  catchError,
-  filter,
-  map,
-  mergeMapTo,
-  pluck,
-  switchMap,
-  switchMapTo,
-  takeWhile,
-  tap,
-} from "rxjs/operators";
+import { fromEvent, of, timer } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+import { catchError, exhaustMap, filter, map, mergeMapTo, pluck, switchMap, takeWhile, tap } from 'rxjs/operators';
 
-import listPostStore from "../store/listPost";
+import listPostStore from '../store/listPost';
 
 export const listPostStream = listPostStore;
 
@@ -125,7 +115,7 @@ export const createEditPost$ = (
 
 export const erasePost$ = (eraseButtonElement, post, cookies) => {
   return fromEvent(eraseButtonElement, "click").pipe(
-    switchMapTo(
+    exhaustMap(() =>
       ajax({
         url: "/api/posts/" + post.postId,
         method: "DELETE",

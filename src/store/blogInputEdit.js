@@ -1,5 +1,5 @@
-import { nanoid } from 'nanoid';
-import { BehaviorSubject } from 'rxjs';
+import { nanoid } from "nanoid";
+import { BehaviorSubject } from "rxjs";
 
 const initialState = {
   screenWidth: null,
@@ -23,9 +23,26 @@ const initialState = {
   colorId: nanoid(),
   COLORS: [],
   colorStyleMap: {},
+  alignStyleMap: {
+    CENTER: {
+      textAlign: "center",
+      display: "block",
+      clear: "both",
+    },
+    LEFT: {
+      textAlign: "start",
+      display: "block",
+      clear: "both",
+    },
+    RIGHT: {
+      textAlign: "end",
+      display: "block",
+      clear: "both",
+    },
+  },
   colorStyleMapSavedString: "{}",
   triggerFetchBlog: true,
-  isLoading:false
+  isLoading: false,
 };
 const behaviorSubject = new BehaviorSubject(initialState);
 let state = initialState;
@@ -56,11 +73,11 @@ const blogInputEditStore = {
   },
   updateBodyQuick: (body) => {
     state.dataBlogPage.body = body;
-    behaviorSubject.next(state);
+    // behaviorSubject.next(state);
   },
   updateIsCompletedQuick: (bool) => {
     state.dataBlogPage.isCompleted = bool;
-    behaviorSubject.next(state);
+    // behaviorSubject.next(state);
   },
   updateCOLORS: () => {
     let COLORS = [];

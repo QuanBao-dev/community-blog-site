@@ -106,74 +106,23 @@ figure{
   }
 }
 
-.wrapper-image-upload{
-  width: fit-content;
-  height: fit-content;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  cursor: zoom-in;
-}
-
-.edit-button{
-  content: "Edit";
-  background-color: rgb(0, 0, 0);
-  cursor: pointer;
-  position: absolute;
-  left: 0;
-  top:0;
-  display: none;
-  border: none;
-  outline: none;
-  color: white;
-  padding: 0.5rem 1rem;
-}
-
-.wrapper-iframe-upload{
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  position: relative;
-}
-
-.container-image-fullscreen{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  background-color: black;
-  cursor: zoom-out;
-}
-
-.container-image-fullscreen img{
-  width: fit-content!important;
-  height: fit-content!important;
-  object-fit: contain;
-  object-position: center;
-  max-width: 100%;
-  max-height: 100%;
-  margin: auto;
-}
-
-.container-image-fullscreen .edit-button{
-  display: none!important;
-}
-
-.wrapper-iframe-upload:hover .edit-button{
-  display: inline-block;
-}
-
 .text-align-center{
   display: flex;
   justify-content: center;
+  clear: both;
+  padding-top: 1rem;
+}
+
+.text-align-left{
+  float: left;
+  margin-top: 1rem;
+  margin-right: 1rem;
+}
+
+.text-align-right{
+  float: right;
+  margin-top: 1rem;
+  margin-left: 1rem;
 }
 
 .code-block{
@@ -224,6 +173,13 @@ pre {
 
 .button-publicize-post{
   background-color: green;
+  color: white;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.button-saved-post{
+  background-color: rgb(0, 70, 128);
   color: white;
   padding: 1rem;
   cursor: pointer;

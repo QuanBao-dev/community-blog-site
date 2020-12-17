@@ -78,7 +78,13 @@ router.get("/:tagId/posts", async (req, res) => {
           return post;
         })
     );
-    res.send({ message: listPost });
+    res.send({
+      message: listPost.sort(
+        (postPrev, postNext) =>
+          -new Date(postPrev.updatedAt).getTime() +
+          new Date(postNext.updatedAt).getTime()
+      ),
+    });
   } catch (error) {
     if (error) return res.status(400).send({ error: error.message });
     res.status(404).send({ error: "Something went wrong" });

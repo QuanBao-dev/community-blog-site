@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 const ListTag = ({ tags }) => {
   return (
     <div className="tag-list">
-      {tags.map((tag, index) => (
-        <div key={index}>
+      {tags.map((tag) => (
+        <div key={tag.tagId}>
           <div className="tag-item-container">
             <Link className="tag-list__tag-name" to={"/tags/" + tag.tagId}>
               #{tag.tagName}

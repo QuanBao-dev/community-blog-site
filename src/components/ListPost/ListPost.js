@@ -42,14 +42,15 @@ const ListPost = ({ tagId, title, userId }) => {
           <h3>Don't have any result</h3>
         )}
       {listPostState.listPost.length > 0 &&
-        listPostState.listPost.map((post, index) => {
-          return <Post key={index} post={post} />;
+        listPostState.listPost.map((post) => {
+          return <Post key={post.postId} post={post} />;
         })}
-      {!listPostState.isStopFetching && (
-        <div className="loading-symbol">
-          <i className="fas fa-cog fa-spin fa-2x"></i>
-        </div>
-      )}
+      {!listPostState.isStopFetching &&
+        !listPostState.isStillFetchingWhenScrolling && (
+          <div className="loading-symbol">
+            <i className="fas fa-cog fa-spin fa-2x"></i>
+          </div>
+        )}
     </ul>
   );
 };

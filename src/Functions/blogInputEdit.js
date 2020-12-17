@@ -1,4 +1,11 @@
-import { AtomicBlockUtils, convertToRaw, EditorState } from "draft-js";
+import {
+  AtomicBlockUtils,
+  convertFromRaw,
+  convertToRaw,
+  EditorState,
+  Modifier,
+  RichUtils,
+} from "draft-js";
 import { nanoid } from "nanoid";
 import { fromEvent } from "rxjs";
 
@@ -25,6 +32,11 @@ export function initEditorContent(
   decorator
 ) {
   return () => {
+    if (postId === "create") {
+      blogInputEditStream.updateData({
+        toggleEditMode: true,
+      });
+    }
     if (blogState.dataBlogPage.body) {
       let content = "";
       if (typeof blogState.dataBlogPage.body !== "string") {
@@ -69,7 +81,20 @@ export function initBlogDetail(onChange, decorator, setBlogState) {
     });
     blogInputEditStream.init();
     return () => {
-      onChange(EditorState.createEmpty(decorator));
+      if (blogInputEditStream.currentState().currentPostIdPath === "create") {
+        blogInputEditStream.updateBodyQuick(
+          `{"blocks":[{"key":"funpc","text":"Ctrl+s to save blog","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`
+        );
+        onChange(
+          EditorState.createWithContent(
+            convertFromRaw(
+              JSON.parse(
+                `{"blocks":[{"key":"funpc","text":"Ctrl+s to save blog","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`
+              )
+            )
+          )
+        );
+      } else onChange(EditorState.createEmpty(decorator));
       subscription.unsubscribe();
       subscription2.unsubscribe();
       latestPostsStream.updateData({
@@ -93,18 +118,12 @@ export function initBlogDetail(onChange, decorator, setBlogState) {
   };
 }
 
-export function colorPickerChange(
-  colorPickerInput,
-  applyColorInlineStyle,
-  editorState,
-  onChange
-) {
+export function colorPickerChange(colorPickerInput, editorState, onChange) {
   return () => {
     let subscription;
     if (colorPickerInput) {
       subscription = handleColorPickerChange$(
         colorPickerInput,
-        applyColorInlineStyle,
         editorState,
         onChange
       );
@@ -126,6 +145,9 @@ export function autosave(cookies, history) {
             currentPostIdPath: blogInputEditStream.currentState().randomId,
             isLoading: false,
           });
+          blogInputEditStream.updateData({
+            toggleEditMode: true,
+          });
           history.replace(
             "/blog/" + blogInputEditStream.currentState().randomId
           );
@@ -133,7 +155,6 @@ export function autosave(cookies, history) {
         blogInputEditStream.updateData({
           isCompleted: false,
           listImageString: v.listImageString || "[]",
-          dataBlogPage: v,
         });
         delete data.body;
         if (
@@ -154,9 +175,14 @@ export function autosave(cookies, history) {
           listPostStream.updateData({
             listPost: updatedList,
           });
+        } else {
+          if (listPostStream.currentState().listPost.length === 0)
+            listPostStream.updateData({
+              listPost: [data],
+            });
         }
       } else {
-        if (v.error === "Access denied") {
+        if (v.error === "Access denied" || v.error === "Invalid token") {
           userStream.updateData({
             user: null,
             quantityUser: null,
@@ -175,7 +201,7 @@ export function autosave(cookies, history) {
 
 export function saveTrigger(cookies, history) {
   return () => {
-    // eslint-disable-next-line no-unused-vars
+    // console.log("Save trigger", blogInputEditStream.currentState());
     if (blogInputEditStream.currentState().toggleEditMode) {
       triggerSaveData$(cookies).subscribe((v) => {
         if (!v.error) {
@@ -188,6 +214,9 @@ export function saveTrigger(cookies, history) {
               currentPostIdPath: blogInputEditStream.currentState().randomId,
               isLoading: false,
             });
+            blogInputEditStream.updateData({
+              toggleEditMode: true,
+            });
             history.replace(
               "/blog/" + blogInputEditStream.currentState().randomId
             );
@@ -195,7 +224,6 @@ export function saveTrigger(cookies, history) {
           blogInputEditStream.updateData({
             isCompleted: false,
             listImageString: v.listImageString || "[]",
-            dataBlogPage: v,
           });
           delete data.body;
           if (
@@ -216,9 +244,14 @@ export function saveTrigger(cookies, history) {
             listPostStream.updateData({
               listPost: updatedList,
             });
+          } else {
+            if (listPostStream.currentState().listPost.length === 0)
+              listPostStream.updateData({
+                listPost: [data],
+              });
           }
         } else {
-          if (v.error === "Access denied") {
+          if (v.error === "Access denied" || v.error === "Invalid token") {
             userStream.updateData({
               user: null,
               quantityUser: null,
@@ -248,13 +281,15 @@ export function publishPost(buttonUpload, cookies, history) {
               blogInputEditStream.updateData({
                 currentPostIdPath: blogInputEditStream.currentState().randomId,
               });
+              blogInputEditStream.updateData({
+                toggleEditMode: true,
+              });
               history.replace(
                 "/blog/" + blogInputEditStream.currentState().randomId
               );
             }
             blogInputEditStream.updateData({
               isCompleted: true,
-              dataBlogPage: v,
               listImageString: v.listImageString || "[]",
               isPublicizing: false,
             });
@@ -275,7 +310,7 @@ export function publishPost(buttonUpload, cookies, history) {
               });
             }
           } else {
-            if (v.error === "Access denied") {
+            if (v.error === "Access denied" || v.error === "Invalid token") {
               userStream.updateData({
                 user: null,
                 quantityUser: null,
@@ -342,7 +377,20 @@ export function fetchBlogData(postId, onChange, decorator, history) {
         });
         blogInputEditStream.updateCOLORS();
       } else {
-        onChange(EditorState.createEmpty(decorator));
+        if (blogInputEditStream.currentState().currentPostIdPath === "create") {
+          blogInputEditStream.updateBodyQuick(
+            `{"blocks":[{"key":"funpc","text":"Ctrl+s to save blog","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`
+          );
+          onChange(
+            EditorState.createWithContent(
+              convertFromRaw(
+                JSON.parse(
+                  `{"blocks":[{"key":"funpc","text":"Ctrl+s to save blog","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`
+                )
+              )
+            )
+          );
+        } else onChange(EditorState.createEmpty(decorator));
         if (
           postId === "create" &&
           blogInputEditStream.currentState().dataBlogPage.title === ""
@@ -532,3 +580,52 @@ export const saveContent = (content) => {
   const body = JSON.stringify(rawBody);
   blogInputEditStream.updateBodyQuick(body);
 };
+
+export function applyInlineStyleMap(
+  editorState,
+  styleMap,
+  type,
+  onChange,
+  isNotColor
+) {
+  return (e) => {
+    e.preventDefault();
+    if (blogInputEditStream.currentState().toggleEditMode) {
+      const selection = editorState.getSelection();
+      const nextContentState = Object.keys(styleMap).reduce(
+        (contentState, color) => {
+          return Modifier.removeInlineStyle(contentState, selection, color);
+        },
+        editorState.getCurrentContent()
+      );
+      let nextEditorState = EditorState.push(
+        editorState,
+        nextContentState,
+        "change-inline-style"
+      );
+      const currentStyle = editorState.getCurrentInlineStyle();
+      if (!isNotColor)
+        nextEditorState = RichUtils.toggleInlineStyle(
+          nextEditorState,
+          type.style
+        );
+      // console.log(convertToRaw(nextEditorState));
+      if (selection.isCollapsed()) {
+        nextEditorState = currentStyle.reduce((state, color) => {
+          return RichUtils.toggleInlineStyle(state, color);
+        }, nextEditorState);
+      }
+      // If the color is being toggled on, apply it.
+      if (isNotColor)
+        if (!currentStyle.has(type.style)) {
+          nextEditorState = RichUtils.toggleInlineStyle(
+            nextEditorState,
+            type.style
+          );
+        }
+      onChange(nextEditorState);
+      if (blogInputEditStream.currentState().isAutosaveMode)
+        changeTriggerSave();
+    }
+  };
+}

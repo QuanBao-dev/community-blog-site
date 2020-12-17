@@ -32,7 +32,14 @@ export function useInitEditorContent(
   decorator
 ) {
   useEffect(
-    initEditorContent(postId,blogState, cookies, onChange, convertFromRaw, decorator),
+    initEditorContent(
+      postId,
+      blogState,
+      cookies,
+      onChange,
+      convertFromRaw,
+      decorator
+    ),
     [blogState.dataBlogPage.title]
   );
 }
@@ -57,7 +64,7 @@ export const usePublishPost = (buttonUpload, cookies, history, postId) => {
   ]);
 };
 export const useSaveTrigger = (cookies, blogState, history) => {
-  useEffect(saveTrigger(cookies, history), [blogState.triggerSave, cookies]);
+  useEffect(saveTrigger(cookies, history), [blogState.triggerSave]);
 };
 
 export const useAutoSave = (cookies, history) => {
@@ -68,12 +75,10 @@ export function useColorPickerChange(
   colorPickerInput,
   editorState,
   onChange,
-  applyColorInlineStyle
 ) {
   useEffect(
     colorPickerChange(
       colorPickerInput,
-      applyColorInlineStyle,
       editorState,
       onChange
     ),

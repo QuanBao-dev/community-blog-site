@@ -24,6 +24,9 @@ const VoteBlog = ({ postId }) => {
   useFetchVoteBlog(postId);
   useUpVoteBlog(postId, upVoteButtonRef, cookies);
   useDownVoteBlog(postId, downVoteButtonRef, cookies);
+  if(postId === "create"){
+    return <div></div>
+  }
   // console.log(voteBlogState, user);
   return (
     <div className="wrapper-vote">

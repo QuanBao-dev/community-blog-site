@@ -32,7 +32,7 @@ const LatestPosts = ({ isAuthor }) => {
               blogInputEditStream.currentState().dataBlogPage.user.userId
             }
           >
-            See all posts
+            See all author's posts
           </Link>
         )}
       </ul>

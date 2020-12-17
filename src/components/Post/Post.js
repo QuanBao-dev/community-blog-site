@@ -75,9 +75,11 @@ const Post = ({ post }) => {
         )}
       </div>
       {post.imageUrl && (
-        <div className="container-image-post">
-          <img src={post.imageUrl} alt="image_post" />
-        </div>
+        <Link to={"/blog/" + post.postId}>
+          <div className="container-image-post">
+            <img src={post.imageUrl} alt="image_post" />
+          </div>
+        </Link>
       )}
       <div className="container-author">
         <Link className="author-name" to={`/posts/user/${post.userId}`}>

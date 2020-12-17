@@ -58,6 +58,8 @@ export const upVoteBlog = (postId, upVoteButtonElement, cookies) => {
             return post;
           });
           listPostStream.updateData({ listPost });
+        } else {
+          alert("You need to sign in");
         }
       });
     return () => {
@@ -93,6 +95,8 @@ export const downVoteBlog = (postId, downVoteButtonElement, cookies) => {
             return post;
           });
           listPostStream.updateData({ listPost });
+        } else {
+          alert("You need to sign in");
         }
       });
     return () => {

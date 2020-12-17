@@ -1,5 +1,5 @@
-import "./BlogInputEdit.css";
-import "draft-js/dist/Draft.css";
+import './BlogInputEdit.css';
+import 'draft-js/dist/Draft.css';
 
 import {
   CompositeDecorator,
@@ -8,21 +8,15 @@ import {
   EditorState,
   getDefaultKeyBinding,
   KeyBindingUtil,
-  Modifier,
   RichUtils,
-} from "draft-js";
-import React, { useRef, useState } from "react";
-import { useCookies } from "react-cookie";
-import { useHistory } from "react-router-dom";
+} from 'draft-js';
+import React, { useRef, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useHistory } from 'react-router-dom';
 
-import { blogInputEditStream } from "../../epic/blogInputEdit";
-import { userStream } from "../../epic/user";
-import {
-  changeTriggerSave,
-  saveContent,
-  toggleStateEdit,
-  uploadFile,
-} from "../../Functions/blogInputEdit";
+import { blogInputEditStream } from '../../epic/blogInputEdit';
+import { userStream } from '../../epic/user';
+import { changeTriggerSave, saveContent, toggleStateEdit, uploadFile } from '../../Functions/blogInputEdit';
 import {
   useAutoSave,
   useCheckPageSaved,
@@ -36,12 +30,12 @@ import {
   useShowHideSaving,
   useToggleEdit,
   useUpdateAfterFetch,
-} from "../../Hook/blogInputEdit";
-import AudioCustom from "../AudioCustom/AudioCustom";
-import HeaderBlogPost from "../HeaderBlogPost/HeaderBlogPost";
-import ImageMedia from "../ImageMedia/ImageMedia";
-import LinkCustom from "../LinkCustom/LinkCustom";
-import MenuController from "../MenuController/MenuController";
+} from '../../Hook/blogInputEdit';
+import AudioCustom from '../AudioCustom/AudioCustom';
+import HeaderBlogPost from '../HeaderBlogPost/HeaderBlogPost';
+import Media from '../Media/Media';
+import LinkCustom from '../LinkCustom/LinkCustom';
+import MenuController from '../MenuController/MenuController';
 
 window.addEventListener("resize", () => {
   blogInputEditStream.updateData({ screenWidth: window.innerWidth });
@@ -59,7 +53,7 @@ function findLinkEntities(contentBlock, callback, contentState) {
     );
   }, callback);
 }
-function findImageMediaEntities(contentBlock, callback, contentState) {
+function findMediaEntities(contentBlock, callback, contentState) {
   contentBlock.findEntityRanges((character) => {
     const entityKey = character.getEntity();
     return (
@@ -86,8 +80,8 @@ const decorator = new CompositeDecorator([
     component: LinkCustom,
   },
   {
-    strategy: findImageMediaEntities,
-    component: ImageMedia,
+    strategy: findMediaEntities,
+    component: Media,
   },
   {
     strategy: findAudioEntities,
@@ -96,7 +90,9 @@ const decorator = new CompositeDecorator([
 ]);
 
 const BlogInputEdit = ({ postId }) => {
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(
+    EditorState.createEmpty(decorator)
+  );
   const [blogState, setBlogState] = useState(
     blogInputEditStream.currentState()
   );
@@ -133,12 +129,7 @@ const BlogInputEdit = ({ postId }) => {
   useShowHideSaving(blogState);
   useUpdateAfterFetch(editorState, onChange, blogState);
   useCheckPageSaved(blogState, editorState);
-  useColorPickerChange(
-    colorPickerInput,
-    editorState,
-    onChange,
-    applyColorInlineStyle
-  );
+  useColorPickerChange(colorPickerInput, editorState, onChange);
 
   const { currentStyle, styleMap } = handleData(
     editorState,
@@ -168,8 +159,17 @@ const BlogInputEdit = ({ postId }) => {
             (postId === "create" && blogState.dataBlogPage.title)) && (
             <div className="menu-control-fix">
               {blogState.isCompleted !== true && (
-                <button className="button-publicize-post">Upload Post</button>
+                <button className="button-publicize-post">Publish</button>
               )}
+              <button
+                className="button-saved-post"
+                onClick={() => {
+                  if (blogInputEditStream.currentState().toggleEditMode)
+                    changeTriggerSave();
+                }}
+              >
+                Saved
+              </button>
               <button
                 onClick={toggleStateEdit}
                 className={
@@ -256,6 +256,7 @@ function BlogContentDetail({
 function handleData(editorState, blogState, colorPickerInput) {
   const currentStyle = editorState.getCurrentInlineStyle();
   const styleMap = {
+    ...blogInputEditStream.currentState().alignStyleMap,
     ...blogInputEditStream.currentState().colorStyleMap,
   };
   const colorPicker = blogState.COLORS.find(({ style }) => {
@@ -283,41 +284,6 @@ function onKeyDown(editorState, onChange) {
       return;
     }
     return getDefaultKeyBinding(e);
-  };
-}
-
-function applyColorInlineStyle(editorState, type, onChange) {
-  return (e) => {
-    e.preventDefault();
-    if (blogInputEditStream.currentState().toggleEditMode) {
-      const selection = editorState.getSelection();
-      const nextContentState = Object.keys(
-        blogInputEditStream.currentState().colorStyleMap
-      ).reduce((contentState, color) => {
-        return Modifier.removeInlineStyle(contentState, selection, color);
-      }, editorState.getCurrentContent());
-      let nextEditorState = EditorState.push(
-        editorState,
-        nextContentState,
-        "change-inline-style"
-      );
-      const currentStyle = editorState.getCurrentInlineStyle();
-      nextEditorState = RichUtils.toggleInlineStyle(
-        nextEditorState,
-        type.style
-      );
-      // console.log(convertToRaw(nextEditorState));
-      if (selection.isCollapsed()) {
-        nextEditorState = currentStyle.reduce((state, color) => {
-          return RichUtils.toggleInlineStyle(state, color);
-        }, nextEditorState);
-      }
-      // If the color is being toggled on, apply it.
-
-      onChange(nextEditorState);
-      if (blogInputEditStream.currentState().isAutosaveMode)
-        changeTriggerSave();
-    }
   };
 }
 

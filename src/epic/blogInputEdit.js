@@ -12,6 +12,7 @@ import {
   switchMapTo,
   tap,
 } from "rxjs/operators";
+import { applyInlineStyleMap } from "../Functions/blogInputEdit";
 
 import blogInputEditStore from "../store/blogInputEdit";
 
@@ -75,6 +76,7 @@ export const autosave$ = ({ idBloggerUser }) => {
       delete body.createdAt;
       delete body.upVotesUserIdList;
       delete body.downVotesUserIdList;
+      delete body.isCheckedImage;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isSaving: true })),
@@ -126,6 +128,7 @@ export const triggerSaveData$ = ({ idBloggerUser }) => {
       delete body.createdAt;
       delete body.upVotesUserIdList;
       delete body.downVotesUserIdList;
+      delete body.isCheckedImage;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isSaving: true })),
@@ -153,6 +156,13 @@ export const publicizePost$ = (buttonUpload, { idBloggerUser }) => {
     filter(() => !blogInputEditStream.currentState().isPublicizing),
     map(() => {
       let body = { ...blogInputEditStream.currentState().dataBlogPage };
+      body.colorStyleMapString = JSON.stringify(
+        blogInputEditStream.currentState().colorStyleMap
+      );
+      blogInputEditStream.updateData({
+        bodySavedString: body.body,
+        colorStyleMapSavedString: body.colorStyleMapString,
+      });
       if (blogInputEditStream.currentState().currentPostIdPath === "create") {
         body.postId = blogInputEditStream.currentState().randomId;
         body.tags = JSON.stringify(
@@ -170,6 +180,7 @@ export const publicizePost$ = (buttonUpload, { idBloggerUser }) => {
       delete body.createdAt;
       delete body.upVotesUserIdList;
       delete body.downVotesUserIdList;
+      delete body.isCheckedImage;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isPublicizing: true })),
@@ -196,9 +207,14 @@ export const fetchValidateImageList$ = ({ idBloggerUser }, postId) => {
   return timer(0).pipe(
     map(() => {
       const body = blogInputEditStream.currentState().bodySavedString;
-      return { body, postId };
+      const isCheckedImage = blogInputEditStream.currentState().dataBlogPage
+        .isCheckedImage;
+      return { body, postId, isCheckedImage };
     }),
-    filter(({ body, postId }) => postId && body && body !== ""),
+    filter(
+      ({ body, postId, isCheckedImage }) =>
+        postId && body && body !== "" && !isCheckedImage
+    ),
     mergeMap((data) =>
       ajax({
         method: "PUT",
@@ -215,7 +231,6 @@ export const fetchValidateImageList$ = ({ idBloggerUser }, postId) => {
 
 export const handleColorPickerChange$ = (
   colorPickerInput,
-  applyColorInlineStyle,
   editorState,
   onChange
 ) => {
@@ -231,7 +246,12 @@ export const handleColorPickerChange$ = (
           },
         });
         blogInputEditStream.updateCOLORS();
-        applyColorInlineStyle(editorState, { style }, onChange)(e);
+        applyInlineStyleMap(
+          editorState,
+          blogInputEditStream.currentState().colorStyleMap,
+          { style },
+          onChange
+        )(e);
       }
     });
 };

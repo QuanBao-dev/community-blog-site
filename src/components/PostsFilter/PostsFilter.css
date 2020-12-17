@@ -9,6 +9,8 @@
 
 .container-search-posts{
   display: flex;
+  width: 81%;
+  margin: auto;
 }
 
 .container-search-posts__list-post{

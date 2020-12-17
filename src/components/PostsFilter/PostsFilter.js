@@ -8,11 +8,9 @@ import { catchError, pluck } from "rxjs/operators";
 import { of } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { useHistory } from "react-router-dom";
-
 const PostsFilter = ({ title, tagId, userId }) => {
   const [tag, setTag] = useState();
   const [username, setUsername] = useState();
-
   const history = useHistory();
   useEffect(() => {
     window.scroll({ top: 0 });
@@ -35,7 +33,6 @@ const PostsFilter = ({ title, tagId, userId }) => {
           }
         });
     return () => {
-      setTag(null);
       subscription && subscription.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,7 +43,9 @@ const PostsFilter = ({ title, tagId, userId }) => {
     if (userId)
       subscription = ajax("/api/users/" + userId)
         .pipe(pluck("response", "message"))
-        .subscribe((v) => setUsername(v.username));
+        .subscribe((v) => {
+          setUsername(v.username);
+        });
     return () => {
       subscription && subscription.unsubscribe();
     };

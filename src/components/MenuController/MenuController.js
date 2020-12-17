@@ -1,10 +1,15 @@
-import './MenuController.css';
+import "./MenuController.css";
 
-import { AtomicBlockUtils, RichUtils } from 'draft-js';
-import React from 'react';
+import { AtomicBlockUtils, RichUtils } from "draft-js";
+import React from "react";
 
-import { blogInputEditStream } from '../../epic/blogInputEdit';
-import { changeTriggerSave, createNewCustomBlock, uploadFile } from '../../Functions/blogInputEdit';
+import { blogInputEditStream } from "../../epic/blogInputEdit";
+import {
+  applyInlineStyleMap,
+  changeTriggerSave,
+  createNewCustomBlock,
+  uploadFile,
+} from "../../Functions/blogInputEdit";
 
 const BLOCK_STYLES = [
   { label: "h1", style: "header-one" },
@@ -22,6 +27,12 @@ const INLINE_STYLES = [
   { label: "Monospace", style: "CODE" },
   { label: "Bold", style: "BOLD" },
   { label: "Italic", style: "ITALIC" },
+];
+
+const TEXT_ALIGN = [
+  { label: "CENTER", style: "CENTER" },
+  { label: "LEFT", style: "LEFT" },
+  { label: "RIGHT", style: "RIGHT" },
 ];
 
 function MenuController({ blogState, onChange, editorState, currentStyle }) {
@@ -200,6 +211,23 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
         className="input-link-text"
       />
       <button onMouseDown={applyLink}>Confirm</button>
+      <div>
+        {TEXT_ALIGN.map((type, index) => (
+          <button
+            className={`${currentStyle.has(type.style) ? "active-button" : ""}`}
+            key={index}
+            onMouseDown={applyInlineStyleMap(
+              editorState,
+              blogInputEditStream.currentState().alignStyleMap,
+              type,
+              onChange,
+              true
+            )}
+          >
+            {type.label}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -216,6 +244,7 @@ function ListButtonChangeBlockStyle({ blockType, onChange, editorState }) {
             e.preventDefault();
             if (blogInputEditStream.currentState().toggleEditMode) {
               onChange(RichUtils.toggleBlockType(editorState, type.style));
+              applyInlineStyleMap(editorState);
               if (blogInputEditStream.currentState().isAutosaveMode)
                 changeTriggerSave();
             }
