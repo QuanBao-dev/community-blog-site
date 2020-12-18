@@ -2,7 +2,6 @@ import { nanoid } from "nanoid";
 import { BehaviorSubject } from "rxjs";
 
 const initialState = {
-  screenWidth: null,
   dataBlogPage: {
     body: "",
     title: "",

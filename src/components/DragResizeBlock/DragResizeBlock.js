@@ -33,8 +33,8 @@ const DragResizeBlock = ({
       ref={block}
       className="drag-resize-block"
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
+        maxWidth: `${width}px`,
+        maxHeight: `${height}px`,
       }}
     >
       {isImage && <img ref={imageRef} src={url} alt="NOT_FOUND" />}

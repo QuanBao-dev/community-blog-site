@@ -12,7 +12,8 @@
 }
 
 .App-header__container-wrapper-link{
-  width: 80%;
+  width: 100%;
+  max-width: 1200px;
   justify-content: space-between;
   margin: auto;
   align-items: center;
@@ -58,6 +59,11 @@
 .login-link{
   color: #323EBE;
   font-weight: 600;
+}
+
+.header-bars{
+  cursor: pointer;
+  margin: 0 1rem;
 }
 
 @media(max-width:500px){

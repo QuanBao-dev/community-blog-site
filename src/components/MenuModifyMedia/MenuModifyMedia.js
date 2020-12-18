@@ -21,12 +21,6 @@ const MenuModifyMedia = ({
     <span
       ref={editButtonsRef}
       className="edit-buttons"
-      style={{
-        display:
-          blogInputEditStream.currentState().screenWidth < width
-            ? "none"
-            : "inline-block",
-      }}
     >
       <button
         className="button-edit-item"

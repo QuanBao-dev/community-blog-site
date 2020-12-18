@@ -1,16 +1,10 @@
-import "./VoteBlog.css";
+import './VoteBlog.css';
 
-import React, { useRef, useState } from "react";
-import { useCookies } from "react-cookie";
+import React, { useRef, useState } from 'react';
+import { useCookies } from 'react-cookie';
 
-import {
-  useDownVoteBlog,
-  useUpVoteBlog,
-  useInitVoteBlog,
-  voteBlogStream,
-  useFetchVoteBlog,
-} from "../../Hook/voteBlog";
-import { userStream } from "../../epic/user";
+import { userStream } from '../../epic/user';
+import { useDownVoteBlog, useFetchVoteBlog, useInitVoteBlog, useUpVoteBlog, voteBlogStream } from '../../Hook/voteBlog';
 
 const VoteBlog = ({ postId }) => {
   const upVoteButtonRef = useRef();
@@ -27,7 +21,6 @@ const VoteBlog = ({ postId }) => {
   if(postId === "create"){
     return <div></div>
   }
-  // console.log(voteBlogState, user);
   return (
     <div className="wrapper-vote">
       <i

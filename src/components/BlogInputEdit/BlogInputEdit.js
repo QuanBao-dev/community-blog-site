@@ -1,5 +1,5 @@
-import './BlogInputEdit.css';
-import 'draft-js/dist/Draft.css';
+import "./BlogInputEdit.css";
+import "draft-js/dist/Draft.css";
 
 import {
   CompositeDecorator,
@@ -9,14 +9,19 @@ import {
   getDefaultKeyBinding,
   KeyBindingUtil,
   RichUtils,
-} from 'draft-js';
-import React, { useRef, useState } from 'react';
-import { useCookies } from 'react-cookie';
-import { useHistory } from 'react-router-dom';
+} from "draft-js";
+import React, { useRef, useState } from "react";
+import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
 
-import { blogInputEditStream } from '../../epic/blogInputEdit';
-import { userStream } from '../../epic/user';
-import { changeTriggerSave, saveContent, toggleStateEdit, uploadFile } from '../../Functions/blogInputEdit';
+import { blogInputEditStream } from "../../epic/blogInputEdit";
+import { userStream } from "../../epic/user";
+import {
+  changeTriggerSave,
+  saveContent,
+  toggleStateEdit,
+  uploadFile,
+} from "../../Functions/blogInputEdit";
 import {
   useAutoSave,
   useCheckPageSaved,
@@ -30,17 +35,12 @@ import {
   useShowHideSaving,
   useToggleEdit,
   useUpdateAfterFetch,
-} from '../../Hook/blogInputEdit';
-import AudioCustom from '../AudioCustom/AudioCustom';
-import HeaderBlogPost from '../HeaderBlogPost/HeaderBlogPost';
-import Media from '../Media/Media';
-import LinkCustom from '../LinkCustom/LinkCustom';
-import MenuController from '../MenuController/MenuController';
-
-window.addEventListener("resize", () => {
-  blogInputEditStream.updateData({ screenWidth: window.innerWidth });
-});
-blogInputEditStream.updateData({ screenWidth: window.innerWidth });
+} from "../../Hook/blogInputEdit";
+import AudioCustom from "../AudioCustom/AudioCustom";
+import HeaderBlogPost from "../HeaderBlogPost/HeaderBlogPost";
+import Media from "../Media/Media";
+import LinkCustom from "../LinkCustom/LinkCustom";
+import MenuController from "../MenuController/MenuController";
 
 //////////////
 
@@ -161,15 +161,17 @@ const BlogInputEdit = ({ postId }) => {
               {blogState.isCompleted !== true && (
                 <button className="button-publicize-post">Publish</button>
               )}
-              <button
-                className="button-saved-post"
-                onClick={() => {
-                  if (blogInputEditStream.currentState().toggleEditMode)
-                    changeTriggerSave();
-                }}
-              >
-                Saved
-              </button>
+              {blogState.toggleEditMode && (
+                <button
+                  className="button-saved-post"
+                  onClick={() => {
+                    if (blogInputEditStream.currentState().toggleEditMode)
+                      changeTriggerSave();
+                  }}
+                >
+                  Saved
+                </button>
+              )}
               <button
                 onClick={toggleStateEdit}
                 className={
@@ -183,7 +185,8 @@ const BlogInputEdit = ({ postId }) => {
             </div>
           )}
         {user &&
-          (blogState.dataBlogPage.userId === user.userId ||
+          ((blogState.dataBlogPage.userId === user.userId &&
+            blogState.toggleEditMode) ||
             (postId === "create" && blogState.dataBlogPage.title)) && (
             <MenuController
               blogState={blogState}

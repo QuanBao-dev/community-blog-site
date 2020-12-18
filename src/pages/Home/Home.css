@@ -1,5 +1,6 @@
 .home-page__container{
-  width: 80%;
+  width: 100%;
+  max-width: 1200px;
   margin: auto;
   display: flex;
   justify-content: flex-start;
@@ -24,6 +25,7 @@
 
 .home-page__container-right-section{
   width: 25%;
+  margin-right: 1rem;
 }
 
 .home-page__container-main-section{
@@ -77,4 +79,27 @@
 
 .home-page__tags-link li:hover{
   background-color: rgba(199, 198, 198, 0.253);
+}
+
+@media(max-width:1000px){
+  .home-page__container-right-section{
+    display: none;
+  }
+
+  .home-page__container-main-section{
+    width: 85%;
+  }
+
+  .home-page__container-left-section{
+    min-width: 136px;
+  }
+}
+
+@media(max-width:592px){
+  .home-page__container-left-section{
+    display: none;
+  }
+  .home-page__container-main-section{
+    width: 100%;
+  }
 }

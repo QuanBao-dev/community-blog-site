@@ -9,3 +9,9 @@
 .wrapper-vote i{
   cursor: pointer;
 }
+
+@media(max-width:554px){
+  .wrapper-vote{
+    display: none;
+  }
+}

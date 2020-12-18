@@ -14,13 +14,15 @@ const Blog = (props) => {
       <div className="vote-menu-controller">
         <VoteBlog postId={postId} />
       </div>
-      <div className="editor-blog">
-        <BlogInputEdit postId={postId} />
-        <Comments postId={postId} />
-      </div>
-      <div className="container-news">
-        <LatestPosts />
-        <LatestPosts isAuthor={true} />
+      <div className="container-editor-blog">
+        <div className="editor-blog">
+          <BlogInputEdit postId={postId} />
+          <Comments postId={postId} />
+        </div>
+        <div className="container-news">
+          <LatestPosts />
+          <LatestPosts isAuthor={true} />
+        </div>
       </div>
     </div>
   );

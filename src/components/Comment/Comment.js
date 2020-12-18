@@ -30,7 +30,7 @@ function Comment({ comment }) {
   return (
     <li
       className="comment-list__comment"
-      style={{ marginLeft: `${comment.childLevel * 50}px` }}
+      style={{ marginLeft: `${comment.childLevel * 50 + 10}px` }}
     >
       {user && comment.userId === user.userId && (
         <span className="comment-list__delete-symbol" ref={deleteButtonRef}>

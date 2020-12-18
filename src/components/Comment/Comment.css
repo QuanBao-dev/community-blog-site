@@ -37,3 +37,9 @@
   color: grey;
   font-weight: 900;
 }
+
+@media(max-width:624px){
+  .comment-list__comment{
+    padding: 1rem;
+  }
+}

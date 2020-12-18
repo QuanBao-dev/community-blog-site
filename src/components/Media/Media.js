@@ -30,11 +30,10 @@ const Media = (props) => {
   useEffect(() => {
     const subscription = blogInputEditStream.subscribe(setBlogInputEditState);
     blogInputEditStream.init();
-    blogInputEditStream.updateData({ screenWidth: window.innerWidth });
     return () => {
       subscription.unsubscribe();
     };
-  }, [blogInputEditState.screenWidth]);
+  }, []);
   return (
     <div className={classNameState || ""}>
       {isNotEditableState && isImage && (
@@ -70,16 +69,12 @@ const Media = (props) => {
             }}
             src={url}
             alt="NOT_FOUND"
-            width={
-              blogInputEditStream.currentState().screenWidth < width || !width
-                ? "100%"
-                : `${width}px`
-            }
-            height={
-              blogInputEditStream.currentState().screenWidth < width || !width
-                ? "fit-content"
-                : `${height}px`
-            }
+            style={{
+              maxWidth: `${width}px`,
+              maxHeight: `${height}px`,
+              width: "100%",
+              height: "100%",
+            }}
           />
           {blogInputEditState.toggleEditMode && isNotEditableState && (
             <MenuModifyMedia
@@ -101,16 +96,12 @@ const Media = (props) => {
             title={url}
             src={url}
             alt="NOT_FOUND"
-            width={
-              blogInputEditStream.currentState().screenWidth < width
-                ? blogInputEditStream.currentState().screenWidth - 100
-                : `${width}px`
-            }
-            height={
-              blogInputEditStream.currentState().screenWidth < width
-                ? "520px"
-                : `${height}px`
-            }
+            style={{
+              maxWidth: `${width}px`,
+              maxHeight: `${height}px`,
+              width: "100%",
+              height: "100%",
+            }}
           />
           {blogInputEditState.toggleEditMode && (
             <MenuModifyMedia

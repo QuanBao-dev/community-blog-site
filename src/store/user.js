@@ -1,8 +1,9 @@
 import { BehaviorSubject } from "rxjs";
 const initialState = {
   user: null,
-  quantityUser:null,
-  isDoneFetch:false,
+  quantityUser: null,
+  isDoneFetch: false,
+  screenWidth: null,
 };
 const behaviorSubject = new BehaviorSubject(initialState);
 let state = initialState;
