@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { blogInputEditStream } from "../../epic/blogInputEdit";
 import { saveContent } from "../../Functions/blogInputEdit";
 import MenuModifyMedia from "../MenuModifyMedia/MenuModifyMedia";
+import { fromEvent } from "rxjs";
 
 const DragResizeBlock = ({
   props,
@@ -23,9 +24,15 @@ const DragResizeBlock = ({
 }) => {
   const block = useRef();
   useEffect(() => {
-    block.current.addEventListener("mousedown", (e) => {
-      mutable(e, block.current, props, url, className);
-    });
+    const subscription = fromEvent(block.current, "mousedown").subscribe(
+      (e) => {
+        if (e.target.className === "drag-resize-block")
+          mutable(e, block.current, props, url, className, isImage);
+      }
+    );
+    return () => {
+      subscription.unsubscribe();
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -33,8 +40,8 @@ const DragResizeBlock = ({
       ref={block}
       className="drag-resize-block"
       style={{
-        maxWidth: `${width}px`,
-        maxHeight: `${height}px`,
+        width: `${width}px`,
+        height: `${height}px`,
       }}
     >
       {isImage && <img ref={imageRef} src={url} alt="NOT_FOUND" />}
@@ -63,7 +70,7 @@ const DragResizeBlock = ({
   );
 };
 
-const mutable = function (e, block, props, url, className) {
+const mutable = function (e, block, props, url, className, isImage) {
   // Elements initial width and height
   const h = block.offsetHeight;
   const w = block.offsetWidth;
@@ -88,13 +95,14 @@ const mutable = function (e, block, props, url, className) {
     const height = e.pageY - t + y;
     block.style.width = `${width}px`;
     block.style.height = `${height}px`;
+    console.log(width, height);
     saveContent(
       props.contentState.replaceEntityData(props.entityKey, {
         url: url,
         className: className,
         width: width,
         height: height,
-        isImage: true,
+        isImage: isImage,
         isNotEditable: true,
       })
     );

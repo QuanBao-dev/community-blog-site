@@ -161,7 +161,7 @@ const BlogInputEdit = ({ postId }) => {
               {blogState.isCompleted !== true && (
                 <button className="button-publicize-post">Publish</button>
               )}
-              {blogState.toggleEditMode && (
+              {blogState.toggleEditMode && !blogState.isSaved && (
                 <button
                   className="button-saved-post"
                   onClick={() => {
@@ -259,6 +259,13 @@ function BlogContentDetail({
 function handleData(editorState, blogState, colorPickerInput) {
   const currentStyle = editorState.getCurrentInlineStyle();
   const styleMap = {
+    CODE: {
+      fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+      fontSize: "16px",
+      padding: "2px",
+      borderRadius: "4px",
+      backgroundColor: "#e9e8e8",
+    },
     ...blogInputEditStream.currentState().alignStyleMap,
     ...blogInputEditStream.currentState().colorStyleMap,
   };

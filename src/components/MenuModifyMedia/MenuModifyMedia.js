@@ -18,10 +18,7 @@ const MenuModifyMedia = ({
   const editButtonsRef = useRef();
 
   return (
-    <span
-      ref={editButtonsRef}
-      className="edit-buttons"
-    >
+    <span ref={editButtonsRef} className="edit-buttons">
       <button
         className="button-edit-item"
         onMouseDown={(e) => {
@@ -40,7 +37,14 @@ const MenuModifyMedia = ({
           e.preventDefault();
         }}
         onClick={() => {
-          transformMedia(props, "text-align-center", true, url, width, height);
+          transformMedia(
+            props,
+            "text-align-center",
+            isImage,
+            url,
+            width,
+            height
+          );
           setClassNameState("text-align-center");
         }}
       >
@@ -52,7 +56,14 @@ const MenuModifyMedia = ({
           e.preventDefault();
         }}
         onClick={() => {
-          transformMedia(props, "text-align-right", true, url, width, height);
+          transformMedia(
+            props,
+            "text-align-right",
+            isImage,
+            url,
+            width,
+            height
+          );
           setClassNameState("text-align-right");
         }}
       >

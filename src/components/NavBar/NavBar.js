@@ -1,18 +1,41 @@
-import './NavBar.css';
+import "./NavBar.css";
 
-import React from 'react';
-import { Link, useHistory, withRouter } from 'react-router-dom';
+import React, { useEffect, useRef } from "react";
+import { Link, useHistory, withRouter } from "react-router-dom";
 
-import { tabBarStream } from '../../epic/tabBar';
-import { logoutUser$, userStream } from '../../epic/user';
+import { tabBarStream } from "../../epic/tabBar";
+import { logoutUser$, userStream } from "../../epic/user";
+import { fromEvent } from "rxjs";
 
-function NavBar({ userState, removeCookie, cookies }) {
+function NavBar({ userState, removeCookie, cookies, screenWidth }) {
   const history = useHistory();
+  const headerBarRef = useRef();
+  useEffect(() => {
+    let subscription;
+    if (screenWidth <= 592 && headerBarRef.current) {
+      subscription = fromEvent(
+        headerBarRef.current,
+        "click"
+      ).subscribe(() => {
+        console.log("click");
+      });
+    }
+    return () => {
+      subscription && subscription.unsubscribe();
+    };
+  }, [screenWidth]);
   return (
     <header className="App-header">
+      <aside></aside>
       <ul className="App-header__list-link-navbar">
         <div className="App-header__container-wrapper-link">
           <div className="App-header__wrapper-link">
+            {screenWidth <= 592 && (
+              <i
+                className="fas fa-bars header-bars fa-2x"
+                ref={headerBarRef}
+              ></i>
+            )}
             <Link
               className="App-header__link-navbar-item App-header__logo"
               to="/"

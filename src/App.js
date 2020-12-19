@@ -24,7 +24,9 @@ import TagId from "./pages/TagId/TagId";
 import Tags from "./pages/Tags/Tags";
 import UserCompletedPosts from "./pages/UserCompletedPosts/UserCompletedPosts";
 import EditAccount from "./pages/EditAccount/EditAccount";
-
+window.addEventListener("resize", () => {
+  userStream.updateData({ screenWidth: window.innerWidth });
+});
 function App() {
   const [userState, setUserState] = useState(userStream.currentState());
   const [cookies, , removeCookie] = useCookies(["idCartoonUser"]);
@@ -32,6 +34,7 @@ function App() {
   useEffect(() => {
     const subscription = userStream.subscribe(setUserState);
     userStream.init();
+    userStream.updateData({ screenWidth: window.innerWidth });
     const fetchUserSub = fetchUser$(cookies).subscribe((user) => {
       if (!user.error) {
         userStream.updateData({ user });
@@ -67,6 +70,7 @@ function App() {
           userState={userState}
           removeCookie={removeCookie}
           cookies={cookies}
+          screenWidth={userState.screenWidth}
         />
         <Switch>
           <Route component={Home} path="/" exact />

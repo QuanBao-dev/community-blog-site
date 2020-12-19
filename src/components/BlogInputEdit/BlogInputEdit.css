@@ -1,17 +1,33 @@
-h1,h2,h3,h4,h5,h6{
+/* h1,h2,h3,h4,h5,h6{
   margin: 0;
+} */
+
+.section-blog-detail{
+  line-height: 2.5rem;
 }
 
 .public-DraftEditor-content{
   margin-top: 2rem;
+  font-size: 1.2rem;
 }
+
+.header-blog-post{
+  font-size: 1.2rem;
+  line-height: 2rem;
+}
+
+.header-blog-post__child-container{
+  margin: 1rem 0;
+  line-height: 3.5rem;
+}
+
 
 code{
   font-family: "Inconsolata", "Menlo", "Consolas", monospace;
   font-size: 16px;
   padding: 2px;
   border-radius: 4px;
-  background-color: #d3d3d3;
+  background-color: #e9e8e8;
 }
 
 blockquote{
@@ -130,11 +146,11 @@ figure{
 }
 
 pre {
-  background-color: #F2F2F2;
   font-family: Inconsolata,Menlo,Consolas,monospace;
   font-size: 16px;
   padding: 1rem;
   line-height: 1.5rem;
+  background-color: #e9e8e8;
 }
 
 .active-button{

@@ -1,13 +1,14 @@
-import "./Media.css";
+import './Media.css';
 
-import React from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useState } from "react";
+import React from 'react';
+import { useEffect } from 'react';
+import { useRef } from 'react';
+import { useState } from 'react';
 
-import { blogInputEditStream } from "../../epic/blogInputEdit";
-import DragResizeBlock from "../DragResizeBlock/DragResizeBlock";
-import MenuModifyMedia from "../MenuModifyMedia/MenuModifyMedia";
+import { blogInputEditStream } from '../../epic/blogInputEdit';
+import { userStream } from '../../epic/user';
+import DragResizeBlock from '../DragResizeBlock/DragResizeBlock';
+import MenuModifyMedia from '../MenuModifyMedia/MenuModifyMedia';
 
 const Media = (props) => {
   const {
@@ -21,6 +22,7 @@ const Media = (props) => {
   const [blogInputEditState, setBlogInputEditState] = useState(
     blogInputEditStream.currentState()
   );
+  const [, setUserState] = useState(userStream.currentState());
   const imageRef = useRef();
   const iframeRef = useRef();
   const wrapperRef = useRef();
@@ -29,11 +31,19 @@ const Media = (props) => {
   const [previousEditModeState, setPreviousEditModeState] = useState();
   useEffect(() => {
     const subscription = blogInputEditStream.subscribe(setBlogInputEditState);
+    const resizeSub = userStream.subscribe(setUserState);
     blogInputEditStream.init();
     return () => {
+      resizeSub.unsubscribe();
       subscription.unsubscribe();
     };
   }, []);
+  const maxHeight = document.querySelector(".public-DraftEditor-content")
+    ? document.querySelector(".public-DraftEditor-content").offsetHeight
+    : 0;
+  const maxWidth = document.querySelector(".public-DraftEditor-content")
+    ? document.querySelector(".public-DraftEditor-content").offsetWidth
+    : 0;
   return (
     <div className={classNameState || ""}>
       {isNotEditableState && isImage && (
@@ -99,8 +109,8 @@ const Media = (props) => {
             style={{
               maxWidth: `${width}px`,
               maxHeight: `${height}px`,
-              width: "100%",
-              height: "100%",
+              width: maxWidth + "px",
+              height: maxHeight + "px",
             }}
           />
           {blogInputEditState.toggleEditMode && (
