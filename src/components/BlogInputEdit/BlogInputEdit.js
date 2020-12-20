@@ -189,7 +189,7 @@ const BlogInputEdit = ({ postId }) => {
                 Publish
               </button>
 
-              {blogState.toggleEditMode && !blogState.isSaved && (
+              {!blogState.isSaved && (
                 <button
                   className="button-saved-post"
                   onClick={() => {

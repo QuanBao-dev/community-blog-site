@@ -29,6 +29,7 @@ const Media = (props) => {
   const [classNameState, setClassNameState] = useState(className);
   const [isNotEditableState, setIsNotEditableState] = useState(isNotEditable);
   const [previousEditModeState, setPreviousEditModeState] = useState();
+  const { toggleEditMode } = blogInputEditState;
   useEffect(() => {
     const subscription = blogInputEditStream.subscribe(setBlogInputEditState);
     const resizeSub = userStream.subscribe(setUserState);
@@ -38,6 +39,11 @@ const Media = (props) => {
       subscription.unsubscribe();
     };
   }, []);
+  useEffect(() => {
+    if (!toggleEditMode) {
+      setIsNotEditableState(true);
+    }
+  }, [toggleEditMode]);
   const maxWidth = document.querySelector(".public-DraftEditor-content")
     ? document.querySelector(".public-DraftEditor-content").offsetWidth
     : 0;
@@ -54,7 +60,9 @@ const Media = (props) => {
               const controlMenuFixed = document.querySelector(
                 ".menu-control-fix"
               );
-              const voteMenuMobile = document.querySelector(".vote-menu-controller-mobile");
+              const voteMenuMobile = document.querySelector(
+                ".vote-menu-controller-mobile"
+              );
               if (wrapper.className === "wrapper-image-upload") {
                 wrapper.className += " container-image-fullscreen";
                 document.body.style.overflow = "hidden";

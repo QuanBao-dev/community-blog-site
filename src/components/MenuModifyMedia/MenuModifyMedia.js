@@ -77,7 +77,8 @@ const MenuModifyMedia = ({
           setIsNotEditableState(isNotEditableState);
         }}
       >
-        <i className="fas fa-expand-arrows-alt"></i>
+        {!isNotEditableState && <i className="fas fa-expand-arrows-alt"></i>}
+        {isNotEditableState && <i class="far fa-window-close"></i>}
       </button>
     </span>
   );
