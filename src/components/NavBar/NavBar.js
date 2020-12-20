@@ -31,13 +31,14 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
     if (screenWidth <= 592 && headerBarRef.current) {
       subscription = fromEvent(headerBarRef.current, "click").subscribe(() => {
         setIsShowSideBar(!isShowSideBar);
+        window.document.body.style.overflow = "hidden";
       });
     }
     if (headerBarMobileRef.current) {
       subscription1 = fromEvent(headerBarMobileRef.current, "click").subscribe(
         () => {
-          console.log("click");
           setIsShowSideBar(!isShowSideBar);
+          window.document.body.style.overflow = "auto";
         }
       );
     }
@@ -51,7 +52,10 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
       <div
         className="App-header__block-side-bar"
         style={{ display: isShowSideBar ? "block" : "none" }}
-        onClick={() => {setIsShowSideBar(!isShowSideBar);console.log(isShowSideBar)}}
+        onClick={() => {
+          setIsShowSideBar(!isShowSideBar);
+          window.document.body.style.overflow = "auto";
+        }}
       />
       <aside
         className="App-header__side-bar-container"

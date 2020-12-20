@@ -1,13 +1,46 @@
 .wrapper-vote{
   text-align: center;
-  position: sticky;
-  top: 0;
   font-size: 3rem;
   color: grey;
 }
 
 .wrapper-vote i{
   cursor: pointer;
+}
+
+.vote-menu-controller-mobile{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  z-index: 2;
+  transition: 0.5s;
+}
+
+.vote-menu-controller-mobile .wrapper-vote{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.vote-menu-controller-mobile .wrapper-vote i{
+  margin: 0 1rem;
+}
+
+@media(max-width:1080px){
+  .vote-menu-controller{
+    margin: 0;
+  }
+}
+
+@media(max-width:624px){
+  .vote-menu-controller{
+    width: 0;
+    margin: 0;
+    display: none;
+  }
 }
 
 @media(max-width:554px){

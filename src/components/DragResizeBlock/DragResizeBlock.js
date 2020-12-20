@@ -95,7 +95,6 @@ const mutable = function (e, block, props, url, className, isImage) {
     const height = e.pageY - t + y;
     block.style.width = `${width}px`;
     block.style.height = `${height}px`;
-    console.log(width, height);
     saveContent(
       props.contentState.replaceEntityData(props.entityKey, {
         url: url,

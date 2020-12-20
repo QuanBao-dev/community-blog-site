@@ -54,9 +54,11 @@ const Media = (props) => {
               const controlMenuFixed = document.querySelector(
                 ".menu-control-fix"
               );
+              const voteMenuMobile = document.querySelector(".vote-menu-controller-mobile");
               if (wrapper.className === "wrapper-image-upload") {
                 wrapper.className += " container-image-fullscreen";
                 document.body.style.overflow = "hidden";
+                voteMenuMobile.style.display = "none";
                 if (controlMenuFixed) controlMenuFixed.style.zIndex = 1;
                 if (controlMenu) controlMenu.style.zIndex = 0;
                 setPreviousEditModeState(
@@ -66,6 +68,7 @@ const Media = (props) => {
                   blogInputEditStream.updateData({ toggleEditMode: false });
               } else {
                 wrapper.className = "wrapper-image-upload";
+                voteMenuMobile.style.display = "flex";
                 if (controlMenu) controlMenu.style.zIndex = 3;
                 if (controlMenuFixed) controlMenuFixed.style.zIndex = 8;
                 document.body.style.overflow = "auto";

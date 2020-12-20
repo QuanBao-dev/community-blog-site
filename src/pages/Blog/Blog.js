@@ -11,9 +11,7 @@ const Blog = (props) => {
   const { postId } = props.match.params;
   return (
     <div className="container-blog">
-      <div className="vote-menu-controller">
-        <VoteBlog postId={postId} />
-      </div>
+      <VoteBlog postId={postId} />
       <div className="container-editor-blog">
         <div className="editor-blog">
           <BlogInputEdit postId={postId} />
