@@ -7,6 +7,45 @@
   box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.158) ;
 }
 
+.App-header__side-bar-container{
+  background-color: rgb(230, 232, 245);
+  width: 170px;
+  height: 100%;
+  transition: 0.5s;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.App-header__block-side-bar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9;
+}
+
+.App-header__side-bar ul{
+  list-style-type: none;
+}
+
+.App-header__tags-link{
+  text-decoration: none;
+  color: black;
+}
+
+.App-header__tags-link div{
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.App-header__tags-link div:hover{
+  background-color: rgba(199, 198, 198, 0.253);
+}
+
 .App-header__list-link-navbar a{
   text-decoration: none;
 }
@@ -64,6 +103,11 @@
 .header-bars{
   cursor: pointer;
   margin: 0 1rem;
+}
+
+.header-bars-mobile{
+  margin-top: 1.5rem;
+  margin-left: 1rem;
 }
 
 @media(max-width:500px){

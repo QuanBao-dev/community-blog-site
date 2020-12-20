@@ -1,19 +1,48 @@
+.container-mobile-menu{
+  position: relative;
+}
+
 .control-menu-container{
-  top: 0;
   display: flex;
+  transition: 0.5s;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: flex-start;
-  z-index: 2;
   padding: 1rem;
   background-color: rgb(159, 163, 172);
-  border-radius: 10px;
   font-size: small;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.close-control-menu-container{
+  width: 100%;
+  margin-bottom: 0.2rem;
+}
+
+.close-control-menu{
+  padding: 0.3rem 1rem;
+  border-radius: 5px;
+  background-color: black;
+  color:white;
+  cursor: pointer;
+}
+
+.control-menu-wrapper{
   position: sticky;
+  z-index: 3;
+  top: 0;
+  border-radius: 10px;
 }
 
 .autosave-button-active{
   background-color: black;
   color: white;
   outline: none;
+}
+
+.fa-pen-square{
+  cursor: pointer;
+  background-color: white;
 }

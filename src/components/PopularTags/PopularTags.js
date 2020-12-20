@@ -29,10 +29,10 @@ const PopularTags = () => {
   return (
     <div className="home-page__container-popular-tags">
       <div className="title-bolder">Popular Tags</div>
-      <ul>
+      <ul className="list-tag">
         {popularTagsState.topPopularTags.map((tag, key) => (
           <Link to={`/tags/${tag.tagId}/posts`} key={key} className="popular-tag-link">
-            <li>#{tag.tagName} ({tag.quantity})</li>
+            <li className="tag-item">#{tag.tagName} ({tag.quantity})</li>
           </Link>
         ))}
       </ul>

@@ -8,6 +8,15 @@
   color: black;
 }
 
-.popular-tag-link li:hover{
+.tag-item:hover{
   background-color: rgba(199, 198, 198, 0.253);
+}
+
+.tag-item{
+  padding: 0.5rem 1rem;
+}
+
+.list-tag{
+  list-style-type: none;
+  padding: 0;
 }

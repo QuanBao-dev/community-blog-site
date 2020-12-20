@@ -1,32 +1,74 @@
 import "./NavBar.css";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useHistory, withRouter } from "react-router-dom";
 
 import { tabBarStream } from "../../epic/tabBar";
 import { logoutUser$, userStream } from "../../epic/user";
 import { fromEvent } from "rxjs";
+import PopularTags from "../PopularTags/PopularTags";
 
 function NavBar({ userState, removeCookie, cookies, screenWidth }) {
   const history = useHistory();
   const headerBarRef = useRef();
+  const headerBarMobileRef = useRef();
+  const sideBarRef = useRef();
+  const [isShowSideBar, setIsShowSideBar] = useState(false);
   useEffect(() => {
-    let subscription;
+    const subscription = fromEvent(sideBarRef.current, "click").subscribe(
+      (e) => {
+        if (e.target.className === "App-header__side-bar show") {
+          setIsShowSideBar(!isShowSideBar);
+        }
+      }
+    );
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [isShowSideBar]);
+  useEffect(() => {
+    let subscription, subscription1;
     if (screenWidth <= 592 && headerBarRef.current) {
-      subscription = fromEvent(
-        headerBarRef.current,
-        "click"
-      ).subscribe(() => {
-        console.log("click");
+      subscription = fromEvent(headerBarRef.current, "click").subscribe(() => {
+        setIsShowSideBar(!isShowSideBar);
       });
+    }
+    if (headerBarMobileRef.current) {
+      subscription1 = fromEvent(headerBarMobileRef.current, "click").subscribe(
+        () => {
+          console.log("click");
+          setIsShowSideBar(!isShowSideBar);
+        }
+      );
     }
     return () => {
       subscription && subscription.unsubscribe();
+      subscription1 && subscription1.unsubscribe();
     };
-  }, [screenWidth]);
+  }, [screenWidth, isShowSideBar]);
   return (
     <header className="App-header">
-      <aside></aside>
+      <div
+        className="App-header__block-side-bar"
+        style={{ display: isShowSideBar ? "block" : "none" }}
+        onClick={() => {setIsShowSideBar(!isShowSideBar);console.log(isShowSideBar)}}
+      />
+      <aside
+        className="App-header__side-bar-container"
+        ref={sideBarRef}
+        style={{
+          transform: !isShowSideBar ? "translateX(-200px)" : "translateX(0)",
+        }}
+      >
+        <i
+          className="fas fa-bars header-bars-mobile fa-2x"
+          ref={headerBarMobileRef}
+        ></i>
+        <Link to="/tags" className="App-header__tags-link">
+          <div>Tags</div>
+        </Link>
+        <PopularTags />
+      </aside>
       <ul className="App-header__list-link-navbar">
         <div className="App-header__container-wrapper-link">
           <div className="App-header__wrapper-link">

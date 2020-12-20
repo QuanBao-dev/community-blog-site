@@ -155,12 +155,40 @@ const BlogInputEdit = ({ postId }) => {
           <i className="fas fa-spinner fa-spin"></i> <span>Publicizing...</span>
         </div>
         {user &&
+          ((blogState.dataBlogPage.userId === user.userId &&
+            blogState.toggleEditMode) ||
+            (postId === "create" && blogState.dataBlogPage.title)) && (
+            <MenuController
+              blogState={blogState}
+              onChange={onChange}
+              editorState={editorState}
+              currentStyle={currentStyle}
+            />
+          )}
+        <BlogContentDetail
+          blogState={blogState}
+          styleMap={styleMap}
+          editorState={editorState}
+          onChange={onChange}
+          editorRef={editorRef}
+          postId={postId}
+        />
+        {user &&
           (blogState.dataBlogPage.userId === user.userId ||
             (postId === "create" && blogState.dataBlogPage.title)) && (
             <div className="menu-control-fix">
-              {blogState.isCompleted !== true && (
-                <button className="button-publicize-post">Publish</button>
-              )}
+              <button
+                className="button-publicize-post"
+                style={{
+                  display:
+                    !blogState.toggleEditMode && blogState.isCompleted !== true
+                      ? "inline-block"
+                      : "none",
+                }}
+              >
+                Publish
+              </button>
+
               {blogState.toggleEditMode && !blogState.isSaved && (
                 <button
                   className="button-saved-post"
@@ -180,29 +208,10 @@ const BlogInputEdit = ({ postId }) => {
                     : "edit-button-post"
                 }
               >
-                {blogState.toggleEditMode === true ? "No Edit" : "Edit"}
+                {blogState.toggleEditMode === true ? "Done" : "Edit"}
               </button>
             </div>
           )}
-        {user &&
-          ((blogState.dataBlogPage.userId === user.userId &&
-            blogState.toggleEditMode) ||
-            (postId === "create" && blogState.dataBlogPage.title)) && (
-            <MenuController
-              blogState={blogState}
-              onChange={onChange}
-              editorState={editorState}
-              currentStyle={currentStyle}
-            />
-          )}
-        <BlogContentDetail
-          blogState={blogState}
-          styleMap={styleMap}
-          editorState={editorState}
-          onChange={onChange}
-          editorRef={editorRef}
-          postId={postId}
-        />
       </div>
       <div
         style={{

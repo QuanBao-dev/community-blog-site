@@ -1,14 +1,14 @@
-import './Media.css';
+import "./Media.css";
 
-import React from 'react';
-import { useEffect } from 'react';
-import { useRef } from 'react';
-import { useState } from 'react';
+import React from "react";
+import { useEffect } from "react";
+import { useRef } from "react";
+import { useState } from "react";
 
-import { blogInputEditStream } from '../../epic/blogInputEdit';
-import { userStream } from '../../epic/user';
-import DragResizeBlock from '../DragResizeBlock/DragResizeBlock';
-import MenuModifyMedia from '../MenuModifyMedia/MenuModifyMedia';
+import { blogInputEditStream } from "../../epic/blogInputEdit";
+import { userStream } from "../../epic/user";
+import DragResizeBlock from "../DragResizeBlock/DragResizeBlock";
+import MenuModifyMedia from "../MenuModifyMedia/MenuModifyMedia";
 
 const Media = (props) => {
   const {
@@ -38,9 +38,6 @@ const Media = (props) => {
       subscription.unsubscribe();
     };
   }, []);
-  const maxHeight = document.querySelector(".public-DraftEditor-content")
-    ? document.querySelector(".public-DraftEditor-content").offsetHeight
-    : 0;
   const maxWidth = document.querySelector(".public-DraftEditor-content")
     ? document.querySelector(".public-DraftEditor-content").offsetWidth
     : 0;
@@ -81,9 +78,8 @@ const Media = (props) => {
             alt="NOT_FOUND"
             style={{
               maxWidth: `${width}px`,
-              maxHeight: `${height}px`,
-              width: "100%",
-              height: "100%",
+              width: maxWidth + "px",
+              height: height,
             }}
           />
           {blogInputEditState.toggleEditMode && isNotEditableState && (
@@ -108,9 +104,8 @@ const Media = (props) => {
             alt="NOT_FOUND"
             style={{
               maxWidth: `${width}px`,
-              maxHeight: `${height}px`,
               width: maxWidth + "px",
-              height: maxHeight + "px",
+              height: height,
             }}
           />
           {blogInputEditState.toggleEditMode && (

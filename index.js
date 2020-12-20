@@ -41,10 +41,12 @@ app.use((req, res, next) => {
   next();
 });
 const commentsRoute = require("./routes/comment.route");
+const indexRoute = require("./routes/index.route");
 const tokenRoute = require("./routes/token.route");
 const usersRoute = require("./routes/users.route");
 const postsRoute = require("./routes/post.route");
 const tagsRoute = require("./routes/tag.route");
+app.use("/", indexRoute);
 app.use("/api/tags", tagsRoute);
 app.use("/api/comments", commentsRoute);
 app.use("/api/users", usersRoute);

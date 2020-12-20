@@ -110,18 +110,6 @@ figure{
   text-decoration: none;
 }
 
-@media(max-width:500px){
-  .public-DraftEditor-content > div{
-    width: 95%;
-    margin: auto;
-  }
-
-  .header-blog-post{
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-}
-
 .text-align-center{
   display: flex;
   justify-content: center;
@@ -179,38 +167,46 @@ pre {
 }
 
 .menu-control-fix{
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  margin-bottom: 1rem;
-  margin-right: 1rem;
-  z-index: 8;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
 }
 
 .button-publicize-post{
   background-color: green;
   color: white;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
 .button-saved-post{
   background-color: rgb(0, 70, 128);
   color: white;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
 .edit-button-post{
   background-color: rgb(187, 25, 25);
   color: white;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
 }
 
 .edit-button-post--inactive{
   background-color: rgb(0, 0, 0);
   color: white;
-  padding: 1rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
+}
+
+@media(max-width:500px){
+  .public-DraftEditor-content > div{
+    margin: auto;
+  }
+
+  .header-blog-post{
+    width: 100%;
+    margin-bottom: 1rem;
+  }
 }

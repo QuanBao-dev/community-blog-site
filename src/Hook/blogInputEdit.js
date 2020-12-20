@@ -57,7 +57,12 @@ export function useFetchBlogData(
   ]);
 }
 
-export const usePublishPost = (buttonUpload, cookies, history, postId) => {
+export const usePublishPost = (
+  buttonUpload,
+  cookies,
+  history,
+  postId
+) => {
   useEffect(publishPost(buttonUpload, cookies, history), [
     buttonUpload,
     postId,
@@ -71,19 +76,11 @@ export const useAutoSave = (cookies, history) => {
   useEffect(autosave(cookies, history), [cookies]);
 };
 
-export function useColorPickerChange(
-  colorPickerInput,
-  editorState,
-  onChange,
-) {
-  useEffect(
-    colorPickerChange(
-      colorPickerInput,
-      editorState,
-      onChange
-    ),
-    [colorPickerInput, editorState]
-  );
+export function useColorPickerChange(colorPickerInput, editorState, onChange) {
+  useEffect(colorPickerChange(colorPickerInput, editorState, onChange), [
+    colorPickerInput,
+    editorState,
+  ]);
 }
 
 export function useCheckPageSaved(blogState, editorState) {
