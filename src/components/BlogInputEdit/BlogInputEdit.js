@@ -274,6 +274,7 @@ function handleData(editorState, blogState, colorPickerInput) {
       padding: "2px",
       borderRadius: "4px",
       backgroundColor: "#e9e8e8",
+      whiteSpace:"pre"
     },
     ...blogInputEditStream.currentState().alignStyleMap,
     ...blogInputEditStream.currentState().colorStyleMap,

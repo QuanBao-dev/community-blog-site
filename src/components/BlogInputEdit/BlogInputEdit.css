@@ -11,6 +11,10 @@
   font-size: 1.2rem;
 }
 
+.public-DraftStyleDefault-pre{
+  overflow: auto;
+}
+
 .header-blog-post{
   font-size: 1.2rem;
   line-height: 2rem;
