@@ -52,6 +52,7 @@ const Media = (props) => {
       {isNotEditableState && isImage && (
         <div ref={wrapperRef} className="wrapper-image-upload">
           <img
+            loading="lazy"
             onClick={() => {
               const wrapper = wrapperRef.current;
               const controlMenu = document.querySelector(
@@ -66,7 +67,7 @@ const Media = (props) => {
               if (wrapper.className === "wrapper-image-upload") {
                 wrapper.className += " container-image-fullscreen";
                 document.body.style.overflow = "hidden";
-                voteMenuMobile.style.display = "none";
+                voteMenuMobile && (voteMenuMobile.style.display = "none");
                 if (controlMenuFixed) controlMenuFixed.style.zIndex = 1;
                 if (controlMenu) controlMenu.style.zIndex = 0;
                 setPreviousEditModeState(
@@ -76,7 +77,7 @@ const Media = (props) => {
                   blogInputEditStream.updateData({ toggleEditMode: false });
               } else {
                 wrapper.className = "wrapper-image-upload";
-                voteMenuMobile.style.display = "flex";
+                voteMenuMobile && (voteMenuMobile.style.display = "flex");
                 if (controlMenu) controlMenu.style.zIndex = 3;
                 if (controlMenuFixed) controlMenuFixed.style.zIndex = 8;
                 document.body.style.overflow = "auto";
@@ -110,6 +111,7 @@ const Media = (props) => {
       {isNotEditableState && !isImage && (
         <div className="wrapper-iframe-upload">
           <iframe
+            loading="lazy"
             title={url}
             src={url}
             alt="NOT_FOUND"
