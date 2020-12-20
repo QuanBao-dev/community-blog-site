@@ -100,24 +100,28 @@ export const updateDataListPost = (
         listPostState.title,
         listPostState.userId
       ).subscribe((data) => {
-        const updatedData = [
-          ...listPostStream.currentState().listPost,
-          ...data,
-        ];
-        if (data.length === 0) {
+        if (!data.error) {
+          const updatedData = [
+            ...listPostStream.currentState().listPost,
+            ...data,
+          ];
+          if (data.length === 0) {
+            listPostStream.updateData({
+              isStopFetching: true,
+              isStillFetchingWhenScrolling: false,
+            });
+          }
           listPostStream.updateData({
-            isStopFetching: true,
-            isStillFetchingWhenScrolling: false,
+            listPost: updatedData,
+            latestTagId: tagId,
+            latestPageFetched: listPostState.currentPage,
+            latestTabMode: tabBarState.tabMode,
+            latestUserId: userId,
+            latestTitle: title,
           });
+        } else {
+          window.location.replace("/");
         }
-        listPostStream.updateData({
-          listPost: updatedData,
-          latestTagId: tagId,
-          latestPageFetched: listPostState.currentPage,
-          latestTabMode: tabBarState.tabMode,
-          latestUserId: userId,
-          latestTitle: title,
-        });
       });
     return () => {
       subscription && subscription.unsubscribe();

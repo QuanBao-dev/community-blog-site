@@ -1,8 +1,18 @@
-import { fromEvent, of, timer } from 'rxjs';
-import { ajax } from 'rxjs/ajax';
-import { catchError, exhaustMap, filter, map, mergeMapTo, pluck, switchMap, takeWhile, tap } from 'rxjs/operators';
+import { fromEvent, of, timer } from "rxjs";
+import { ajax } from "rxjs/ajax";
+import {
+  catchError,
+  exhaustMap,
+  filter,
+  map,
+  mergeMapTo,
+  pluck,
+  switchMap,
+  takeWhile,
+  tap,
+} from "rxjs/operators";
 
-import listPostStore from '../store/listPost';
+import listPostStore from "../store/listPost";
 
 export const listPostStream = listPostStore;
 
@@ -55,7 +65,8 @@ export const fetchPosts$ = (
     mergeMapTo(
       ajax(request).pipe(
         takeWhile(() => !listPostStream.currentState().isStopFetching),
-        pluck("response", "message")
+        pluck("response", "message"),
+        catchError((error) => of(error).pipe(map((error) => ({ error }))))
       )
     )
   );

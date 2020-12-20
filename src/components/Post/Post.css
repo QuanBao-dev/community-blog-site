@@ -33,6 +33,8 @@
 .body-post{
   display: flex;
   flex-direction: column;
+  margin-top: 1rem;
+  line-height: 1.5rem;
 }
 
 .container-menu-control{
@@ -70,6 +72,12 @@
 .container-post__link{
   text-decoration: none;
   color: black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
 }
 
 .title-post{
@@ -79,11 +87,12 @@
   background-size: 0 4px;
   transition: 0.4s;
   background-repeat: no-repeat;
-  background-position: left 100%;
+  background-position: left 96%;
   cursor: pointer;
   overflow: hidden;
   width: 100%;
   display: inline;
+  line-height: 2.3rem;
 }
 
 .title-post:hover{

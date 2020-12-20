@@ -1,17 +1,11 @@
-import "./MenuController.css";
+import './MenuController.css';
 
-import { AtomicBlockUtils, RichUtils } from "draft-js";
-import React, { useEffect, useRef, useState } from "react";
+import { AtomicBlockUtils, RichUtils } from 'draft-js';
+import React, { useEffect, useRef, useState } from 'react';
+import { fromEvent } from 'rxjs';
 
-import { blogInputEditStream } from "../../epic/blogInputEdit";
-import {
-  applyInlineStyleMap,
-  changeTriggerSave,
-  createNewCustomBlock,
-  uploadFile,
-} from "../../Functions/blogInputEdit";
-import { userStream } from "../../epic/user";
-import { fromEvent } from "rxjs";
+import { blogInputEditStream } from '../../epic/blogInputEdit';
+import { applyInlineStyleMap, changeTriggerSave, createNewCustomBlock, uploadFile } from '../../Functions/blogInputEdit';
 
 const BLOCK_STYLES = [
   { label: "h1", style: "header-one" },
