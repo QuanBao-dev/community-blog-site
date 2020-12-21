@@ -29,7 +29,7 @@ window.addEventListener("resize", () => {
 });
 function App() {
   const [userState, setUserState] = useState(userStream.currentState());
-  const [cookies, , removeCookie] = useCookies(["idCartoonUser"]);
+  const [cookies, , removeCookie] = useCookies(["idBloggerUser"]);
   const history = useHistory();
   useEffect(() => {
     const subscription = userStream.subscribe(setUserState);

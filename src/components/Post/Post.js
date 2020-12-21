@@ -26,6 +26,8 @@ const Post = ({ post }) => {
   const introRef = useRef();
   const tagRef = useRef();
 
+  const titlePostRef = useRef();
+
   useEraseEditPost(
     eraseButtonRef,
     editButtonRef,
@@ -76,7 +78,17 @@ const Post = ({ post }) => {
       </div>
       {post.imageUrl && (
         <Link to={"/blog/" + post.postId}>
-          <div className="container-image-post">
+          <div
+            className="container-image-post"
+            onMouseEnter={() =>
+              (titlePostRef.current.className = "title-post active")
+            }
+            onMouseLeave={() => (titlePostRef.current.className = "title-post")}
+            onTouchStart={() =>
+              (titlePostRef.current.className = "title-post active")
+            }
+            onTouchEnd={() => (titlePostRef.current.className = "title-post")}
+          >
             <img src={post.imageUrl} alt="image_post" />
           </div>
         </Link>
@@ -91,7 +103,9 @@ const Post = ({ post }) => {
       </div>
       <div className="body-post">
         <Link to={"/blog/" + post.postId} className="container-post__link">
-          <div className="title-post">{post.title}</div>
+          <div className="title-post" ref={titlePostRef}>
+            {post.title}
+          </div>
         </Link>
         <div>
           {post.tags.map((tag, index) => {

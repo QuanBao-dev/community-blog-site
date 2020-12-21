@@ -95,6 +95,10 @@
   line-height: 2.3rem;
 }
 
+.title-post.active{
+  background-size: 100% 4px;
+}
+
 .title-post:hover{
   background-size: 100% 4px;
 }
