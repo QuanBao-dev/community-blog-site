@@ -1,8 +1,8 @@
-import './LatestPost.css';
+import "./LatestPost.css";
 
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Link } from 'react-router-dom';
+import React from "react";
+import ReactMarkdown from "react-markdown";
+import { Link } from "react-router-dom";
 
 const LatestPost = ({ post }) => {
   return (
@@ -15,10 +15,14 @@ const LatestPost = ({ post }) => {
           {post.user.username}
         </Link>
       </div>
-      <Link to={"/blog/" + post.postId} className="latest-post-item__title">
-        {post.title}
-      </Link>
-      <ReactMarkdown className="latest-post-item__excerpt">{post.excerpt}</ReactMarkdown>
+      <div className="latest-post-item__title-container">
+        <Link to={"/blog/" + post.postId} className="latest-post-item__title">
+          {post.title}
+        </Link>
+      </div>
+      <ReactMarkdown className="latest-post-item__excerpt">
+        {post.excerpt}
+      </ReactMarkdown>
       <ul className="latest-post-item__tag-list">
         {post.tags.map((tag) => (
           <Link to={"/tags/" + tag.tagId} key={tag.tagId}>
