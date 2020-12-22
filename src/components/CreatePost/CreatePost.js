@@ -8,13 +8,58 @@ import Input from "../Input/Input";
 
 const CreatePost = () => {
   const [dataSend, setDataSend] = useState([]);
+  const [isShowCreatePost, setIsShowCreatePost] = useState(false);
   const titleRef = useRef();
   const introductionRef = useRef();
   const tagRef = useRef();
   const history = useHistory();
   // console.log(dataSend);
   return (
-    <div className="form-create-post-container">
+    <div
+      className="form-create-post-container"
+      title={"create post"}
+      style={
+        !isShowCreatePost
+          ? {
+              height: 0,
+              width: 0,
+              overflow: "hidden",
+            }
+          : {
+              height: null,
+              width: "90%",
+            }
+      }
+    >
+      {!isShowCreatePost && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            textAlign: "center",
+            width: "100%",
+            cursor: "pointer",
+          }}
+          onClick={() => setIsShowCreatePost(!isShowCreatePost)}
+        >
+          <i className="fas fa-plus"></i>
+        </div>
+      )}
+      {isShowCreatePost && (
+        <i
+          style={{
+            position: "absolute",
+            top: 0,
+            right: "10px",
+            cursor: "pointer",
+            display: "inline-block",
+            zIndex: 1,
+          }}
+          onClick={() => setIsShowCreatePost(!isShowCreatePost)}
+          className="fas fa-times fa-2x"
+        ></i>
+      )}
       <div className="form-create-post">
         <Input label={"Title"} input={titleRef} />
         <Input label={"Introduction"} input={introductionRef} />

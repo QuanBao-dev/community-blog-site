@@ -1,11 +1,16 @@
-import "./Blog.css";
+import './Blog.css';
 
-import React from "react";
+import loadable from '@loadable/component';
+import React from 'react';
 
-import BlogInputEdit from "../../components/BlogInputEdit/BlogInputEdit";
-import Comments from "../../components/Comments/Comments";
-import LatestPosts from "../../components/LatestPosts/LatestPosts";
-import VoteBlog from "../../components/VoteBlog/VoteBlog";
+import BlogInputEdit from '../../components/BlogInputEdit/BlogInputEdit';
+
+const Comments = loadable(() => import("../../components/Comments/Comments"));
+
+const VoteBlog = loadable(() => import("../../components/VoteBlog/VoteBlog"));
+const LatestPosts = loadable(() =>
+  import("../../components/LatestPosts/LatestPosts")
+);
 
 const Blog = (props) => {
   const { postId } = props.match.params;

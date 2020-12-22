@@ -1,14 +1,22 @@
 import "./Home.css";
 
+import loadable from "@loadable/component";
 import React from "react";
-
-import CreatePost from "../../components/CreatePost/CreatePost";
-import ListPost from "../../components/ListPost/ListPost";
-import TabBar from "../../components/TabBar/TabBar";
-import { userStream } from "../../epic/user";
-import PopularTags from "../../components/PopularTags/PopularTags";
 import { Link } from "react-router-dom";
-import LatestPosts from "../../components/LatestPosts/LatestPosts";
+
+import { userStream } from "../../epic/user";
+
+const TabBar = loadable(() => import("../../components/TabBar/TabBar"));
+const CreatePost = loadable(() =>
+  import("../../components/CreatePost/CreatePost")
+);
+const ListPost = loadable(() => import("../../components/ListPost/ListPost"));
+const PopularTags = loadable(() =>
+  import("../../components/PopularTags/PopularTags")
+);
+const LatestPosts = loadable(() =>
+  import("../../components/LatestPosts/LatestPosts")
+);
 
 const Home = () => {
   const { user, quantityUser, isDoneFetch } = userStream.currentState();
@@ -47,8 +55,8 @@ const Home = () => {
           {user && (
             <h1>
               Hello
-              <span style={{ color: "blue" }}> {user.username} </span>,
-              you are a part of our community
+              <span style={{ color: "blue" }}> {user.username} </span>, you are
+              a part of our community
             </h1>
           )}
           <p>

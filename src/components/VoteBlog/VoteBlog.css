@@ -1,11 +1,18 @@
 .wrapper-vote{
   text-align: center;
   font-size: 3rem;
-  color: grey;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
 }
 
 .wrapper-vote i{
   cursor: pointer;
+}
+
+.vote-menu-controller{
+  height: 100%;
+  display: block;
 }
 
 .vote-menu-controller-mobile{
@@ -29,6 +36,11 @@
   margin: 0 1rem;
 }
 
+.fa-pen-square{
+  cursor: pointer;
+  background-color: transparent;
+}
+
 @media(max-width:1080px){
   .vote-menu-controller{
     margin: 0;
@@ -40,6 +52,9 @@
     width: 0;
     margin: 0;
     display: none;
+  }
+  .wrapper-vote{
+    flex-direction: row;
   }
 }
 

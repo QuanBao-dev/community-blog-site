@@ -1,6 +1,7 @@
 import "./BlogInputEdit.css";
 import "draft-js/dist/Draft.css";
 
+import loadable from "@loadable/component";
 import {
   CompositeDecorator,
   convertFromRaw,
@@ -36,12 +37,16 @@ import {
   useToggleEdit,
   useUpdateAfterFetch,
 } from "../../Hook/blogInputEdit";
-import AudioCustom from "../AudioCustom/AudioCustom";
-import HeaderBlogPost from "../HeaderBlogPost/HeaderBlogPost";
-import Media from "../Media/Media";
-import LinkCustom from "../LinkCustom/LinkCustom";
-import MenuController from "../MenuController/MenuController";
 
+const AudioCustom = loadable(() => import("../AudioCustom/AudioCustom"));
+const HeaderBlogPost = loadable(() =>
+  import("../HeaderBlogPost/HeaderBlogPost")
+);
+const Media = loadable(() => import("../Media/Media"));
+const LinkCustom = loadable(() => import("../LinkCustom/LinkCustom"));
+const MenuController = loadable(() =>
+  import("../MenuController/MenuController")
+);
 //////////////
 
 function findLinkEntities(contentBlock, callback, contentState) {
@@ -151,7 +156,7 @@ const BlogInputEdit = ({ postId }) => {
           <span></span>
         </div>
         <div className="loading-publicize-content">
-          <i className="fas fa-spinner fa-spin"></i> <span>Publicizing...</span>
+          <i className="fas fa-spinner fa-spin"></i><span>Publishing...</span>
         </div>
         {user &&
           ((blogState.dataBlogPage.userId === user.userId &&

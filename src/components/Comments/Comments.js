@@ -1,13 +1,19 @@
-import './Comments.css';
+import "./Comments.css";
 
-import React from 'react';
-import { useState } from 'react';
+import loadable from "@loadable/component";
+import React from "react";
+import { useState } from "react";
 
-import { blogInputEditStream } from '../../epic/blogInputEdit';
-import { commentStream } from '../../epic/comment';
-import { useFetchComment, useHandleListPageChange, useInitComment } from '../../Hook/comment';
-import Comment from '../Comment/Comment';
-import CommentForm from '../CommentForm/CommentForm';
+import { blogInputEditStream } from "../../epic/blogInputEdit";
+import { commentStream } from "../../epic/comment";
+import {
+  useFetchComment,
+  useHandleListPageChange,
+  useInitComment,
+} from "../../Hook/comment";
+
+import Comment from "../Comment/Comment";
+const CommentForm = loadable(() => import("../CommentForm/CommentForm"));
 
 const Comments = ({ postId }) => {
   const [commentsState, setCommentsState] = useState(

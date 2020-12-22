@@ -1,29 +1,28 @@
-import "./App.css";
+import './App.css';
 
-import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useHistory,
-} from "react-router-dom";
-import { timer } from "rxjs";
-import { ajax } from "rxjs/ajax";
-import { pluck, switchMapTo, takeWhile } from "rxjs/operators";
+import loadable from '@loadable/component';
+import React, { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import { timer } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
+import { pluck, switchMapTo, takeWhile } from 'rxjs/operators';
 
-import NavBar from "./components/NavBar/NavBar";
-import { fetchUser$, userStream } from "./epic/user";
-import Blog from "./pages/Blog/Blog";
-import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import NotFound from "./pages/NotFound/NotFound";
-import Register from "./pages/Register/Register";
-import SearchPosts from "./pages/SearchPosts/SearchPosts";
-import TagId from "./pages/TagId/TagId";
-import Tags from "./pages/Tags/Tags";
-import UserCompletedPosts from "./pages/UserCompletedPosts/UserCompletedPosts";
-import EditAccount from "./pages/EditAccount/EditAccount";
+import NavBar from './components/NavBar/NavBar';
+import { fetchUser$, userStream } from './epic/user';
+
+const Blog = loadable(() => import("./pages/Blog/Blog"));
+const Home = loadable(() => import("./pages/Home/Home"));
+const Login = loadable(() => import("./pages/Login/Login"));
+const NotFound = loadable(() => import("./pages/NotFound/NotFound"));
+const Register = loadable(() => import("./pages/Register/Register"));
+const SearchPosts = loadable(() => import("./pages/SearchPosts/SearchPosts"));
+const TagId = loadable(() => import("./pages/TagId/TagId"));
+const Tags = loadable(() => import("./pages/Tags/Tags"));
+const UserCompletedPosts = loadable(() =>
+  import("./pages/UserCompletedPosts/UserCompletedPosts")
+);
+const EditAccount = loadable(() => import("./pages/EditAccount/EditAccount"));
 window.addEventListener("resize", () => {
   userStream.updateData({ screenWidth: window.innerWidth });
 });

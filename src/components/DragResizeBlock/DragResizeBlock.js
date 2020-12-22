@@ -5,8 +5,11 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { blogInputEditStream } from "../../epic/blogInputEdit";
 import { saveContent } from "../../Functions/blogInputEdit";
-import MenuModifyMedia from "../MenuModifyMedia/MenuModifyMedia";
 import { fromEvent } from "rxjs";
+import loadable from "@loadable/component";
+const MenuModifyMedia = loadable(() =>
+  import("../MenuModifyMedia/MenuModifyMedia")
+);
 
 const DragResizeBlock = ({
   props,

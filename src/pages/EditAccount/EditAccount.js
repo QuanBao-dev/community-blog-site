@@ -2,8 +2,9 @@ import "./EditAccount.css";
 
 import React, { useEffect, useRef, useState } from "react";
 import Input from "../../components/Input/Input";
-import { submitForm$, userStream } from "../../epic/user";
+import { fetchUser$, submitForm$, userStream } from "../../epic/user";
 import { useCookies } from "react-cookie";
+import { useHistory } from "react-router-dom";
 
 const EditAccount = () => {
   const [errorCurrentPassword, setErrorCurrentPassword] = useState();
@@ -13,6 +14,7 @@ const EditAccount = () => {
   const [cookies, setCookie] = useCookies(["idBloggerUser"]);
   const { user } = userStream.currentState();
 
+  const history = useHistory();
   const currentPasswordRef = useRef();
   const passwordRef = useRef();
   const emailRef = useRef();
@@ -41,7 +43,15 @@ const EditAccount = () => {
         setCookie("isBloggerUser", v, {
           path: "/",
         });
-        window.location.replace("/");
+        fetchUser$({ idBloggerUser: v }).subscribe((user) => {
+          if (!user.error) {
+            userStream.updateData({ user });
+            history.replace("/");
+          } else {
+            userStream.updateData({ user: null });
+          }
+          userStream.updateData({ isDoneFetch: true });
+        });
       } else {
         const message = v.error;
         setErrorEmail(null);

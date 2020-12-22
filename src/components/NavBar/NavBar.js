@@ -1,12 +1,14 @@
-import "./NavBar.css";
+import './NavBar.css';
 
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useHistory, withRouter } from "react-router-dom";
+import loadable from '@loadable/component';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useHistory, withRouter } from 'react-router-dom';
+import { fromEvent } from 'rxjs';
 
-import { tabBarStream } from "../../epic/tabBar";
-import { logoutUser$, userStream } from "../../epic/user";
-import { fromEvent } from "rxjs";
-import PopularTags from "../PopularTags/PopularTags";
+import { tabBarStream } from '../../epic/tabBar';
+import { logoutUser$, userStream } from '../../epic/user';
+
+const PopularTags = loadable(() => import("../PopularTags/PopularTags"));
 
 function NavBar({ userState, removeCookie, cookies, screenWidth }) {
   const history = useHistory();

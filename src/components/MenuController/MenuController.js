@@ -1,8 +1,7 @@
 import "./MenuController.css";
 
 import { AtomicBlockUtils, RichUtils } from "draft-js";
-import React, { useEffect, useRef, useState } from "react";
-import { fromEvent } from "rxjs";
+import React from "react";
 
 import { blogInputEditStream } from "../../epic/blogInputEdit";
 import {
@@ -41,39 +40,6 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
     .getCurrentContent()
     .getBlockForKey(editorState.getSelection().getAnchorKey())
     .getType();
-  const [isShowBar, setIsShowBar] = useState(false);
-  const penSquareRef = useRef();
-  useEffect(() => {
-    let subscription2;
-    if (penSquareRef.current)
-      subscription2 = fromEvent(penSquareRef.current, "click").subscribe(() => {
-        setIsShowBar(!isShowBar);
-      });
-    return () => {
-      subscription2 && subscription2.unsubscribe();
-    };
-  }, [isShowBar]);
-  const createNewImage = () => {
-    if (!blogState.toggleEditMode) {
-      return;
-    }
-    const inputImage = document.querySelector(".input-image-text");
-    const url = inputImage.value.trim();
-    const { newEditorState, entityKey } = createNewCustomBlock(
-      editorState,
-      "PHOTO",
-      "IMMUTABLE",
-      {
-        url,
-        className: "text-align-center",
-      }
-    );
-    onChange(
-      AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ")
-    );
-    inputImage.value = "";
-    if (blogInputEditStream.currentState().isAutosaveMode) changeTriggerSave();
-  };
 
   const createNewIframe = (e) => {
     e.preventDefault();
@@ -169,21 +135,14 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
   };
   return (
     <div>
-      <i className="control-menu-wrapper fas fa-pen-square fa-2x" ref={penSquareRef}></i>
       <div
         className="control-menu-wrapper control-menu-container"
         style={{
-          transform: !isShowBar ? "translateY(-600px)" : "translateY(0)",
+          transform: !blogInputEditStream.currentState().isShowBar
+            ? "translateY(-600px)"
+            : "translateY(0)",
         }}
       >
-        <div className="close-control-menu-container">
-          <i
-            className="fas fa-times close-control-menu fa-2x"
-            onClick={() => {
-              setIsShowBar(!isShowBar);
-            }}
-          ></i>
-        </div>
         <button
           className={blogState.isAutosaveMode ? "autosave-button-active" : ""}
           onClick={toggleAutosaveMode}
@@ -203,13 +162,6 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
           className="input-iframe-text"
         />
         <button onMouseDown={createNewIframe}>Confirm</button>
-
-        <input
-          type="text"
-          placeholder="ENTER IMAGE URL"
-          className="input-image-text"
-        />
-        <button onMouseDown={createNewImage}>Confirm</button>
 
         <input
           type="text"

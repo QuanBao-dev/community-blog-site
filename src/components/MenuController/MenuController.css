@@ -9,7 +9,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   padding: 1rem;
-  background-color: rgb(159, 163, 172);
+  background-color: rgb(211, 211, 211);
   font-size: small;
   position: absolute;
   top: 0;
@@ -42,7 +42,8 @@
   outline: none;
 }
 
-.fa-pen-square{
-  cursor: pointer;
-  background-color: white;
+@media(max-width:624px){
+  .control-menu-wrapper{
+    top: 70px;
+  }
 }

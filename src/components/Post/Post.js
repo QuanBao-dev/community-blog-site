@@ -90,7 +90,7 @@ const Post = ({ post }) => {
             }
             onTouchEnd={() => (titlePostRef.current.className = "title-post")}
           >
-            <img src={post.imageUrl} alt="image_post" />
+            <img src={post.imageUrl} alt="image_post" loading={"lazy"} />
           </div>
         </Link>
       )}

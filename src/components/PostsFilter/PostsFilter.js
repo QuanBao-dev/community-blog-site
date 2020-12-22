@@ -2,12 +2,13 @@ import "./PostsFilter.css";
 
 import React, { useEffect, useState } from "react";
 
-import LatestPosts from "../LatestPosts/LatestPosts";
-import ListPost from "../ListPost/ListPost";
 import { catchError, pluck } from "rxjs/operators";
 import { of } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { useHistory } from "react-router-dom";
+import loadable from "@loadable/component";
+const LatestPosts = loadable(() => import("../LatestPosts/LatestPosts"));
+const ListPost = loadable(() => import("../ListPost/ListPost"));
 const PostsFilter = ({ title, tagId, userId }) => {
   const [tag, setTag] = useState();
   const [username, setUsername] = useState();

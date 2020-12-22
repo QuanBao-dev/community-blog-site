@@ -13,6 +13,7 @@ import {
 } from "../../Hook/voteBlog";
 import { fromEvent } from "rxjs";
 import { filter } from "rxjs/operators";
+import { blogInputEditStream } from "../../epic/blogInputEdit";
 let posY1 = 0;
 let posY2 = 0;
 const VoteBlog = ({ postId }) => {
@@ -22,14 +23,37 @@ const VoteBlog = ({ postId }) => {
   const [cookies] = useCookies(["idBloggerUser"]);
   const [isDown, setIsDown] = useState(true);
   const [userState, setUserState] = useState(userStream.currentState());
+  const [blogInputState, setBlogInputState] = useState(
+    blogInputEditStream.currentState()
+  );
+  const penSquareRef = useRef();
   const [voteBlogState, setVoteBlogState] = useState(
     voteBlogStream.currentState()
   );
   const { screenWidth } = userState;
+  const { toggleEditMode, isShowBar } = blogInputState;
+  useEffect(() => {
+    let subscription2;
+    if (penSquareRef.current)
+      subscription2 = fromEvent(penSquareRef.current, "click")
+        .pipe(filter(() => blogInputEditStream.currentState().toggleEditMode))
+        .subscribe(() => {
+          // setIsShowBar(!isShowBar);
+          blogInputEditStream.updateData({
+            isShowBar: !blogInputEditStream.currentState().isShowBar,
+          });
+        });
+    return () => {
+      subscription2 && subscription2.unsubscribe();
+    };
+  }, [postId]);
+
   useEffect(() => {
     const subscription = userStream.subscribe(setUserState);
+    const blogInputSub = blogInputEditStream.subscribe(setBlogInputState);
     return () => {
       subscription.unsubscribe();
+      blogInputSub.unsubscribe();
     };
   }, []);
 
@@ -102,6 +126,20 @@ const VoteBlog = ({ postId }) => {
           ref={downVoteButtonRef}
           className="fa fa-caret-down"
         ></i>
+        <span ref={penSquareRef}>
+          <i
+            className="fas fa-pen-square"
+            style={{
+              display: toggleEditMode && !isShowBar ? "block" : "none",
+            }}
+          ></i>
+          <i
+            className="fas fa-times"
+            style={{
+              display: toggleEditMode && isShowBar ? "block" : "none",
+            }}
+          ></i>
+        </span>
       </div>
     </div>
   );
