@@ -25,8 +25,8 @@ const MenuModifyMedia = ({
           e.preventDefault();
         }}
         onClick={() => {
-          transformMedia(props, "text-align-left", isImage, url, width, height);
           setClassNameState("text-align-left");
+          transformMedia(props, "text-align-left", isImage, url, width, height);
         }}
       >
         <i className="fas fa-align-left"></i>
@@ -37,6 +37,7 @@ const MenuModifyMedia = ({
           e.preventDefault();
         }}
         onClick={() => {
+          setClassNameState("text-align-center");
           transformMedia(
             props,
             "text-align-center",
@@ -45,7 +46,6 @@ const MenuModifyMedia = ({
             width,
             height
           );
-          setClassNameState("text-align-center");
         }}
       >
         <i className="fas fa-align-center"></i>
@@ -56,6 +56,7 @@ const MenuModifyMedia = ({
           e.preventDefault();
         }}
         onClick={() => {
+          setClassNameState("text-align-right");
           transformMedia(
             props,
             "text-align-right",
@@ -64,7 +65,6 @@ const MenuModifyMedia = ({
             width,
             height
           );
-          setClassNameState("text-align-right");
         }}
       >
         <i className="fas fa-align-right"></i>
@@ -78,7 +78,7 @@ const MenuModifyMedia = ({
         }}
       >
         {!isNotEditableState && <i className="fas fa-expand-arrows-alt"></i>}
-        {isNotEditableState && <i class="far fa-window-close"></i>}
+        {isNotEditableState && <i className="far fa-window-close"></i>}
       </button>
     </span>
   );

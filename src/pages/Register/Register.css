@@ -34,3 +34,20 @@
 .button-register-submit:hover{
   background-color: #2b349b;
 }
+
+@media(max-width:1075px){
+  .register-page__container-register{
+    width: 60%;
+  }
+}
+
+@media(max-width:775px){
+  .register-page__container-register{
+    width: 80%;
+  }
+}
+@media(max-width:500px){
+  .register-page__container-register{
+    width: 90%;
+  }
+}

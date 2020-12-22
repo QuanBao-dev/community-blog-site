@@ -12,6 +12,7 @@ import {
   voteBlogStream,
 } from "../../Hook/voteBlog";
 import { fromEvent } from "rxjs";
+import { filter } from "rxjs/operators";
 let posY1 = 0;
 let posY2 = 0;
 const VoteBlog = ({ postId }) => {
@@ -24,6 +25,7 @@ const VoteBlog = ({ postId }) => {
   const [voteBlogState, setVoteBlogState] = useState(
     voteBlogStream.currentState()
   );
+  const { screenWidth } = userState;
   useEffect(() => {
     const subscription = userStream.subscribe(setUserState);
     return () => {
@@ -32,19 +34,21 @@ const VoteBlog = ({ postId }) => {
   }, []);
 
   useEffect(() => {
-    const scrollingSub = fromEvent(window.document, "scroll").subscribe(() => {
-      posY2 = posY1 - window.scrollY;
-      posY1 = window.scrollY;
-      if (posY2 > 3 && isDown) {
-        setIsDown(false);
-      } else if (posY2 < 0 && !isDown) {
-        setIsDown(true);
-      }
-    });
+    const scrollingSub = fromEvent(window.document, "scroll")
+      .pipe(filter(() => screenWidth < 624))
+      .subscribe(() => {
+        posY2 = posY1 - window.scrollY;
+        posY1 = window.scrollY;
+        if (posY2 > 3 && isDown) {
+          setIsDown(false);
+        } else if (posY2 < 0 && !isDown) {
+          setIsDown(true);
+        }
+      });
     return () => {
       scrollingSub.unsubscribe();
     };
-  }, [isDown]);
+  }, [isDown, screenWidth]);
   useInitVoteBlog(setVoteBlogState);
   useFetchVoteBlog(postId);
   useUpVoteBlog(postId, upVoteButtonRef, cookies);
@@ -52,7 +56,6 @@ const VoteBlog = ({ postId }) => {
   if (postId === "create") {
     return <div></div>;
   }
-  const { screenWidth } = userState;
   return (
     <div
       className={

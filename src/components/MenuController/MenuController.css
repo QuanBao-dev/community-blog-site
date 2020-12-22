@@ -22,15 +22,15 @@
 }
 
 .close-control-menu{
-  padding: 0.3rem 1rem;
+  padding: 0.2rem 0.7rem;
   border-radius: 5px;
-  background-color: black;
+  background-color: rgb(175, 175, 175);
   color:white;
   cursor: pointer;
 }
 
 .control-menu-wrapper{
-  position: sticky;
+  position: fixed;
   z-index: 3;
   top: 0;
   border-radius: 10px;

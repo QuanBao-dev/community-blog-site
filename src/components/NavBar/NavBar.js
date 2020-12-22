@@ -13,6 +13,8 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
   const headerBarRef = useRef();
   const headerBarMobileRef = useRef();
   const sideBarRef = useRef();
+
+  const [isShowSearchBar, setIsShowSearchBar] = useState(false);
   const [isShowSideBar, setIsShowSideBar] = useState(false);
   useEffect(() => {
     const subscription = fromEvent(sideBarRef.current, "click").subscribe(
@@ -48,7 +50,21 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
     };
   }, [screenWidth, isShowSideBar]);
   return (
-    <header className="App-header">
+    <header
+      className="App-header"
+      style={
+        screenWidth <= 592
+          ? {
+              position: "sticky",
+              top: 0,
+              left: 0,
+              width: "100%",
+              backgroundColor: "white",
+              zIndex: "5",
+            }
+          : {}
+      }
+    >
       <div
         className="App-header__block-side-bar"
         style={{ display: isShowSideBar ? "block" : "none" }}
@@ -74,6 +90,22 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
         <PopularTags />
       </aside>
       <ul className="App-header__list-link-navbar">
+        {screenWidth <= 592 && isShowSearchBar && (
+          <div className="App-header__search-mobile-post">
+            <input
+              type="text"
+              placeholder="Search..."
+              onKeyDown={(e) => {
+                const text = e.target.value.trim();
+                if (e.keyCode === 13 && text !== "") {
+                  history.push("/posts/search/" + text);
+                  e.target.value = "";
+                  setIsShowSearchBar(!isShowSearchBar);
+                }
+              }}
+            />
+          </div>
+        )}
         <div className="App-header__container-wrapper-link">
           <div className="App-header__wrapper-link">
             {screenWidth <= 592 && (
@@ -88,18 +120,26 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
             >
               <li>DEV</li>
             </Link>
-            <input
-              className="App-header__input-search"
-              type="text"
-              placeholder="Search..."
-              onKeyDown={(e) => {
-                const text = e.target.value.trim();
-                if (e.keyCode === 13 && text !== "") {
-                  history.push("/posts/search/" + text);
-                  e.target.value = "";
-                }
-              }}
-            />
+            {screenWidth > 592 && (
+              <input
+                className="App-header__input-search"
+                type="text"
+                placeholder="Search..."
+                onKeyDown={(e) => {
+                  const text = e.target.value.trim();
+                  if (e.keyCode === 13 && text !== "") {
+                    history.push("/posts/search/" + text);
+                    e.target.value = "";
+                  }
+                }}
+              />
+            )}
+            {screenWidth <= 592 && (
+              <i
+                className="fas fa-search search-symbol"
+                onClick={() => setIsShowSearchBar(!isShowSearchBar)}
+              ></i>
+            )}
           </div>
           <div className="App-header__wrapper-link">
             {!userState.user && (
@@ -119,31 +159,34 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
               </Link>
             )}
             {userState.user && (
-              <span
-                className="App-header__link-navbar-item login-link"
-                onClick={() => {
-                  removeCookie("idBloggerUser", {
-                    path: "/",
-                  });
-                  logoutUser$(cookies).subscribe(() => {
-                    userStream.updateData({
-                      user: null,
-                    });
-                    tabBarStream.updateData({ tabMode: 1 });
-                    history.push("/auth/login");
-                  });
-                }}
-              >
-                <li>Logout</li>
-              </span>
-            )}
-            {userState.user && (
-              <Link
-                to="/account/edit"
-                className="App-header__link-navbar-item register-link"
-              >
-                <li>{userState.user.username}</li>
-              </Link>
+              <div className="App-header__link-navbar-item item-account-info">
+                <span>Account</span>
+                <div className="list-link-account">
+                  <Link to="/account/edit">
+                    <div className="item-link-account">Edit Account</div>
+                  </Link>
+                  <div
+                    className="item-link-account"
+                    onClick={() => {
+                      removeCookie("idBloggerUser", {
+                        path: "/",
+                      });
+                      logoutUser$(cookies).subscribe(() => {
+                        userStream.updateData({
+                          user: null,
+                        });
+                        tabBarStream.updateData({ tabMode: 1 });
+                        history.push("/auth/login");
+                      });
+                    }}
+                  >
+                    <li>Logout</li>
+                  </div>
+                  <div className="item-link-account">
+                    {userState.user.username}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>

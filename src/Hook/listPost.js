@@ -80,7 +80,6 @@ export const useEraseEditPost = (
   trigger,
   setTrigger,
   triggerFetchTagsTop,
-  setDataSend,
   post,
   cookies
 ) => {
@@ -92,7 +91,6 @@ export const useEraseEditPost = (
       trigger,
       setTrigger,
       triggerFetchTagsTop,
-      setDataSend,
       post,
       cookies
     ),
@@ -135,6 +133,7 @@ export const useCreatePost = (
     ),
     [
       trigger,
+      dataSend,
       buttonSubmitRef.current,
       titleRef.current,
       introRef.current,

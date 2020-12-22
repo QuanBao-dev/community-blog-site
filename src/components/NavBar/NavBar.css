@@ -5,6 +5,25 @@
   margin: 0;
   padding: 0.6rem 0;
   box-shadow: 0 1px 1px 1px rgba(0, 0, 0, 0.158) ;
+  position: relative;
+}
+
+.App-header__search-mobile-post{
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background-color: white;
+  border: 1px solid black;
+  z-index: 5;
+}
+
+.App-header__search-mobile-post input{
+  display: block;
+  width: 92%;
+  border: none;
+  margin: auto;
+  padding: 1rem 0;
+  outline: none;
 }
 
 .App-header__side-bar-container{
@@ -78,6 +97,7 @@
 .App-header__link-navbar-item{
   margin: 0 0.3rem;
   cursor: pointer;
+  color: black;
 }
 
 .App-header__logo{
@@ -95,8 +115,39 @@
   background-color: #323EBE;
 }
 
+.item-account-info{
+  padding: 0.6rem;
+  font-weight: 600;
+  border-radius: 5px;
+  z-index: 5;
+  position: relative;
+}
+
+.item-link-account{
+  background-color: white;
+  padding: 0.2rem 1rem;
+  white-space: nowrap;
+  color: black;
+}
+
+.item-link-account:hover{
+  background-color: rgb(180, 180, 180);
+}
+
+.item-account-info:hover .list-link-account{
+  display: block;
+}
+
+.list-link-account{
+  position: absolute;
+  top: 100%;
+  right: 0;
+  border: 1px solid black;
+  display: none;
+}
+
 .login-link{
-  color: #323EBE;
+  color: black;
   font-weight: 600;
 }
 
@@ -108,6 +159,13 @@
 .header-bars-mobile{
   margin-top: 1.5rem;
   margin-left: 1rem;
+}
+
+.search-symbol{
+  cursor: pointer;
+  display: block;
+  padding: 1rem 0.5rem;
+  font-size: 1.2rem;
 }
 
 @media(max-width:500px){

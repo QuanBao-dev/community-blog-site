@@ -10,7 +10,7 @@ import {
   KeyBindingUtil,
   RichUtils,
 } from "draft-js";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useHistory } from "react-router-dom";
 
@@ -131,10 +131,9 @@ const BlogInputEdit = ({ postId }) => {
   useCheckPageSaved(blogState, editorState);
   useColorPickerChange(colorPickerInput, editorState, onChange);
 
-  const { currentStyle, styleMap } = handleData(
-    editorState,
-    blogState,
-    colorPickerInput
+  const { currentStyle, styleMap } = useMemo(
+    handleData(editorState, blogState, colorPickerInput),
+    [editorState]
   );
   return (
     <div>
@@ -266,27 +265,29 @@ function BlogContentDetail({
 }
 
 function handleData(editorState, blogState, colorPickerInput) {
-  const currentStyle = editorState.getCurrentInlineStyle();
-  const styleMap = {
-    CODE: {
-      fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
-      fontSize: "16px",
-      padding: "2px",
-      borderRadius: "4px",
-      backgroundColor: "#e9e8e8",
-      whiteSpace:"pre"
-    },
-    ...blogInputEditStream.currentState().alignStyleMap,
-    ...blogInputEditStream.currentState().colorStyleMap,
+  return () => {
+    const currentStyle = editorState.getCurrentInlineStyle();
+    const styleMap = {
+      CODE: {
+        fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
+        fontSize: "16px",
+        padding: "2px",
+        borderRadius: "4px",
+        backgroundColor: "#e9e8e8",
+        whiteSpace: "pre",
+      },
+      ...blogInputEditStream.currentState().alignStyleMap,
+      ...blogInputEditStream.currentState().colorStyleMap,
+    };
+    const colorPicker = blogState.COLORS.find(({ style }) => {
+      return currentStyle.has(style);
+    });
+    if (colorPickerInput)
+      colorPickerInput.value = colorPicker
+        ? styleMap[colorPicker.style].color
+        : "#000000";
+    return { currentStyle, styleMap };
   };
-  const colorPicker = blogState.COLORS.find(({ style }) => {
-    return currentStyle.has(style);
-  });
-  if (colorPickerInput)
-    colorPickerInput.value = colorPicker
-      ? styleMap[colorPicker.style].color
-      : "#000000";
-  return { currentStyle, styleMap };
 }
 
 function onKeyDown(editorState, onChange) {

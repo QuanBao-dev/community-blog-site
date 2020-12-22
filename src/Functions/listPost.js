@@ -155,7 +155,6 @@ export const eraseEditPost = (
   trigger,
   setTrigger,
   triggerFetchTagsTop,
-  setDataSend,
   post,
   cookies
 ) => {
@@ -182,8 +181,6 @@ export const eraseEditPost = (
         boardEditElement.style.display =
           boardEditElement.style.display === "block" ? "none" : "block";
         setTrigger(!trigger);
-        const dataTagSend = post.tags.map((tag) => tag.tagName);
-        setDataSend(dataTagSend);
       });
     return () => {
       subscription2 && subscription2.unsubscribe();
@@ -221,6 +218,7 @@ export const createPost = (
         cookies
       ).subscribe((v) => {
         if (!v.error) {
+          console.log(dataSend);
           blogInputEditStream.updateData({ dataBlogPage: v });
           if (tabBarStream.currentState().tabMode === 1)
             latestPostsStream.updateData({ shouldFetchLatestPost: true });

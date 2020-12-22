@@ -1,6 +1,6 @@
 import "./HeaderBlogPost.css";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 
@@ -45,7 +45,6 @@ const HeaderBlogPost = ({
     trigger,
     setTrigger,
     triggerFetchTagsTop,
-    setDataSend,
     post,
     cookies
   );
@@ -64,10 +63,15 @@ const HeaderBlogPost = ({
     cookies,
     triggerFetchTagsTop
   );
-  if (introRef.current && titleRef.current) {
-    introRef.current.value = post.excerpt;
-    titleRef.current.value = post.title;
-  }
+  useEffect(() => {
+    if (introRef.current && titleRef.current) {
+      introRef.current.value = post.excerpt;
+      titleRef.current.value = post.title;
+      if (post.tags) setDataSend(post.tags.map((tag) => tag.tagName));
+      // console.log(post.tags);
+    }
+  }, [post.excerpt, post.tags, post.title]);
+
   return (
     <div className="header-blog-post">
       <h1 className="header-blog-post__child-container">{title}</h1>

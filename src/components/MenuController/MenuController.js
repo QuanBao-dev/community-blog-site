@@ -1,11 +1,16 @@
-import './MenuController.css';
+import "./MenuController.css";
 
-import { AtomicBlockUtils, RichUtils } from 'draft-js';
-import React, { useEffect, useRef, useState } from 'react';
-import { fromEvent } from 'rxjs';
+import { AtomicBlockUtils, RichUtils } from "draft-js";
+import React, { useEffect, useRef, useState } from "react";
+import { fromEvent } from "rxjs";
 
-import { blogInputEditStream } from '../../epic/blogInputEdit';
-import { applyInlineStyleMap, changeTriggerSave, createNewCustomBlock, uploadFile } from '../../Functions/blogInputEdit';
+import { blogInputEditStream } from "../../epic/blogInputEdit";
+import {
+  applyInlineStyleMap,
+  changeTriggerSave,
+  createNewCustomBlock,
+  uploadFile,
+} from "../../Functions/blogInputEdit";
 
 const BLOCK_STYLES = [
   { label: "h1", style: "header-one" },
@@ -163,97 +168,95 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
     if (blogInputEditStream.currentState().isAutosaveMode) changeTriggerSave();
   };
   return (
-    <div className="control-menu-wrapper">
-      <div className="container-mobile-menu">
-        <i className="fas fa-pen-square fa-2x" ref={penSquareRef}></i>
-        <div
-          className="control-menu-container"
-          style={{
-            transform: !isShowBar ? "translateY(-600px)" : "translateY(0)",
-          }}
+    <div>
+      <i className="control-menu-wrapper fas fa-pen-square fa-2x" ref={penSquareRef}></i>
+      <div
+        className="control-menu-wrapper control-menu-container"
+        style={{
+          transform: !isShowBar ? "translateY(-600px)" : "translateY(0)",
+        }}
+      >
+        <div className="close-control-menu-container">
+          <i
+            className="fas fa-times close-control-menu fa-2x"
+            onClick={() => {
+              setIsShowBar(!isShowBar);
+            }}
+          ></i>
+        </div>
+        <button
+          className={blogState.isAutosaveMode ? "autosave-button-active" : ""}
+          onClick={toggleAutosaveMode}
         >
-          <div className="close-control-menu-container">
-            <i
-              className="fas fa-times close-control-menu fa-2x"
-              onClick={() => {
-                setIsShowBar(!isShowBar);
-              }}
-            ></i>
-          </div>
-          <button
-            className={blogState.isAutosaveMode ? "autosave-button-active" : ""}
-            onClick={toggleAutosaveMode}
-          >
-            autosave
-          </button>
-          <input
-            type="file"
-            id="change-file-image-input"
-            onChange={createChosenFileImage}
-            onMouseDown={(e) => e.preventDefault()}
-          />
+          autosave
+        </button>
+        <input
+          type="file"
+          id="change-file-image-input"
+          onChange={createChosenFileImage}
+          onMouseDown={(e) => e.preventDefault()}
+        />
 
-          <input
-            type="text"
-            placeholder="ENTER IFRAME URL"
-            className="input-iframe-text"
-          />
-          <button onMouseDown={createNewIframe}>Confirm</button>
+        <input
+          type="text"
+          placeholder="ENTER IFRAME URL"
+          className="input-iframe-text"
+        />
+        <button onMouseDown={createNewIframe}>Confirm</button>
 
-          <input
-            type="text"
-            placeholder="ENTER IMAGE URL"
-            className="input-image-text"
-          />
-          <button onMouseDown={createNewImage}>Confirm</button>
+        <input
+          type="text"
+          placeholder="ENTER IMAGE URL"
+          className="input-image-text"
+        />
+        <button onMouseDown={createNewImage}>Confirm</button>
 
-          <input
-            type="text"
-            placeholder="ENTER URL AUDIO"
-            className="input-audio-text"
-          />
-          <button onMouseDown={createNewAudio}>Confirm</button>
-          <ListButtonChangeBlockStyle
-            blockType={blockType}
-            onChange={onChange}
-            editorState={editorState}
-          />
-          <ListButtonChangeInlineStyle
-            currentStyle={currentStyle}
-            onChange={onChange}
-            editorState={editorState}
-          />
-          <input
-            className="color-picker-input"
-            type="color"
-            title="Enter to select"
-            onMouseDown={(e) => e.preventDefault()}
-          />
-          <input
-            type="text"
-            placeholder="ENTER LINK TEXT"
-            className="input-link-text"
-          />
-          <button onMouseDown={applyLink}>Confirm</button>
-          <div>
-            {TEXT_ALIGN.map((type, index) => (
-              <button
-                className={`${
-                  currentStyle.has(type.style) ? "active-button" : ""
-                }`}
-                key={index}
-                onMouseDown={applyInlineStyleMap(
-                  editorState,
-                  blogInputEditStream.currentState().alignStyleMap,
-                  type,
-                  onChange,
-                  true
-                )}
-              >
-                {type.label}
-              </button>
-            ))}
-          </div>
+        <input
+          type="text"
+          placeholder="ENTER URL AUDIO"
+          className="input-audio-text"
+        />
+        <button onMouseDown={createNewAudio}>Confirm</button>
+        <ListButtonChangeBlockStyle
+          blockType={blockType}
+          onChange={onChange}
+          editorState={editorState}
+        />
+        <ListButtonChangeInlineStyle
+          currentStyle={currentStyle}
+          onChange={onChange}
+          editorState={editorState}
+        />
+        <input
+          className="color-picker-input"
+          type="color"
+          title="Enter to select"
+          onMouseDown={(e) => e.preventDefault()}
+        />
+        <input
+          type="text"
+          placeholder="ENTER LINK TEXT"
+          className="input-link-text"
+        />
+        <button onMouseDown={applyLink}>Confirm</button>
+        <div>
+          {TEXT_ALIGN.map((type, index) => (
+            <button
+              className={`${
+                currentStyle.has(type.style) ? "active-button" : ""
+              }`}
+              key={index}
+              onMouseDown={applyInlineStyleMap(
+                editorState,
+                blogInputEditStream.currentState().alignStyleMap,
+                type,
+                onChange,
+                true
+              )}
+            >
+              {type.label}
+            </button>
+          ))}
         </div>
       </div>
     </div>

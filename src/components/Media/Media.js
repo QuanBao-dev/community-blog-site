@@ -1,7 +1,6 @@
 import "./Media.css";
 
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 
@@ -33,7 +32,6 @@ const Media = (props) => {
   useEffect(() => {
     const subscription = blogInputEditStream.subscribe(setBlogInputEditState);
     const resizeSub = userStream.subscribe(setUserState);
-    blogInputEditStream.init();
     return () => {
       resizeSub.unsubscribe();
       subscription.unsubscribe();

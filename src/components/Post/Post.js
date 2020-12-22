@@ -1,6 +1,6 @@
 import "./Post.css";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import { useCookies } from "react-cookie";
 import ReactMarkdown from "react-markdown";
@@ -35,7 +35,6 @@ const Post = ({ post }) => {
     trigger,
     setTrigger,
     triggerFetchTagsTop,
-    setDataSend,
     post,
     cookies
   );
@@ -57,11 +56,13 @@ const Post = ({ post }) => {
   const likeQuantity =
     -JSON.parse(post.downVotesUserIdList || "[]").length +
     JSON.parse(post.upVotesUserIdList || "[]").length;
-  if (introRef.current && titleRef.current) {
-    introRef.current.value = post.excerpt;
-    titleRef.current.value = post.title;
-  }
-
+  useEffect(() => {
+    if (introRef.current && titleRef.current) {
+      introRef.current.value = post.excerpt;
+      titleRef.current.value = post.title;
+      setDataSend(post.tags.map((tag) => tag.tagName));
+    }
+  }, [post.excerpt, post.tags, post.title]);
   return (
     <li className="container-post">
       <div className="container-menu-control">

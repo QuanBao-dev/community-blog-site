@@ -73,7 +73,7 @@ export const useSaveTrigger = (cookies, blogState, history) => {
 };
 
 export const useAutoSave = (cookies, history) => {
-  useEffect(autosave(cookies, history), [cookies]);
+  useEffect(autosave(cookies, history), []);
 };
 
 export function useColorPickerChange(colorPickerInput, editorState, onChange) {

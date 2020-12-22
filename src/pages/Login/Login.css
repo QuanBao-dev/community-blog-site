@@ -34,3 +34,20 @@
 .button-login-submit:hover{
   background-color: #2b349b;
 }
+
+@media(max-width:1075px){
+  .login-page__container-login{
+    width: 60%;
+  }
+}
+
+@media(max-width:775px){
+  .login-page__container-login{
+    width: 80%;
+  }
+}
+@media(max-width:500px){
+  .login-page__container-login{
+    width: 90%;
+  }
+}

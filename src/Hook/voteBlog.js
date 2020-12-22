@@ -1,11 +1,7 @@
-import { useEffect } from "react";
-import {
-  downVoteBlog,
-  upVoteBlog,
-  initVoteBlog,
-  fetchVoteBlog,
-} from "../Functions/voteBlog";
-import voteBlogStore from "../store/voteBlog";
+import { useEffect } from 'react';
+
+import { downVoteBlog, fetchVoteBlog, initVoteBlog, upVoteBlog } from '../Functions/voteBlog';
+import voteBlogStore from '../store/voteBlog';
 
 export const voteBlogStream = voteBlogStore;
 

@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { fetchLatestPosts, initLatestPosts } from "../Functions/latestPosts";
+import { useEffect} from 'react';
+
+import { fetchLatestPosts, initLatestPosts } from '../Functions/latestPosts';
 
 export const useInitLatestPosts = (setLatestPostsState) => {
   useEffect(initLatestPosts(setLatestPostsState), []);

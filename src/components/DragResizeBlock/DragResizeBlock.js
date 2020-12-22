@@ -34,7 +34,7 @@ const DragResizeBlock = ({
       subscription.unsubscribe();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [className]);
   return (
     <div
       ref={block}

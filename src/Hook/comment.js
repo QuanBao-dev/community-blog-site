@@ -34,7 +34,7 @@ export const usePostComment = (
       cookies,
       setToggleReply
     ),
-    [cookies, button.current, textarea.current]
+    [button.current, textarea.current]
   );
 };
 
