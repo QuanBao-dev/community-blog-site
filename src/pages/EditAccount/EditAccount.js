@@ -62,7 +62,6 @@ const EditAccount = () => {
         } else if (message.toLocaleLowerCase().includes("at least")) {
           alert(message);
         }
-        console.log(message);
       }
     });
     return () => {

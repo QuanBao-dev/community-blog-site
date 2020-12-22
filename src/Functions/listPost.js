@@ -218,7 +218,6 @@ export const createPost = (
         cookies
       ).subscribe((v) => {
         if (!v.error) {
-          console.log(dataSend);
           blogInputEditStream.updateData({ dataBlogPage: v });
           if (tabBarStream.currentState().tabMode === 1)
             latestPostsStream.updateData({ shouldFetchLatestPost: true });
