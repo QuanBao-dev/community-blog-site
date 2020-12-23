@@ -132,12 +132,14 @@ const VoteBlog = ({ postId }) => {
             style={{
               display: toggleEditMode && !isShowBar ? "block" : "none",
             }}
+            onMouseDown={(e) => e.preventDefault()}
           ></i>
           <i
             className="fas fa-times"
             style={{
               display: toggleEditMode && isShowBar ? "block" : "none",
             }}
+            onMouseDown={(e) => e.preventDefault()}
           ></i>
         </span>
       </div>

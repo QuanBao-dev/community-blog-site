@@ -21,6 +21,7 @@ export const fetchLatestPosts = (isAuthor) => {
         latestPostsStream.updateData({
           latestPostAuthor: v,
           shouldFetchLatestPostAuthor: false,
+          previousAuthorId: latestPostsStream.currentState().authorId,
         });
       }
     });

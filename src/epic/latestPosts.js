@@ -26,7 +26,10 @@ export const fetchLatestPosts$ = (isAuthor) => {
         ),
         timer(0).pipe(
           filter(
-            () => latestPostsStream.currentState().shouldFetchLatestPostAuthor
+            () =>
+              latestPostsStream.currentState().shouldFetchLatestPostAuthor &&
+              latestPostsStream.currentState().authorId !==
+                latestPostsStream.currentState().previousAuthorId
           ),
           filter(() => latestPostsStream.currentState().authorId),
           mergeMapTo(
