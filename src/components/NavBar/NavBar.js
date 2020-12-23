@@ -1,12 +1,12 @@
-import './NavBar.css';
+import "./NavBar.css";
 
-import loadable from '@loadable/component';
-import React, { useEffect, useRef, useState } from 'react';
-import { Link, useHistory, withRouter } from 'react-router-dom';
-import { fromEvent } from 'rxjs';
+import loadable from "@loadable/component";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useHistory, withRouter } from "react-router-dom";
+import { fromEvent } from "rxjs";
 
-import { tabBarStream } from '../../epic/tabBar';
-import { logoutUser$, userStream } from '../../epic/user';
+import { tabBarStream } from "../../epic/tabBar";
+import { logoutUser$, userStream } from "../../epic/user";
 
 const PopularTags = loadable(() => import("../PopularTags/PopularTags"));
 
@@ -162,7 +162,7 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
             )}
             {userState.user && (
               <div className="App-header__link-navbar-item item-account-info">
-                <span>Account</span>
+                <span>{userState.user.username}</span>
                 <div className="list-link-account">
                   <Link to="/account/edit">
                     <div className="item-link-account">Edit Account</div>
@@ -183,9 +183,6 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
                     }}
                   >
                     <li>Logout</li>
-                  </div>
-                  <div className="item-link-account">
-                    {userState.user.username}
                   </div>
                 </div>
               </div>
