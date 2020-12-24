@@ -96,7 +96,8 @@
 }
 
 .tag-name-item{
-  margin-right: 1rem;
+  margin: 0.4rem;
+  display: inline-block;
   background-color: rgba(128, 128, 128, 0.24);
   padding:0.2rem;
   border-radius: 5px;

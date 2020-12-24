@@ -20,7 +20,6 @@ import { userStream } from "../../epic/user";
 import {
   changeTriggerSave,
   saveContent,
-  toggleStateEdit,
   uploadFile,
 } from "../../Functions/blogInputEdit";
 import {
@@ -30,7 +29,6 @@ import {
   useFetchBlogData,
   useInitBlogDetail,
   useInitEditorContent,
-  usePublishPost,
   useSaveTrigger,
   useShowHidePublish,
   useShowHideSaving,
@@ -105,7 +103,6 @@ const BlogInputEdit = ({ postId }) => {
   const [cookies] = useCookies();
   const user = userStream.currentState().user;
   const editorRef = useRef();
-  const buttonUpload = document.querySelector(".button-publicize-post");
   const colorPickerInput = document.querySelector(".color-picker-input");
 
   const onChange = (editorState) => {
@@ -127,7 +124,6 @@ const BlogInputEdit = ({ postId }) => {
 
   useAutoSave(cookies, history);
   useSaveTrigger(cookies, blogState, history);
-  usePublishPost(buttonUpload, cookies, history, postId);
 
   useToggleEdit(blogState);
   useShowHidePublish(blogState);
@@ -156,7 +152,8 @@ const BlogInputEdit = ({ postId }) => {
           <span></span>
         </div>
         <div className="loading-publicize-content">
-          <i className="fas fa-spinner fa-spin"></i><span>Publishing...</span>
+          <i className="fas fa-spinner fa-spin"></i>
+          <span>Publishing...</span>
         </div>
         {user &&
           ((blogState.dataBlogPage.userId === user.userId &&
@@ -177,45 +174,6 @@ const BlogInputEdit = ({ postId }) => {
           editorRef={editorRef}
           postId={postId}
         />
-        {user &&
-          (blogState.dataBlogPage.userId === user.userId ||
-            (postId === "create" && blogState.dataBlogPage.title)) && (
-            <div className="menu-control-fix">
-              <button
-                className="button-publicize-post"
-                style={{
-                  display:
-                    !blogState.toggleEditMode && blogState.isCompleted !== true
-                      ? "inline-block"
-                      : "none",
-                }}
-              >
-                Publish
-              </button>
-
-              {!blogState.isSaved && (
-                <button
-                  className="button-saved-post"
-                  onClick={() => {
-                    if (blogInputEditStream.currentState().toggleEditMode)
-                      changeTriggerSave();
-                  }}
-                >
-                  Saved
-                </button>
-              )}
-              <button
-                onClick={toggleStateEdit}
-                className={
-                  blogState.toggleEditMode === true
-                    ? "edit-button-post--inactive"
-                    : "edit-button-post"
-                }
-              >
-                {blogState.toggleEditMode === true ? "Done" : "Edit"}
-              </button>
-            </div>
-          )}
       </div>
       <div
         style={{

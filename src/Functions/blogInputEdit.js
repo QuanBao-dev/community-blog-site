@@ -293,7 +293,6 @@ export function publishPost(buttonUpload, cookies, history) {
               listImageString: v.listImageString || "[]",
               isPublicizing: false,
             });
-            latestPostsStream.updateData({ shouldFetchLatestPost: true });
             delete data.body;
             if (tabBarStream.currentState().tabMode !== 2) {
               tabBarStream.updateData({ tabMode: 2 });
@@ -342,6 +341,7 @@ function updateLatestPost(v, isPublish) {
     if (!listPostAuthorPostId.includes(v.postId)) {
       latestPostsStream.updateData({
         shouldFetchLatestPostAuthor: true,
+        previousAuthorId: "",
       });
     }
   } else {
@@ -351,6 +351,7 @@ function updateLatestPost(v, isPublish) {
     if (listPostAuthorPostId.includes(v.postId)) {
       latestPostsStream.updateData({
         shouldFetchLatestPostAuthor: true,
+        previousAuthorId: "",
       });
     }
   }
@@ -467,6 +468,9 @@ export function changeTriggerSave() {
   if (blogInputEditStream.currentState().toggleEditMode) {
     blogInputEditStream.updateData({
       triggerSave: !blogInputEditStream.currentState().triggerSave,
+    });
+    latestPostsStream.updateData({
+      shouldFetchLatestPostAuthor: true,
     });
   }
 }

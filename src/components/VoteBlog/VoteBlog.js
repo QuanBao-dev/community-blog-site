@@ -14,24 +14,30 @@ import {
 import { fromEvent } from "rxjs";
 import { filter } from "rxjs/operators";
 import { blogInputEditStream } from "../../epic/blogInputEdit";
-let posY1 = 0;
-let posY2 = 0;
+import {
+  changeTriggerSave,
+  toggleStateEdit,
+} from "../../Functions/blogInputEdit";
+import { usePublishPost } from "../../Hook/blogInputEdit";
+import { useHistory } from "react-router-dom";
 const VoteBlog = ({ postId }) => {
   const upVoteButtonRef = useRef();
   const downVoteButtonRef = useRef();
+  const history = useHistory();
   const { user } = userStream.currentState();
   const [cookies] = useCookies(["idBloggerUser"]);
-  const [isDown, setIsDown] = useState(true);
   const [userState, setUserState] = useState(userStream.currentState());
   const [blogInputState, setBlogInputState] = useState(
     blogInputEditStream.currentState()
   );
   const penSquareRef = useRef();
+  const buttonUploadRef = useRef();
   const [voteBlogState, setVoteBlogState] = useState(
     voteBlogStream.currentState()
   );
   const { screenWidth } = userState;
   const { toggleEditMode, isShowBar } = blogInputState;
+
   useEffect(() => {
     let subscription2;
     if (penSquareRef.current)
@@ -56,27 +62,11 @@ const VoteBlog = ({ postId }) => {
       blogInputSub.unsubscribe();
     };
   }, []);
-
-  useEffect(() => {
-    const scrollingSub = fromEvent(window.document, "scroll")
-      .pipe(filter(() => screenWidth < 624))
-      .subscribe(() => {
-        posY2 = posY1 - window.scrollY;
-        posY1 = window.scrollY;
-        if (posY2 > 3 && isDown) {
-          setIsDown(false);
-        } else if (posY2 < 0 && !isDown) {
-          setIsDown(true);
-        }
-      });
-    return () => {
-      scrollingSub.unsubscribe();
-    };
-  }, [isDown, screenWidth]);
   useInitVoteBlog(setVoteBlogState);
   useFetchVoteBlog(postId);
   useUpVoteBlog(postId, upVoteButtonRef, cookies);
   useDownVoteBlog(postId, downVoteButtonRef, cookies);
+  usePublishPost(buttonUploadRef.current, cookies, history, postId);
   if (postId === "create") {
     return <div></div>;
   }
@@ -87,14 +77,6 @@ const VoteBlog = ({ postId }) => {
           ? `vote-menu-controller`
           : "vote-menu-controller-mobile"
       }
-      style={{
-        transform:
-          screenWidth < 624
-            ? isDown
-              ? "translateY(100px)"
-              : "translateY(0)"
-            : "translateY(100px)",
-      }}
     >
       <div className="wrapper-vote">
         <i
@@ -126,9 +108,18 @@ const VoteBlog = ({ postId }) => {
           ref={downVoteButtonRef}
           className="fa fa-caret-down"
         ></i>
+        {user &&
+          !blogInputEditStream.currentState().toggleEditMode &&
+          blogInputEditStream.currentState().dataBlogPage.userId ===
+            user.userId && (
+            <i onClick={toggleStateEdit} className="fas fa-pencil-alt"></i>
+          )}
+        {blogInputEditStream.currentState().toggleEditMode && (
+          <i onClick={toggleStateEdit} className="fas fa-check-circle"></i>
+        )}
         <span ref={penSquareRef}>
           <i
-            className="fas fa-pen-square"
+            className="fas fa-palette"
             style={{
               display: toggleEditMode && !isShowBar ? "block" : "none",
             }}
@@ -142,6 +133,26 @@ const VoteBlog = ({ postId }) => {
             onMouseDown={(e) => e.preventDefault()}
           ></i>
         </span>
+        {blogInputEditStream.currentState().toggleEditMode &&
+          !blogInputEditStream.currentState().isSaved && (
+            <i
+              onClick={() => {
+                if (blogInputEditStream.currentState().toggleEditMode)
+                  changeTriggerSave();
+              }}
+              className="far fa-save"
+            ></i>
+          )}
+        <i
+          ref={buttonUploadRef}
+          style={{
+            display:
+              blogInputEditStream.currentState().isCompleted === false
+                ? "inline-block"
+                : "none",
+          }}
+          className="fas fa-upload"
+        ></i>
       </div>
     </div>
   );

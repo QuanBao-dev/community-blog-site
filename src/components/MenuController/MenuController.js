@@ -169,6 +169,12 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
           className="input-audio-text"
         />
         <button onMouseDown={createNewAudio}>Confirm</button>
+        <input
+          type="text"
+          placeholder="ENTER LINK TEXT"
+          className="input-link-text"
+        />
+        <button onMouseDown={applyLink}>Confirm</button>
         <ListButtonChangeBlockStyle
           blockType={blockType}
           onChange={onChange}
@@ -179,18 +185,6 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
           onChange={onChange}
           editorState={editorState}
         />
-        <input
-          className="color-picker-input"
-          type="color"
-          title="Enter to select"
-          onMouseDown={(e) => e.preventDefault()}
-        />
-        <input
-          type="text"
-          placeholder="ENTER LINK TEXT"
-          className="input-link-text"
-        />
-        <button onMouseDown={applyLink}>Confirm</button>
         <div>
           {TEXT_ALIGN.map((type, index) => (
             <button
@@ -259,6 +253,12 @@ function ListButtonChangeInlineStyle({ currentStyle, onChange, editorState }) {
           {type.label}
         </button>
       ))}
+      <input
+        className="color-picker-input"
+        type="color"
+        title="Enter to select"
+        onMouseDown={(e) => e.preventDefault()}
+      />
     </div>
   );
 }

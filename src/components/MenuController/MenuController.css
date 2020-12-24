@@ -31,7 +31,7 @@
 
 .control-menu-wrapper{
   position: fixed;
-  z-index: 5;
+  z-index: 3;
   top: 0;
   border-radius: 10px;
 }
@@ -45,5 +45,6 @@
 @media(max-width:624px){
   .control-menu-wrapper{
     top: 70px;
+    padding: 0;
   }
 }
