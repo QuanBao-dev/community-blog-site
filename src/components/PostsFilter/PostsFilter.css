@@ -18,6 +18,11 @@
   width: 100%;
 }
 
+.container-search-posts__list-post.dark .header-container-title{
+  background-color: black;
+  color:white;
+}
+
 .container-search-posts__list-latest-post{
   width: 35%;
   margin-right: 1rem;

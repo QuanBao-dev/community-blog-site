@@ -1,4 +1,5 @@
 import { blogInputEditStream } from "../epic/blogInputEdit";
+import { updateLatestPost } from "../Functions/blogInputEdit";
 import { latestPostsStream } from "../epic/latestPosts";
 import {
   createEditPost$,
@@ -218,6 +219,7 @@ export const createPost = (
         cookies
       ).subscribe((v) => {
         if (!v.error) {
+          updateLatestPost(v);
           blogInputEditStream.updateData({ dataBlogPage: v });
           if (tabBarStream.currentState().tabMode === 1)
             latestPostsStream.updateData({ shouldFetchLatestPost: true });
@@ -230,7 +232,7 @@ export const createPost = (
             }),
           });
           triggerFetchTagsTop();
-          setDataSend([]);
+          setDataSend(v.tags.map((tag) => tag.tagName));
         }
       });
     }

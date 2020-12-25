@@ -5,6 +5,14 @@
   background-color: white;
 }
 
+.container-latest-posts.dark{
+  list-style-type: none;
+  padding: 1rem;
+  box-shadow: 0 0 2px 1px rgba(128, 128, 128, 0.404);
+  background-color: black;
+  color: white;
+}
+
 .container-latest-posts__see-all-posts{
   text-decoration: none;
   color: black;

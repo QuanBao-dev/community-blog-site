@@ -131,11 +131,19 @@ const BlogInputEdit = ({ postId }) => {
   useUpdateAfterFetch(editorState, onChange, blogState);
   useCheckPageSaved(blogState, editorState);
   useColorPickerChange(colorPickerInput, editorState, onChange);
-
   const { currentStyle, styleMap } = useMemo(
     handleData(editorState, blogState, colorPickerInput),
     [editorState]
   );
+  const editorBlog = document.querySelector(".editor-blog");
+  if (editorBlog) {
+    editorBlog.style.backgroundColor = userStream.currentState().isDarkMode
+      ? "black"
+      : "white";
+    editorBlog.style.color = !userStream.currentState().isDarkMode
+      ? "black"
+      : "white";
+  }
   return (
     <div>
       <div style={{ display: !blogState.isLoading ? "block" : "none" }}>
@@ -198,7 +206,11 @@ function BlogContentDetail({
   postId,
 }) {
   return (
-    <section className="section-blog-detail">
+    <section
+      className={`section-blog-detail${
+        userStream.currentState().isDarkMode ? " dark" : ""
+      }`}
+    >
       <HeaderBlogPost
         title={blogState.dataBlogPage.title}
         excerpt={blogState.dataBlogPage.excerpt}
@@ -236,8 +248,10 @@ function handleData(editorState, blogState, colorPickerInput) {
         fontSize: "16px",
         padding: "2px",
         borderRadius: "4px",
+        color: "black",
         backgroundColor: "#e9e8e8",
         whiteSpace: "pre",
+        margin:"0 5px"
       },
       ...blogInputEditStream.currentState().alignStyleMap,
       ...blogInputEditStream.currentState().colorStyleMap,

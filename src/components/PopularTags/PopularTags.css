@@ -3,9 +3,13 @@
   padding: 0 1rem;
 }
 
-.popular-tag-link{
+.home-page__container-popular-tags .popular-tag-link{
   text-decoration: none;
   color: black;
+}
+
+.home-page__container-popular-tags.dark .popular-tag-link{
+  color: white;
 }
 
 .tag-item:hover{

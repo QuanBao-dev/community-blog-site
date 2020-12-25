@@ -9,6 +9,10 @@
   text-align: start;
 }
 
+.form-custom.dark{
+  color: white;
+}
+
 .form-custom .label-name::before{
   content: "";
   position: absolute;
@@ -43,6 +47,10 @@
   outline: none;
   border-bottom: 1px solid black;
   color: black;
+}
+
+.form-custom.dark input{
+  border-bottom: 1px solid white;
 }
 
 .form-custom input:focus + .label-name,

@@ -10,6 +10,11 @@
   box-shadow: 0 0 1px 1px rgba(99, 93, 93, 0.219);
 }
 
+.login-page__container-login.dark{
+  background-color: black;
+  color: white;
+}
+
 .login-page__container-login h1{
   margin-bottom: 0.4rem;
   text-align: center;

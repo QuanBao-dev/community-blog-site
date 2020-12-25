@@ -6,6 +6,11 @@
   flex-direction: column;
 }
 
+.wrapper-vote.dark{
+  color: white;
+  background-color: black;
+}
+
 .wrapper-vote i{
   cursor: pointer;
   margin: 0.5rem 0;

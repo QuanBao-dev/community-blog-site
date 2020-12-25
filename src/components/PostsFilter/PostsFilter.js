@@ -7,6 +7,7 @@ import { of } from "rxjs";
 import { ajax } from "rxjs/ajax";
 import { useHistory } from "react-router-dom";
 import loadable from "@loadable/component";
+import { userStream } from "../../epic/user";
 const LatestPosts = loadable(() => import("../LatestPosts/LatestPosts"));
 const ListPost = loadable(() => import("../ListPost/ListPost"));
 const PostsFilter = ({ title, tagId, userId }) => {
@@ -51,10 +52,14 @@ const PostsFilter = ({ title, tagId, userId }) => {
       subscription && subscription.unsubscribe();
     };
   }, [userId]);
-
+  const { isDarkMode } = userStream.currentState();
   return (
     <div className="container-search-posts">
-      <div className="container-search-posts__list-post">
+      <div
+        className={`container-search-posts__list-post${
+          isDarkMode ? " dark" : ""
+        }`}
+      >
         {title && (
           <h1 className="header-container-title">Searching for "{title}"</h1>
         )}

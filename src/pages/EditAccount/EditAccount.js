@@ -12,7 +12,7 @@ const EditAccount = () => {
   const [errorPassword, setErrorPassword] = useState();
   const [errorEmail, setErrorEmail] = useState();
   const [cookies, setCookie] = useCookies(["idBloggerUser"]);
-  const { user } = userStream.currentState();
+  const { user, isDarkMode } = userStream.currentState();
 
   const history = useHistory();
   const currentPasswordRef = useRef();
@@ -80,7 +80,7 @@ const EditAccount = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cookies]);
   return (
-    <div className="account-edit-form">
+    <div className={`account-edit-form${isDarkMode ? " dark" : ""}`}>
       <h1>Edit Account</h1>
       <Input
         label={"Current Password"}

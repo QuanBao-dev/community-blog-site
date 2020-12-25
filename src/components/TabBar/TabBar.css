@@ -7,6 +7,10 @@
   justify-content: space-between;
 }
 
+.home-page__tab-bar.dark{
+  color: white;
+}
+
 .home-page__tab-item{
   border-bottom: 5px solid rgb(143, 143, 143);
   width: 100%;

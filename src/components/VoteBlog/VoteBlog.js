@@ -35,7 +35,7 @@ const VoteBlog = ({ postId }) => {
   const [voteBlogState, setVoteBlogState] = useState(
     voteBlogStream.currentState()
   );
-  const { screenWidth } = userState;
+  const { screenWidth, isDarkMode } = userState;
   const { toggleEditMode, isShowBar } = blogInputState;
 
   useEffect(() => {
@@ -78,12 +78,19 @@ const VoteBlog = ({ postId }) => {
           : "vote-menu-controller-mobile"
       }
     >
-      <div className="wrapper-vote">
+      <div
+        className={`wrapper-vote${isDarkMode ? " dark" : ""}`}
+        style={{
+          color: !userStream.currentState().isDarkMode ? "black" : "white",
+        }}
+      >
         <i
           style={{
             color:
               user && voteBlogState.upVotesUserIdList.includes(user.userId)
-                ? "black"
+                ? !userStream.currentState().isDarkMode
+                  ? "black"
+                  : "white"
                 : "grey",
           }}
           ref={upVoteButtonRef}

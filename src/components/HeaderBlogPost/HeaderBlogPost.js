@@ -75,21 +75,19 @@ const HeaderBlogPost = ({
   return (
     <div className="header-blog-post">
       <h1 className="header-blog-post__child-container">{title}</h1>
-      <div className="header-blog-post__child-container">
-        {tags && (
-          <div>
-            {tags.map((tag, key) => (
-              <Link
-                to={"/tags/" + tag.tagId}
-                key={key}
-                className="header-blog-post__tag-name"
-              >
-                #{tag.tagName || tag}
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
+      {tags && (
+        <div className="header-blog-post__child-container">
+          {tags.map((tag, key) => (
+            <Link
+              to={"/tags/" + tag.tagId}
+              key={key}
+              className="header-blog-post__tag-name"
+            >
+              #{tag.tagName || tag}
+            </Link>
+          ))}
+        </div>
+      )}
       {user && (
         <Link
           to={"/posts/user/" + user.userId}

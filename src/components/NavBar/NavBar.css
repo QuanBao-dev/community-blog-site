@@ -37,6 +37,11 @@
   z-index: 10;
 }
 
+.App-header__side-bar-container.dark{
+  background-color: black;
+  color: white;
+}
+
 .App-header__block-side-bar{
   position: fixed;
   top: 0;
@@ -51,9 +56,13 @@
   list-style-type: none;
 }
 
-.App-header__tags-link{
+.App-header__side-bar-container .App-header__tags-link{
   text-decoration: none;
   color: black;
+}
+
+.App-header__side-bar-container.dark .App-header__tags-link{
+  color: white;
 }
 
 .App-header__tags-link div{
@@ -67,6 +76,10 @@
 
 .App-header__list-link-navbar a{
   text-decoration: none;
+}
+
+.App-header__list-link-navbar.dark a{
+  color: white;
 }
 
 .App-header__container-wrapper-link{

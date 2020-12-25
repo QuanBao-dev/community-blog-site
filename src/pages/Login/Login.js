@@ -64,12 +64,14 @@ const Login = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isDoneFetch]);
-
+  const { isDarkMode } = userStream.currentState();
   return (
     !user &&
     isDoneFetch && (
       <div className="login-page">
-        <div className="login-page__container-login">
+        <div
+          className={`login-page__container-login${isDarkMode ? " dark" : ""}`}
+        >
           <h1>Welcome to DEV</h1>
           <div className="text-welcome">
             DEV is a community of{" "}

@@ -327,7 +327,7 @@ export function publishPost(buttonUpload, cookies, history) {
   };
 }
 
-function updateLatestPost(v, isPublish) {
+export function updateLatestPost(v, isPublish) {
   const listPostId = latestPostsStream
     .currentState()
     .latestPost.map((post) => post.postId);

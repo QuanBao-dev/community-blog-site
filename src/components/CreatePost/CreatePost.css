@@ -9,6 +9,11 @@
   position: relative;
 }
 
+.form-create-post-container.dark{
+  color: white;
+  background-color: black;
+}
+
 .form-create-post{
   background-color: transparent;
 }

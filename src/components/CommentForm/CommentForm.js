@@ -12,7 +12,7 @@ const CommentForm = ({ isReply = false, commentId, commentLevel }) => {
   const textareaRef = useRef();
   const [toggleReply, setToggleReply] = useState(false);
   const [cookies] = useCookies(["idBloggerUser"]);
-  const { user } = userStream.currentState();
+  const { user, isDarkMode } = userStream.currentState();
   usePostComment(
     isReply,
     commentId,
@@ -30,7 +30,14 @@ const CommentForm = ({ isReply = false, commentId, commentLevel }) => {
         }}
         className="section-container__form"
       >
-        <textarea ref={textareaRef} className="textarea-container" />
+        <textarea
+          ref={textareaRef}
+          className="textarea-container"
+          style={{
+            backgroundColor: isDarkMode ? "black" : "",
+            color: !isDarkMode ? "black" : "white",
+          }}
+        />
         <button
           ref={buttonRef}
           className="button-submit"
@@ -55,7 +62,14 @@ const CommentForm = ({ isReply = false, commentId, commentLevel }) => {
             display: toggleReply ? "block" : "none",
           }}
         >
-          <textarea ref={textareaRef} className="textarea-container" />
+          <textarea
+            ref={textareaRef}
+            className="textarea-container"
+            style={{
+              backgroundColor: isDarkMode ? "black" : "",
+              color: !isDarkMode ? "black" : "white",
+            }}
+          />
           <button
             ref={buttonRef}
             className="button-submit"

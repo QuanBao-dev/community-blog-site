@@ -47,7 +47,6 @@
   .container-news{
     width: 90%;
     padding: 1rem 2rem;
-    background-color: white;
     box-shadow: 0 0 2px 1px rgba(128, 128, 128, 0.644);
   }
   .editor-blog{

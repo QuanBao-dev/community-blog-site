@@ -578,6 +578,7 @@ router.put("/:postId", verifyRole("User", "Admin"), async (req, res) => {
     const ans = {
       ...post.toJSON(),
       user,
+      imageUrl: extractListImage(post, true),
     };
     res.send({
       message: ignoreProperty(ans, [

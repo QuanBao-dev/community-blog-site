@@ -4,6 +4,7 @@ const initialState = {
   quantityUser: null,
   isDoneFetch: false,
   screenWidth: null,
+  isDarkMode: false,
 };
 const behaviorSubject = new BehaviorSubject(initialState);
 let state = initialState;

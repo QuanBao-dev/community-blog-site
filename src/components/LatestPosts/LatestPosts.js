@@ -10,6 +10,7 @@ import {
 import LatestPost from "../LatestPost/LatestPost";
 import { Link } from "react-router-dom";
 import { blogInputEditStream } from "../../epic/blogInputEdit";
+import { userStream } from "../../epic/user";
 
 const LatestPosts = ({ isAuthor }) => {
   const [latestPostsState, setLatestPostsState] = useState(
@@ -17,9 +18,10 @@ const LatestPosts = ({ isAuthor }) => {
   );
   useInitLatestPosts(setLatestPostsState);
   useFetchLatestPosts(latestPostsState, isAuthor);
+  const { isDarkMode } = userStream.currentState();
   if (isAuthor)
     return (
-      <ul className="container-latest-posts">
+      <ul className={`container-latest-posts${isDarkMode ? " dark" : ""}`}>
         <h1>Latest author's Posts</h1>
         {latestPostsState.latestPostAuthor.map((post) => (
           <LatestPost key={post.postId} post={post} />
@@ -38,7 +40,7 @@ const LatestPosts = ({ isAuthor }) => {
       </ul>
     );
   return (
-    <ul className="container-latest-posts">
+    <ul className={`container-latest-posts${isDarkMode ? " dark" : ""}`}>
       <h1>Latest Posts</h1>
       {latestPostsState.latestPost.map((post) => (
         <LatestPost key={post.postId} post={post} />

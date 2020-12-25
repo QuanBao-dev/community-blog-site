@@ -10,6 +10,14 @@
   width: 15%;
 }
 
+.home-page__container-left-section.dark{
+  color: white;
+}
+
+.home-page__container-left-section.dark .home-page__tags-link{
+  color: white;
+}
+
 .home-page__bolder-item{
   font-weight: 600;
 }
@@ -45,6 +53,11 @@
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.13);
 }
 
+.home-page__container-user-quantity.dark{
+  background-color: black;
+  color: white;
+}
+
 .home-page__container-user-quantity img{
   width: 50px;
   height: 50px;
@@ -72,7 +85,15 @@
   margin-top: 0.5rem;
 }
 
-.home-page__login-link:hover{
+.home-page__login-link.dark{
+  color: white;
+}
+
+.home-page__login-link.dark:hover{
+  background-color: rgba(141, 145, 148, 0.295);
+}
+
+.home-page__login-link:not(.dark):hover{
   background-color: rgba(221, 217, 217, 0.295);
   color: #323EBE;
 }

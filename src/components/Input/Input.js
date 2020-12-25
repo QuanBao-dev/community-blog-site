@@ -9,6 +9,7 @@ import {
   switchMap,
 } from "rxjs/operators";
 import { ajax } from "rxjs/ajax";
+import { userStream } from "../../epic/user";
 
 const Input = ({
   label,
@@ -40,8 +41,9 @@ const Input = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataSend]);
+  const { isDarkMode } = userStream.currentState();
   return (
-    <div style={{ width: "100%" }}>
+    <div style={{ width: "100%", color: isDarkMode ? "white" : "black" }}>
       {isSuggestion && (
         <div className="tag-name-list">
           {dataSend.map((tag, index) => (
@@ -62,8 +64,9 @@ const Input = ({
           ))}
         </div>
       )}
-      <div className="form-custom">
+      <div className={`form-custom${isDarkMode ? " dark" : ""}`}>
         <input
+          style={{ color: !isDarkMode ? "black" : "white" }}
           defaultValue={defaultValue}
           ref={input}
           type={type || "text"}

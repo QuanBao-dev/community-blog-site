@@ -1,0 +1,12 @@
+.custom-link{
+  text-decoration: none;
+  color: blue;
+}
+
+.custom-link.dark{
+  color: aqua;
+}
+
+.custom-link:hover{
+  text-decoration: underline;
+}

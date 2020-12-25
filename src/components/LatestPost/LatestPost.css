@@ -1,10 +1,10 @@
-.latest-post-item{
+.container-latest-posts .latest-post-item{
   border-bottom: 1px solid rgba(128, 128, 128, 0.205);
   padding-bottom: 0.5rem;
   line-height: 1.8rem;
 }
 
-.latest-post-item__title-container{
+.container-latest-posts .latest-post-item__title-container{
   color: black;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -14,7 +14,7 @@
   overflow: hidden;
 }
 
-.latest-post-item__title{
+.container-latest-posts .latest-post-item__title{
   text-decoration: none;
   color: black;
   font-weight: 700;
@@ -27,6 +27,11 @@
   cursor: pointer;
   transition: 0.5s;
 }
+
+.container-latest-posts.dark .latest-post-item__title{
+  color: white;
+}
+
 
 .latest-post-item__author-username{
   font-weight: 1000;
@@ -91,4 +96,8 @@
   padding: 0.1em 0.5em;
   margin-top: 0.4em;
   border-radius: 4px;
+}
+
+.container-latest-posts.dark .latest-post-item__tag-list li{
+  background-color: rgb(63, 63, 63);
 }

@@ -1,11 +1,13 @@
-import './TabBar.css';
+import "./TabBar.css";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { tabBarStream } from '../../epic/tabBar';
+import { tabBarStream } from "../../epic/tabBar";
+import { userStream } from "../../epic/user";
 
 const TabBar = () => {
   const [tabBarState, setTabBarState] = useState(tabBarStream.currentState());
+  const { isDarkMode } = userStream.currentState();
   useEffect(() => {
     const subscription = tabBarStream.subscribe(setTabBarState);
     tabBarStream.init();
@@ -14,7 +16,7 @@ const TabBar = () => {
     };
   }, []);
   return (
-    <div className="home-page__tab-bar">
+    <div className={`home-page__tab-bar${isDarkMode ? " dark" : ""}`}>
       <div
         className={`home-page__tab-item${
           tabBarState.tabMode === 1 ? " tab-item-active" : ""

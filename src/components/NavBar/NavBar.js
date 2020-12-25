@@ -19,6 +19,11 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
   const [isShowSearchBar, setIsShowSearchBar] = useState(false);
   const [isShowSideBar, setIsShowSideBar] = useState(false);
   useEffect(() => {
+    userStream.updateData({
+      isDarkMode: window.localStorage.getItem("isDarkMode") === "true",
+    });
+  }, []);
+  useEffect(() => {
     const subscription = fromEvent(sideBarRef.current, "click").subscribe(
       (e) => {
         if (e.target.className === "App-header__side-bar show") {
@@ -51,6 +56,11 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
       subscription1 && subscription1.unsubscribe();
     };
   }, [screenWidth, isShowSideBar]);
+  const { isDarkMode } = userStream.currentState();
+  useEffect(() => {
+    window.localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
+  document.body.style.backgroundColor = isDarkMode ? "black" : "white";
   return (
     <header
       className="App-header"
@@ -61,10 +71,18 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
               top: 0,
               left: 0,
               width: "100%",
-              backgroundColor: "white",
+              backgroundColor: userStream.currentState().isDarkMode
+                ? "black"
+                : "white",
               zIndex: "5",
+              color: !userStream.currentState().isDarkMode ? "black" : "white",
             }
-          : {}
+          : {
+              backgroundColor: userStream.currentState().isDarkMode
+                ? "black"
+                : "white",
+              color: !userStream.currentState().isDarkMode ? "black" : "white",
+            }
       }
     >
       <div
@@ -76,7 +94,7 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
         }}
       />
       <aside
-        className="App-header__side-bar-container"
+        className={`App-header__side-bar-container${isDarkMode ? " dark" : ""}`}
         ref={sideBarRef}
         style={{
           transform: !isShowSideBar ? "translateX(-200px)" : "translateX(0)",
@@ -91,7 +109,9 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
         </Link>
         <PopularTags />
       </aside>
-      <ul className="App-header__list-link-navbar">
+      <ul
+        className={`App-header__list-link-navbar${isDarkMode ? " dark" : ""}`}
+      >
         {screenWidth <= 592 && isShowSearchBar && (
           <div className="App-header__search-mobile-post">
             <input
@@ -144,7 +164,27 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
             )}
           </div>
           <div className="App-header__wrapper-link">
-            {!userState.user && (
+            {userStream.currentState().isDarkMode && (
+              <i
+                className="fas fa-toggle-on fa-2x"
+                onClick={() =>
+                  userStream.updateData({
+                    isDarkMode: !userStream.currentState().isDarkMode,
+                  })
+                }
+              ></i>
+            )}
+            {!userStream.currentState().isDarkMode && (
+              <i
+                className="fas fa-toggle-off fa-2x"
+                onClick={() =>
+                  userStream.updateData({
+                    isDarkMode: !userStream.currentState().isDarkMode,
+                  })
+                }
+              ></i>
+            )}
+            {!userState.user && userState.isDoneFetch && (
               <Link
                 to="/auth/login"
                 className="App-header__link-navbar-item login-link"
@@ -152,7 +192,7 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
                 <li>Log in</li>
               </Link>
             )}
-            {!userState.user && (
+            {!userState.user && userState.isDoneFetch && (
               <Link
                 to="/auth/register"
                 className="App-header__link-navbar-item register-link"
@@ -161,7 +201,14 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
               </Link>
             )}
             {userState.user && (
-              <div className="App-header__link-navbar-item item-account-info">
+              <div
+                className="App-header__link-navbar-item item-account-info"
+                style={{
+                  color: !userStream.currentState().isDarkMode
+                    ? "black"
+                    : "white",
+                }}
+              >
                 <span>{userState.user.username}</span>
                 <div className="list-link-account">
                   <Link to="/account/edit">

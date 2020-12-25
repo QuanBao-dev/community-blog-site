@@ -14,6 +14,7 @@ import {
   useUpdateParams,
 } from "../../Hook/listPost";
 import Post from "../Post/Post";
+import { userStream } from "../../epic/user";
 
 const ListPost = ({ tagId, title, userId }) => {
   const [listPostState, setListPostState] = useState(
@@ -35,8 +36,9 @@ const ListPost = ({ tagId, title, userId }) => {
   );
   useUpdatePageScrolling(listPostState);
   useStopFetch(listPostState);
+  const { isDarkMode } = userStream.currentState();
   return (
-    <ul className="list-post-container">
+    <ul className={`list-post-container${isDarkMode ? " dark" : ""}`}>
       {listPostState.listPost.length === 0 &&
         listPostState.latestPageFetched !== null && (
           <h3>Don't have any result</h3>

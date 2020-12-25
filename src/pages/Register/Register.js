@@ -49,10 +49,11 @@ const Register = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const { isDarkMode } = userStream.currentState();
   return (
     !user &&
     isDoneFetch && (
-      <div className="register-page">
+      <div className={`register-page${isDarkMode ? " dark" : ""}`}>
         <div className="register-page__container-register">
           <h1>Welcome to DEV</h1>
           <div className="text-welcome">

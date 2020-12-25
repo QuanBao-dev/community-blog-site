@@ -19,10 +19,20 @@ const LatestPosts = loadable(() =>
 );
 
 const Home = () => {
-  const { user, quantityUser, isDoneFetch } = userStream.currentState();
+  const {
+    user,
+    quantityUser,
+    isDoneFetch,
+    isDarkMode,
+  } = userStream.currentState();
+
   return (
     <div className="home-page__container">
-      <aside className="home-page__container-left-section">
+      <aside
+        className={`home-page__container-left-section${
+          isDarkMode ? " dark" : ""
+        }`}
+      >
         <ul>
           <Link to="/tags" className="home-page__tags-link">
             <li>
@@ -38,7 +48,11 @@ const Home = () => {
         <ListPost />
       </main>
       <aside className="home-page__container-right-section">
-        <div className="home-page__container-user-quantity">
+        <div
+          className={`home-page__container-user-quantity${
+            isDarkMode ? " dark" : ""
+          }`}
+        >
           <img
             src="https://res.cloudinary.com/practicaldev/image/fetch/s--g3JdSGe6--/c_limit,f_auto,fl_progressive,q_80,w_190/https://practicaldev-herokuapp-com.freetls.fastly.net/assets/rainbowdev.svg"
             alt="Not_Found"
@@ -71,7 +85,13 @@ const Home = () => {
                 </div>
               </Link>
               <Link to="/auth/login">
-                <div className="home-page__login-link">Login</div>
+                <div
+                  className={`home-page__login-link${
+                    isDarkMode ? " dark" : ""
+                  }`}
+                >
+                  Login
+                </div>
               </Link>
             </div>
           )}

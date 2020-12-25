@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 
 import { blogInputEditStream } from "../../epic/blogInputEdit";
 import Input from "../Input/Input";
+import { userStream } from "../../epic/user";
 
 const CreatePost = () => {
   const [dataSend, setDataSend] = useState([]);
@@ -14,9 +15,10 @@ const CreatePost = () => {
   const tagRef = useRef();
   const history = useHistory();
   // console.log(dataSend);
+  const { isDarkMode } = userStream.currentState();
   return (
     <div
-      className="form-create-post-container"
+      className={`form-create-post-container${isDarkMode ? " dark" : ""}`}
       title={"create post"}
       style={
         !isShowCreatePost
