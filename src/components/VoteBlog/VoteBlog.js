@@ -154,6 +154,10 @@ const VoteBlog = ({ postId }) => {
           ref={buttonUploadRef}
           style={{
             display:
+              user &&
+              blogInputEditStream.currentState().dataBlogPage &&
+              blogInputEditStream.currentState().dataBlogPage.userId ===
+                user.userId &&
               blogInputEditStream.currentState().isCompleted === false
                 ? "inline-block"
                 : "none",

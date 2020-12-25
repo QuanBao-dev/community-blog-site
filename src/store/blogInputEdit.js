@@ -42,7 +42,8 @@ const initialState = {
   colorStyleMapSavedString: "{}",
   triggerFetchBlog: true,
   isLoading: false,
-  isShowBar:false
+  isShowBar: false,
+  isPending: null,
 };
 const behaviorSubject = new BehaviorSubject(initialState);
 let state = initialState;

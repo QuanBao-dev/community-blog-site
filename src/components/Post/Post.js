@@ -78,7 +78,7 @@ const Post = ({ post }) => {
         )}
       </div>
       {post.imageUrl && (
-        <Link to={"/blog/" + post.postId}>
+        <Link to={`/blog/${post.postId}/${!post.isCompleted ? "true" : ""}`}>
           <div
             className="container-image-post"
             onMouseEnter={() =>
@@ -103,7 +103,10 @@ const Post = ({ post }) => {
         </div>
       </div>
       <div className="body-post">
-        <Link to={"/blog/" + post.postId} className="container-post__link">
+        <Link
+          to={`/blog/${post.postId}/${!post.isCompleted ? "true" : ""}`}
+          className="container-post__link"
+        >
           <div className="title-post" ref={titlePostRef}>
             {post.title}
           </div>

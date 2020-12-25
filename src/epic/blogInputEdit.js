@@ -1,5 +1,5 @@
-import { fromEvent, of, timer } from "rxjs";
-import { ajax } from "rxjs/ajax";
+import { fromEvent, iif, of, timer } from 'rxjs';
+import { ajax } from 'rxjs/ajax';
 import {
   catchError,
   debounceTime,
@@ -7,27 +7,45 @@ import {
   filter,
   map,
   mergeMap,
+  mergeMapTo,
   pluck,
   switchMap,
-  switchMapTo,
   tap,
-} from "rxjs/operators";
-import { applyInlineStyleMap } from "../Functions/blogInputEdit";
+} from 'rxjs/operators';
 
-import blogInputEditStore from "../store/blogInputEdit";
+import { applyInlineStyleMap } from '../Functions/blogInputEdit';
+import blogInputEditStore from '../store/blogInputEdit';
 
 export const blogInputEditStream = blogInputEditStore;
 
-export const fetchBlog$ = (postId) => {
+export const fetchBlog$ = (postId, isPending, { idBloggerUser }) => {
   return timer(0).pipe(
-    switchMapTo(
-      ajax({ url: "/api/posts/" + postId }).pipe(
-        pluck("response", "message"),
-        tap(() => blogInputEditStream.updateData({ isLoading: false })),
-        catchError((error) =>
-          of(error).pipe(
-            pluck("response", "error"),
-            map((error) => ({ error }))
+    mergeMapTo(
+      iif(
+        () => !isPending,
+        ajax({ url: "/api/posts/" + postId }).pipe(
+          pluck("response", "message"),
+          tap(() => blogInputEditStream.updateData({ isLoading: false })),
+          catchError((error) =>
+            of(error).pipe(
+              pluck("response", "error"),
+              map((error) => ({ error }))
+            )
+          )
+        ),
+        ajax({
+          url: "/api/posts/" + postId + "/pending",
+          headers: {
+            authorization: `Bearer ${idBloggerUser}`,
+          },
+        }).pipe(
+          pluck("response", "message"),
+          tap(() => blogInputEditStream.updateData({ isLoading: false })),
+          catchError((error) =>
+            of(error).pipe(
+              pluck("response", "error"),
+              map((error) => ({ error }))
+            )
           )
         )
       )
@@ -77,6 +95,7 @@ export const autosave$ = ({ idBloggerUser }) => {
       delete body.upVotesUserIdList;
       delete body.downVotesUserIdList;
       delete body.isCheckedImage;
+      delete body.imageUrl;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isSaving: true })),
@@ -129,6 +148,7 @@ export const triggerSaveData$ = ({ idBloggerUser }) => {
       delete body.upVotesUserIdList;
       delete body.downVotesUserIdList;
       delete body.isCheckedImage;
+      delete body.imageUrl;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isSaving: true })),
@@ -181,6 +201,7 @@ export const publicizePost$ = (buttonUpload, { idBloggerUser }) => {
       delete body.upVotesUserIdList;
       delete body.downVotesUserIdList;
       delete body.isCheckedImage;
+      delete body.imageUrl;
       return body;
     }),
     tap(() => blogInputEditStream.updateData({ isPublicizing: true })),

@@ -35,10 +35,7 @@ router.get("/", async (req, res) => {
     tags = [tags];
   }
   page = +page;
-  const opts = ignoreProperty(optionsSelection, [
-    "colorStyleMapString",
-    "isCompleted",
-  ]);
+  const opts = ignoreProperty(optionsSelection, ["colorStyleMapString"]);
   try {
     let posts;
     if (tags && tags.length > 0)
@@ -204,10 +201,40 @@ router.get("/:postId/votes", async (req, res) => {
   });
 });
 
+router.get(
+  "/:postId/pending",
+  verifyRole("Admin", "User"),
+  async (req, res) => {
+    const { postId } = req.params;
+    const post = await Post.findOne({ postId, isCompleted: false }).select(
+      optionsSelection
+    );
+    if (!post) {
+      return res.status(404).send({ error: "Post is not found" });
+    }
+    if (post.userId !== req.user.userId) {
+      return res.status(401).send({ error: "Not your post" });
+    }
+    try {
+      post.user = await User.findOne({ userId: post.userId })
+        .lean()
+        .select({ _id: 0, userId: 1, username: 1 });
+      const listImage = extractListImage(post);
+      post.listImageString = JSON.stringify(listImage);
+      res.send({ message: post });
+    } catch (error) {
+      if (error) return res.status(400).send({ error: error.message });
+      res.status(404).send({ error: "Something went wrong" });
+    }
+  }
+);
+
 router.get("/:postId", async (req, res) => {
   const { postId } = req.params;
   try {
-    const post = await Post.findOne({ postId }).lean().select(optionsSelection);
+    const post = await Post.findOne({ postId, isCompleted: true })
+      .lean()
+      .select(optionsSelection);
     if (!post) {
       return res.status(404).send({ error: "Post is not found" });
     }

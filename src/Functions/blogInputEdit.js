@@ -149,7 +149,7 @@ export function autosave(cookies, history) {
             toggleEditMode: true,
           });
           history.replace(
-            "/blog/" + blogInputEditStream.currentState().randomId
+            "/blog/" + blogInputEditStream.currentState().randomId + "/true"
           );
         }
         blogInputEditStream.updateData({
@@ -218,7 +218,7 @@ export function saveTrigger(cookies, history) {
               toggleEditMode: true,
             });
             history.replace(
-              "/blog/" + blogInputEditStream.currentState().randomId
+              "/blog/" + blogInputEditStream.currentState().randomId + "/true"
             );
           }
           blogInputEditStream.updateData({
@@ -230,6 +230,7 @@ export function saveTrigger(cookies, history) {
             listPostStream.currentState().listPost[0] &&
             listPostStream.currentState().listPost[0].postId !== data.postId
           ) {
+            data.imageUrl = JSON.parse(v.listImageString)[0];
             const updatedList = listPostStream
               .currentState()
               .listPost.filter((post) => post.postId !== data.postId);
@@ -245,6 +246,7 @@ export function saveTrigger(cookies, history) {
               listPost: updatedList,
             });
           } else {
+            data.imageUrl = JSON.parse(v.listImageString)[0];
             if (listPostStream.currentState().listPost.length === 0)
               listPostStream.updateData({
                 listPost: [data],
@@ -285,7 +287,7 @@ export function publishPost(buttonUpload, cookies, history) {
                 toggleEditMode: true,
               });
               history.replace(
-                "/blog/" + blogInputEditStream.currentState().randomId
+                "/blog/" + blogInputEditStream.currentState().randomId + "/true"
               );
             }
             blogInputEditStream.updateData({
@@ -304,6 +306,7 @@ export function publishPost(buttonUpload, cookies, history) {
               const updatedList = listPostStream
                 .currentState()
                 .listPost.filter((post) => post.postId !== data.postId);
+              data.imageUrl = JSON.parse(v.listImageString)[0];
               listPostStream.updateData({
                 listPost: [data, ...updatedList],
               });
@@ -357,7 +360,14 @@ export function updateLatestPost(v, isPublish) {
   }
 }
 
-export function fetchBlogData(postId, onChange, decorator, history) {
+export function fetchBlogData(
+  postId,
+  onChange,
+  decorator,
+  history,
+  isPending,
+  cookies
+) {
   return () => {
     blogInputEditStream.updateData({ currentPostIdPath: postId });
     if (postId === "create") {
@@ -365,7 +375,11 @@ export function fetchBlogData(postId, onChange, decorator, history) {
       blogInputEditStream.updateData({ randomId: id });
     }
 
-    const subscription = fetchBlog$(postId).subscribe((data) => {
+    const subscription = fetchBlog$(
+      postId,
+      isPending === "true",
+      cookies
+    ).subscribe((data) => {
       blogInputEditStream.updateData({ isLoading: false });
       if (!data.error) {
         latestPostsStream.updateData({ authorId: data.userId });
@@ -378,6 +392,9 @@ export function fetchBlogData(postId, onChange, decorator, history) {
         });
         blogInputEditStream.updateCOLORS();
       } else {
+        if(postId === "create"){
+          changeTriggerSave();
+        }    
         if (blogInputEditStream.currentState().currentPostIdPath === "create") {
           blogInputEditStream.updateBodyQuick(
             `{"blocks":[{"key":"funpc","text":"Ctrl+s to save blog","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`
@@ -408,6 +425,7 @@ export function fetchBlogData(postId, onChange, decorator, history) {
       } else {
         blogInputEditStream.updateData({ isLoading: true });
       }
+      blogInputEditStream.updateData({ currentPostIdPath: null });
       subscription.unsubscribe();
     };
   };

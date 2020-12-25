@@ -78,6 +78,7 @@ function App() {
           <Route component={SearchPosts} path="/posts/search/:title" />
           <Route component={TagId} path="/tags/:tagId" />
           <Route component={Tags} path="/tags" />
+          <Route component={Blog} path="/blog/:postId/:isPending" />
           <Route component={Blog} path="/blog/:postId" />
           <Route component={Login} path="/auth/login" />
           <Route component={Register} path="/auth/register" />

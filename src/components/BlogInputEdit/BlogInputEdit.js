@@ -92,7 +92,7 @@ const decorator = new CompositeDecorator([
   },
 ]);
 
-const BlogInputEdit = ({ postId }) => {
+const BlogInputEdit = ({ postId, isPending }) => {
   const [editorState, setEditorState] = useState(
     EditorState.createEmpty(decorator)
   );
@@ -120,7 +120,15 @@ const BlogInputEdit = ({ postId }) => {
     convertFromRaw,
     decorator
   );
-  useFetchBlogData(blogState, postId, onChange, history, decorator);
+  useFetchBlogData(
+    blogState,
+    postId,
+    onChange,
+    history,
+    decorator,
+    isPending,
+    cookies
+  );
 
   useAutoSave(cookies, history);
   useSaveTrigger(cookies, blogState, history);
@@ -251,7 +259,7 @@ function handleData(editorState, blogState, colorPickerInput) {
         color: "black",
         backgroundColor: "#e9e8e8",
         whiteSpace: "pre",
-        margin:"0 5px"
+        margin: "0 5px",
       },
       ...blogInputEditStream.currentState().alignStyleMap,
       ...blogInputEditStream.currentState().colorStyleMap,

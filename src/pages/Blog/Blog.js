@@ -13,13 +13,13 @@ const LatestPosts = loadable(() =>
 );
 
 const Blog = (props) => {
-  const { postId } = props.match.params;
+  const { postId, isPending } = props.match.params;
   return (
     <div className="container-blog">
       <VoteBlog postId={postId} />
       <div className="container-editor-blog">
         <div className="editor-blog">
-          <BlogInputEdit postId={postId} />
+          <BlogInputEdit postId={postId} isPending={isPending}/>
           <Comments postId={postId} />
         </div>
         <div className="container-news">

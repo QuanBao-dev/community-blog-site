@@ -49,12 +49,14 @@ export function useFetchBlogData(
   postId,
   onChange,
   history,
-  decorator
+  decorator,
+  isPending,
+  cookies
 ) {
-  useEffect(fetchBlogData(postId, onChange, decorator, history), [
-    postId,
-    triggerFetchBlog,
-  ]);
+  useEffect(
+    fetchBlogData(postId, onChange, decorator, history, isPending, cookies),
+    [postId, isPending, triggerFetchBlog]
+  );
 }
 
 export const usePublishPost = (buttonUpload, cookies, history, postId) => {
