@@ -25,6 +25,10 @@
   background-color: white;
 }
 
+.editor-blog.dark{
+  box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.308);
+}
+
 .container-editor-blog{
   display: flex;
 }

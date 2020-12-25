@@ -53,11 +53,8 @@ const Media = (props) => {
             loading="lazy"
             onClick={() => {
               const wrapper = wrapperRef.current;
-              const controlMenu = document.querySelector(
-                ".control-menu-container"
-              );
-              const controlMenuFixed = document.querySelector(
-                ".menu-control-fix"
+              const appHeader = document.querySelector(
+                ".App-header"
               );
               const voteMenuMobile = document.querySelector(
                 ".vote-menu-controller-mobile"
@@ -66,8 +63,7 @@ const Media = (props) => {
                 wrapper.className += " container-image-fullscreen";
                 document.body.style.overflow = "hidden";
                 voteMenuMobile && (voteMenuMobile.style.display = "none");
-                if (controlMenuFixed) controlMenuFixed.style.zIndex = 1;
-                if (controlMenu) controlMenu.style.zIndex = 0;
+                appHeader.style.zIndex = 1;
                 setPreviousEditModeState(
                   blogInputEditStream.currentState().toggleEditMode
                 );
@@ -76,8 +72,7 @@ const Media = (props) => {
               } else {
                 wrapper.className = "wrapper-image-upload";
                 voteMenuMobile && (voteMenuMobile.style.display = "flex");
-                if (controlMenu) controlMenu.style.zIndex = 3;
-                if (controlMenuFixed) controlMenuFixed.style.zIndex = 8;
+                appHeader.style.zIndex = 5;
                 document.body.style.overflow = "auto";
                 blogInputEditStream.updateData({
                   toggleEditMode: previousEditModeState,

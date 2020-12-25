@@ -1,5 +1,6 @@
 .wrapper-vote{
   text-align: center;
+  margin-top: 1rem;
   font-size: 3rem;
   display: flex;
   height: 100%;
@@ -63,6 +64,8 @@
     flex-direction: row;
     font-size: 1.5rem;
     box-shadow: 0 0 3px 1px grey;
+    margin-top: 0;
+    padding: 0.5rem 0;
   }
   .wrapper-vote i{
     cursor: pointer;
@@ -77,5 +80,7 @@
 @media(max-width:554px){
   .wrapper-vote{
     display: none;
+    margin-top: 0;
+    padding: 0.5rem 0;
   }
 }

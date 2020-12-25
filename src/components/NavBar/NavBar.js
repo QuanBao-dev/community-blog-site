@@ -60,7 +60,7 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
   useEffect(() => {
     window.localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
-  document.body.style.backgroundColor = isDarkMode ? "black" : "white";
+  document.body.style.backgroundColor = isDarkMode ? "black" : "#EEF0F1";
   return (
     <header
       className="App-header"

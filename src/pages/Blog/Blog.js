@@ -1,9 +1,10 @@
-import './Blog.css';
+import "./Blog.css";
 
-import loadable from '@loadable/component';
-import React from 'react';
+import loadable from "@loadable/component";
+import React from "react";
 
-import BlogInputEdit from '../../components/BlogInputEdit/BlogInputEdit';
+import BlogInputEdit from "../../components/BlogInputEdit/BlogInputEdit";
+import { userStream } from "../../epic/user";
 
 const Comments = loadable(() => import("../../components/Comments/Comments"));
 
@@ -14,12 +15,13 @@ const LatestPosts = loadable(() =>
 
 const Blog = (props) => {
   const { postId, isPending } = props.match.params;
+  const { isDarkMode } = userStream.currentState();
   return (
     <div className="container-blog">
       <VoteBlog postId={postId} />
       <div className="container-editor-blog">
-        <div className="editor-blog">
-          <BlogInputEdit postId={postId} isPending={isPending}/>
+        <div className={`editor-blog${isDarkMode ? " dark" : ""}`}>
+          <BlogInputEdit postId={postId} isPending={isPending} />
           <Comments postId={postId} />
         </div>
         <div className="container-news">

@@ -56,6 +56,7 @@
 .home-page__container-user-quantity.dark{
   background-color: black;
   color: white;
+  box-shadow: 0 0 3px 1px rgba(255, 255, 255, 0.219);
 }
 
 .home-page__container-user-quantity img{
