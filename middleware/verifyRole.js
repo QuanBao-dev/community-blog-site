@@ -4,7 +4,8 @@ module.exports.verifyRole = (...roles) => {
   return (req, res, next) => {
     const authHeader = req.headers["authorization"];
     let token = authHeader && authHeader.split(" ")[1];
-    if (!token) token = req.signedCookies.idBloggerUser;
+    if (!token || process.env.NODE_ENV === "production")
+      token = req.signedCookies.idBloggerUser;
     if (!token) return res.status(401).send({ error: "Access denied" });
     try {
       const userVm = verify(token, process.env.JWT_KEY);
