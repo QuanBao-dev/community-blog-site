@@ -75,6 +75,11 @@
     margin: 0.5rem;
     padding: 0.5rem;  
   }
+
+  .wrapper-vote.dark{
+    color: white;
+    background-color: black;
+  }  
 }
 
 @media(max-width:554px){

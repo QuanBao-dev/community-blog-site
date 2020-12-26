@@ -9,6 +9,14 @@
   border-radius: 10px;
 }
 
+.tag-item-container.dark{
+  background-color: black;
+}
+
+.tag-item-container.dark a{
+  color: white;
+}
+
 .tag-list__tag-name{
   font-weight: 700;
   text-decoration: none;

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import ListTag from "../../components/ListTag/ListTag";
 import { fetchTags$, tagStream } from "../../epic/tags";
+import { userStream } from "../../epic/user";
 
 const Tags = () => {
   const [tagsState, setTagsState] = useState(tagStream.currentState());
@@ -25,8 +26,13 @@ const Tags = () => {
     };
   }, []);
   const listNavPage = Array.from(Array(tagsState.maxPage).keys());
+  const { isDarkMode } = userStream.currentState();
   return (
-    <div>
+    <div
+      style={{
+        color: isDarkMode ? "white" : "black",
+      }}
+    >
       <h1>All Tags</h1>
       <ListTag tags={tagsState.tagData} />
       <div className="container-list-page">
