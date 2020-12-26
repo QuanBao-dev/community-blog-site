@@ -41,7 +41,7 @@ const ListPost = ({ tagId, title, userId }) => {
     <ul className={`list-post-container${isDarkMode ? " dark" : ""}`}>
       {listPostState.listPost.length === 0 &&
         listPostState.latestPageFetched !== null && (
-          <h3>Don't have any result</h3>
+          <h3>Don't have any posts</h3>
         )}
       {listPostState.listPost.length > 0 &&
         listPostState.listPost.map((post) => {

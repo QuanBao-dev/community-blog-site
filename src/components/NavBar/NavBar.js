@@ -61,7 +61,6 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
     window.localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
   document.body.style.backgroundColor = isDarkMode ? "#111519" : "#EEF0F1";
-  console.log(screenWidth);
   return (
     <header
       className="App-header"

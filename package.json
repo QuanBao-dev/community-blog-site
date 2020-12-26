@@ -26,10 +26,10 @@
   },
   "scripts": {
     "dev:ui": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
     "start": "node index.js",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject",
+    "dev:server": "node_modules\\.bin\\nodemon index.js",
     "dev": "node_modules\\.bin\\concurrently \"npm run dev:ui\" \"nodemon index.js\""
   },
   "eslintConfig": {

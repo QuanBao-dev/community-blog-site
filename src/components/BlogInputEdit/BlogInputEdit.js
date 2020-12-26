@@ -100,7 +100,7 @@ const BlogInputEdit = ({ postId, isPending }) => {
     blogInputEditStream.currentState()
   );
   const history = useHistory();
-  const [cookies] = useCookies();
+  const [cookies] = useCookies(["idBloggerUser"]);
   const user = userStream.currentState().user;
   const editorRef = useRef();
   const colorPickerInput = document.querySelector(".color-picker-input");

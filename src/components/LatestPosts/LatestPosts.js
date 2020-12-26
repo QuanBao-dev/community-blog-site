@@ -39,14 +39,16 @@ const LatestPosts = ({ isAuthor }) => {
         )}
       </ul>
     );
-  return (
-    <ul className={`container-latest-posts${isDarkMode ? " dark" : ""}`}>
-      <h1>Latest Posts</h1>
-      {latestPostsState.latestPost.map((post) => (
-        <LatestPost key={post.postId} post={post} />
-      ))}
-    </ul>
-  );
+  if (latestPostsState.latestPost.length)
+    return (
+      <ul className={`container-latest-posts${isDarkMode ? " dark" : ""}`}>
+        <h1>Latest Posts</h1>
+        {latestPostsState.latestPost.map((post) => (
+          <LatestPost key={post.postId} post={post} />
+        ))}
+      </ul>
+    );
+  return <div></div>;
 };
 
 export default LatestPosts;

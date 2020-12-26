@@ -23,6 +23,7 @@
   box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.308);
   margin-top: 1rem;
   background-color: white;
+  max-width: 770px;
 }
 
 .editor-blog.dark{
@@ -31,6 +32,7 @@
 
 .container-editor-blog{
   display: flex;
+  width: 100%;
 }
 
 .container-news{
