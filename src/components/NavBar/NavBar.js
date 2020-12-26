@@ -61,6 +61,7 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
     window.localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
   document.body.style.backgroundColor = isDarkMode ? "#111519" : "#EEF0F1";
+  console.log(screenWidth);
   return (
     <header
       className="App-header"
@@ -107,15 +108,24 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
         <Link to="/tags" className="App-header__tags-link">
           <div>Tags</div>
         </Link>
+        <Link to="/auth/login" className="App-header__tags-link">
+          <div>Login</div>
+        </Link>
+        <Link to="/auth/register" className="App-header__tags-link">
+          <div className="register-link">Create account</div>
+        </Link>
         <PopularTags />
       </aside>
       <ul
         className={`App-header__list-link-navbar${isDarkMode ? " dark" : ""}`}
       >
         {screenWidth <= 592 && isShowSearchBar && (
-          <div className="App-header__search-mobile-post" style={{
-            backgroundColor:isDarkMode?"black":"white"
-          }}>
+          <div
+            className="App-header__search-mobile-post"
+            style={{
+              backgroundColor: isDarkMode ? "black" : "white",
+            }}
+          >
             <input
               type="text"
               style={{
@@ -194,7 +204,7 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
                 }
               ></i>
             )}
-            {!userState.user && userState.isDoneFetch && (
+            {screenWidth >= 416 && !userState.user && userState.isDoneFetch && (
               <Link
                 to="/auth/login"
                 className="App-header__link-navbar-item login-link"
@@ -202,7 +212,7 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
                 <li>Log in</li>
               </Link>
             )}
-            {!userState.user && userState.isDoneFetch && (
+            {screenWidth >= 416 && !userState.user && userState.isDoneFetch && (
               <Link
                 to="/auth/register"
                 className="App-header__link-navbar-item register-link"

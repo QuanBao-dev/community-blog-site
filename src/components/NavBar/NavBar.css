@@ -71,7 +71,7 @@
 
 .App-header__tags-link div{
   padding: 0.5rem 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 }
 
 .App-header__tags-link div:hover{
@@ -165,6 +165,7 @@
 .login-link{
   color: black;
   font-weight: 600;
+  margin-left: 1rem;
 }
 
 .header-bars{
