@@ -60,7 +60,7 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
   useEffect(() => {
     window.localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
-  document.body.style.backgroundColor = isDarkMode ? "black" : "#EEF0F1";
+  document.body.style.backgroundColor = isDarkMode ? "#111519" : "#EEF0F1";
   return (
     <header
       className="App-header"
@@ -113,9 +113,15 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
         className={`App-header__list-link-navbar${isDarkMode ? " dark" : ""}`}
       >
         {screenWidth <= 592 && isShowSearchBar && (
-          <div className="App-header__search-mobile-post">
+          <div className="App-header__search-mobile-post" style={{
+            backgroundColor:isDarkMode?"black":"white"
+          }}>
             <input
               type="text"
+              style={{
+                color: isDarkMode ? "white" : "black",
+                backgroundColor: isDarkMode ? "black" : "white",
+              }}
               placeholder="Search..."
               onKeyDown={(e) => {
                 const text = e.target.value.trim();
@@ -145,6 +151,10 @@ function NavBar({ userState, removeCookie, cookies, screenWidth }) {
             {screenWidth > 592 && (
               <input
                 className="App-header__input-search"
+                style={{
+                  color: isDarkMode ? "white" : "black",
+                  backgroundColor: isDarkMode ? "black" : "white",
+                }}
                 type="text"
                 placeholder="Search..."
                 onKeyDown={(e) => {

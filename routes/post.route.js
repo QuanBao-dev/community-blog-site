@@ -212,6 +212,7 @@ router.get(
     if (!post) {
       return res.status(404).send({ error: "Post is not found" });
     }
+    console.log(post.userId, req.user.userId);
     if (post.userId !== req.user.userId) {
       return res.status(401).send({ error: "Not your post" });
     }
@@ -644,7 +645,7 @@ router.delete("/:postId", verifyRole("User", "Admin"), async (req, res) => {
   const listTag = post.tags;
   try {
     const urlCloudinaryList = body.match(
-      /https:\/\/res.cloudinary.com\/storagecloud\/image\/upload\/[a-zA-Z0-9:/;,+=@#$%^&*\\\-_]+.png/g
+      /https:\/\/res.cloudinary.com\/storagecloud\/image\/upload\/v[0-9]+\/web-blog\/post-user\/[a-zA-Z0-9:/;,+=@#$%^&*\\\-_]+.(jpg|png|gif)/g
     );
     try {
       if (urlCloudinaryList) {
