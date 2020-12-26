@@ -206,9 +206,9 @@ router.get(
   verifyRole("Admin", "User"),
   async (req, res) => {
     const { postId } = req.params;
-    const post = await Post.findOne({ postId, isCompleted: false }).select(
-      optionsSelection
-    );
+    let post = await Post.findOne({ postId, isCompleted: false })
+      .lean()
+      .select(optionsSelection);
     if (!post) {
       return res.status(404).send({ error: "Post is not found" });
     }

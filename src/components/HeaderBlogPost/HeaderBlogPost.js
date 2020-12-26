@@ -25,6 +25,7 @@ const HeaderBlogPost = ({
   postId,
 }) => {
   const userLogin = userStream.currentState().user;
+  console.log(userLogin, user);
   const [dataSend, setDataSend] = useState([]);
   const [trigger, setTrigger] = useState(true);
   const [cookies] = useCookies(["idBloggerUser"]);
