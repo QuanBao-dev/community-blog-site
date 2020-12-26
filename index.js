@@ -6,7 +6,7 @@ const express = require("express");
 const path = require("path");
 const sslRedirect = require("heroku-ssl-redirect").default;
 const app = express();
-const port = 5000;
+const port = process.env.PORT || 5000;
 cloudinary.config({
   cloud_name: "storagecloud",
   api_key: process.env.API_KEY,
