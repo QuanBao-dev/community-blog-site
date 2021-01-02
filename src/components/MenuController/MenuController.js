@@ -1,6 +1,6 @@
 import "./MenuController.css";
 
-import { AtomicBlockUtils, RichUtils } from "draft-js";
+import { AtomicBlockUtils, EditorState, RichUtils } from "draft-js";
 import React from "react";
 
 import { blogInputEditStream } from "../../epic/blogInputEdit";
@@ -148,6 +148,12 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
           onClick={toggleAutosaveMode}
         >
           autosave
+        </button>
+        <button onClick={() => onChange(EditorState.undo(editorState))}>
+          UNDO
+        </button>
+        <button onClick={() => onChange(EditorState.redo(editorState))}>
+          REDO
         </button>
         <input
           type="file"
