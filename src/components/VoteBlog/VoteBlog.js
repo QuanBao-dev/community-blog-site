@@ -20,6 +20,7 @@ import {
 } from "../../Functions/blogInputEdit";
 import { usePublishPost } from "../../Hook/blogInputEdit";
 import { useHistory } from "react-router-dom";
+import ButtonEditPost from "../ButtonEditPost/ButtonEditPost";
 const VoteBlog = ({ postId }) => {
   const upVoteButtonRef = useRef();
   const downVoteButtonRef = useRef();
@@ -84,7 +85,7 @@ const VoteBlog = ({ postId }) => {
           color: !userStream.currentState().isDarkMode ? "black" : "white",
         }}
       >
-        <i
+        <ButtonEditPost
           style={{
             color:
               user && voteBlogState.upVotesUserIdList.includes(user.userId)
@@ -93,9 +94,10 @@ const VoteBlog = ({ postId }) => {
                   : "white"
                 : "grey",
           }}
-          ref={upVoteButtonRef}
+          refCustom={upVoteButtonRef}
           className="fa fa-caret-up"
-        ></i>
+          title={"Up vote"}
+        />
         <div>
           {voteBlogState.upVotesUserIdList.length -
             voteBlogState.downVotesUserIdList.length >
@@ -105,53 +107,69 @@ const VoteBlog = ({ postId }) => {
           {voteBlogState.upVotesUserIdList.length -
             voteBlogState.downVotesUserIdList.length}
         </div>
-        <i
+        <ButtonEditPost
           style={{
             color:
               user && voteBlogState.downVotesUserIdList.includes(user.userId)
-                ? "black"
+                ? !userStream.currentState().isDarkMode
+                  ? "black"
+                  : "white"
                 : "grey",
           }}
-          ref={downVoteButtonRef}
+          refCustom={downVoteButtonRef}
           className="fa fa-caret-down"
-        ></i>
+          title={"Down vote"}
+        />
         {user &&
           !blogInputEditStream.currentState().toggleEditMode &&
           blogInputEditStream.currentState().dataBlogPage.userId ===
             user.userId && (
-            <i onClick={toggleStateEdit} className="fas fa-pencil-alt"></i>
+            // <i onClick={toggleStateEdit} className="fas fa-pencil-alt"></i>
+            <ButtonEditPost
+              className={"fas fa-pencil-alt"}
+              onClick={toggleStateEdit}
+              title={"Edit"}
+            />
           )}
         {blogInputEditStream.currentState().toggleEditMode && (
-          <i onClick={toggleStateEdit} className="fas fa-check-circle"></i>
+          // <i onClick={toggleStateEdit} className="fas fa-check-circle"></i>
+          <ButtonEditPost
+            className={"fas fa-check-circle"}
+            onClick={toggleStateEdit}
+            title={"Done"}
+          />
         )}
         <span ref={penSquareRef}>
-          <i
+          <ButtonEditPost
             className="fas fa-palette"
             style={{
               display: toggleEditMode && !isShowBar ? "block" : "none",
             }}
             onMouseDown={(e) => e.preventDefault()}
-          ></i>
-          <i
+            title={"Tool"}
+          />
+          <ButtonEditPost
             className="fas fa-times"
             style={{
               display: toggleEditMode && isShowBar ? "block" : "none",
             }}
             onMouseDown={(e) => e.preventDefault()}
-          ></i>
+            title={"Close tool"}
+          />
         </span>
         {blogInputEditStream.currentState().toggleEditMode &&
           !blogInputEditStream.currentState().isSaved && (
-            <i
+            <ButtonEditPost
+              className={"far fa-save"}
               onClick={() => {
                 if (blogInputEditStream.currentState().toggleEditMode)
                   changeTriggerSave();
               }}
-              className="far fa-save"
-            ></i>
+              title={"Save"}
+            />
           )}
-        <i
-          ref={buttonUploadRef}
+        <ButtonEditPost
+          refCustom={buttonUploadRef}
           style={{
             display:
               user &&
@@ -163,7 +181,8 @@ const VoteBlog = ({ postId }) => {
                 : "none",
           }}
           className="fas fa-upload"
-        ></i>
+          title={"Upload"}
+        />
       </div>
     </div>
   );

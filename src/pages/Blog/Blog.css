@@ -43,7 +43,7 @@
 @media(max-width:1080px){
   .container-editor-blog{
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap;
     width: 90%;
   }
 
@@ -52,13 +52,12 @@
   }
 
   .container-news{
-    width: 90%;
-    padding: 1rem 2rem;
-    box-shadow: 0 0 2px 1px rgba(128, 128, 128, 0.644);
+    flex: 1 1 auto;
   }
   .editor-blog{
-    width: 90%;
+    flex: 1 1 auto;
     margin-bottom: 0;
+    max-width: 100%;
   }
 }
 
@@ -86,6 +85,7 @@
   }
   .container-news{
     padding: 0;
+    margin-right: 0;
   }
 
   .section-container__form{

@@ -89,6 +89,7 @@ const blogInputEditStore = {
     );
     blogInputEditStore.updateData({
       COLORS: COLORS,
+      colorId: nanoid()
     });
   },
 };

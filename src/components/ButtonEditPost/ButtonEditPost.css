@@ -1,0 +1,25 @@
+.container-button-post{
+  position: relative;
+}
+
+.button-post{
+  text-align: center;
+}
+
+.button-post:hover + .hint-title-post{
+  display: block;
+}
+
+.hint-title-post{
+  padding: 0.2rem 1rem;
+  background-color: grey;
+  color: white;
+  display: none;
+  font-size: 1.2rem;
+  position: absolute;
+  top: 20%;
+  white-space: nowrap;
+  text-align: center;
+  left: 80%;
+  border-radius: 4px;
+}

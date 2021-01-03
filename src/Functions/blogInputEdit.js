@@ -392,9 +392,9 @@ export function fetchBlogData(
         });
         blogInputEditStream.updateCOLORS();
       } else {
-        if(postId === "create"){
+        if (postId === "create") {
           changeTriggerSave();
-        }    
+        }
         if (blogInputEditStream.currentState().currentPostIdPath === "create") {
           blogInputEditStream.updateBodyQuick(
             `{"blocks":[{"key":"funpc","text":"Ctrl+s to save blog","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}}],"entityMap":{}}`
@@ -631,23 +631,20 @@ export function applyInlineStyleMap(
           nextEditorState,
           type.style
         );
-      // console.log(convertToRaw(nextEditorState));
       if (selection.isCollapsed()) {
         nextEditorState = currentStyle.reduce((state, color) => {
           return RichUtils.toggleInlineStyle(state, color);
         }, nextEditorState);
       }
       // If the color is being toggled on, apply it.
-      if (isNotColor)
-        if (!currentStyle.has(type.style)) {
-          nextEditorState = RichUtils.toggleInlineStyle(
-            nextEditorState,
-            type.style
-          );
-        }
+      if (isNotColor && !currentStyle.has(type.style))
+        nextEditorState = RichUtils.toggleInlineStyle(
+          nextEditorState,
+          type.style
+        );
       onChange(nextEditorState);
-      if (blogInputEditStream.currentState().isAutosaveMode)
-        changeTriggerSave();
+      // if (blogInputEditStream.currentState().isAutosaveMode)
+      //   changeTriggerSave();
     }
   };
 }

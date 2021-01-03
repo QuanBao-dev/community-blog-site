@@ -146,13 +146,20 @@ function MenuController({ blogState, onChange, editorState, currentStyle }) {
         <button
           className={blogState.isAutosaveMode ? "autosave-button-active" : ""}
           onClick={toggleAutosaveMode}
+          title="autosave"
         >
           autosave
         </button>
-        <button onClick={() => onChange(EditorState.undo(editorState))}>
+        <button
+          onClick={() => onChange(EditorState.undo(editorState))}
+          title="undo"
+        >
           UNDO
         </button>
-        <button onClick={() => onChange(EditorState.redo(editorState))}>
+        <button
+          onClick={() => onChange(EditorState.redo(editorState))}
+          title="redo"
+        >
           REDO
         </button>
         <input
