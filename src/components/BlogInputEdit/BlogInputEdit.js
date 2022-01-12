@@ -296,14 +296,6 @@ function onKeyDown(editorState, onChange) {
 function handleKeyCommand(onChange) {
   return (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
-    if (command === "split-block") {
-      const scrollY = window.scrollY;
-      setTimeout(() => {
-        window.scroll({
-          top: scrollY,
-        });
-      }, 0);
-    }
     if (newState) {
       onChange(newState);
       return "handled";
