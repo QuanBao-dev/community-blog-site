@@ -242,6 +242,7 @@ function BlogContentDetail({
             console.log(error);
           }
         }}
+        stripPastedStyles={true}
       />
     </section>
   );

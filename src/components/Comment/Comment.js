@@ -107,7 +107,7 @@ const timeSince = (date) => {
     return Math.floor(seconds) + " second";
   }
   if (Math.floor(seconds) === 0) {
-    return "Recently";
+    return "Just now";
   }
   return Math.floor(seconds) + " seconds";
 };
