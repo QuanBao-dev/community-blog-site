@@ -255,12 +255,10 @@ function handleData(editorState, blogState, colorPickerInput) {
       CODE: {
         fontFamily: '"Inconsolata", "Menlo", "Consolas", monospace',
         fontSize: "16px",
-        padding: "2px",
         borderRadius: "4px",
         color: "black",
         backgroundColor: "#e9e8e8",
         whiteSpace: "pre",
-        margin: "0 5px",
       },
       ...blogInputEditStream.currentState().alignStyleMap,
       ...blogInputEditStream.currentState().colorStyleMap,
