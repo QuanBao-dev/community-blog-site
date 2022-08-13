@@ -27,7 +27,7 @@
   "scripts": {
     "dev:ui": "react-scripts start",
     "start": "node index.js",
-    "build": "react-scripts build",
+    "build": "react-scripts build && rm build/static/js/*.map && rm build/static/css/*.map",
     "eject": "react-scripts eject",
     "dev:server": "node_modules\\.bin\\nodemon index.js",
     "dev": "node_modules\\.bin\\concurrently \"npm run dev:ui\" \"nodemon index.js\""
